@@ -98,3 +98,16 @@ export const logout = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const user = await pool.query(
+      'SELECT * FROM users WHERE id = $1',
+      [res.locals.id]
+    );
+    return res.status(200).json(user.rows[0]);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
