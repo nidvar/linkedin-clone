@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import pool from '../lib/db.js';
 import bcrypt from 'bcryptjs';
+import { generateAccessToken, generateRefreshToken } from '../utils/generateToken.js';
 
 const validation = function(value:string) {
   if(value === undefined || value === null || value === ''){
@@ -58,7 +59,13 @@ export const login = async (req: Request, res: Response) => {
     const compareHashedPassword = await bcrypt.compare(req.body.password, user.rows[0].password_hash);
     if(compareHashedPassword === false){
       return res.status(400).json({ message: 'Incorrect Password' });
-    }
+    };
+    generateAccessToken(user.rows[0].id, res);
+    const refreshToken = generateRefreshToken(user.rows[0].id, res);
+    await pool.query(
+      'UPDATE users SET refresh_token = $1 WHERE id = $2', 
+      [refreshToken, user.rows[0].id]
+    );
     return res.status(200).json({ message: 'logged in' });
   } catch (error) {
     console.log(error);
