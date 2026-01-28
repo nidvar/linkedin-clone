@@ -48,7 +48,17 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
+    const user = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [req.body.email]
+    );
+    if(!user.rows[0]){
+      return res.status(400).json({ message: 'User does not exist' });
+    }
+    const compareHashedPassword = await bcrypt.compare(req.body.password, user.rows[0].password_hash);
+    if(compareHashedPassword === false){
+      return res.status(400).json({ message: 'Incorrect Password' });
+    }
     return res.status(200).json({ message: 'logged in' });
   } catch (error) {
     console.log(error);
