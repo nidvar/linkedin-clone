@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import pool from '../lib/db.js';
 import bcrypt from 'bcryptjs';
 import { generateAccessToken, generateRefreshToken } from '../utils/generateToken.js';
+import { sendWelcomeEmail } from '../utils/handleEmails.js';
 
 const validation = function(value:string) {
   if(value === undefined || value === null || value === ''){
@@ -17,7 +18,8 @@ export const signUp = async (req: Request, res: Response) => {
       !validation(req.body.email) ||
       !validation(req.body.password) ||
       !validation(req.body.firstName) ||
-      !validation(req.body.lastName)
+      !validation(req.body.lastName) ||
+      !validation(req.body.username)
     ){
       return res.status(400).json({ message: 'User details incomplete' });
     };
@@ -27,12 +29,12 @@ export const signUp = async (req: Request, res: Response) => {
     const profilePic = 'https://robohash.org/' + req.body.firstName + '.png';
 
     const user = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
-      [req.body.email]
+      'SELECT * FROM users WHERE email = $1 AND username = $2',
+      [req.body.email, req.body.username]
     );
 
     if(user.rows[0]){
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'Username or email taken' });
     };
 
     await pool.query(
@@ -40,7 +42,16 @@ export const signUp = async (req: Request, res: Response) => {
       [req.body.email, hashedPassword, full_name, profilePic]
     );
 
+    const profileURL = process.env.CLIENT_URL + '/profile/' + req.body.username;
+
+    try {
+      await sendWelcomeEmail(req.body.email, full_name, profileURL);
+    } catch (error) {
+      console.log(error);
+    }
+
     return res.status(200).json({ message: 'Signed Up' });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error' });
