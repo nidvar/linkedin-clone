@@ -55,7 +55,7 @@ export const login = async (req: Request, res: Response) => {
     );
     if(!user.rows[0]){
       return res.status(400).json({ message: 'User does not exist' });
-    }
+    };
     const compareHashedPassword = await bcrypt.compare(req.body.password, user.rows[0].password_hash);
     if(compareHashedPassword === false){
       return res.status(400).json({ message: 'Incorrect Password' });
@@ -75,7 +75,12 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
+    res.clearCookie('linkedIn-Refresh');
+    res.clearCookie('linkedIn-Access');
+    await pool.query(
+      'UPDATE users SET refresh_token = $1 WHERE email =$2',
+      [null, req.body.email]
+    );
     return res.status(200).json({ message: 'logged out' });
   } catch (error) {
     console.log(error);
