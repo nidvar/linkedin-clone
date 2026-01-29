@@ -29,7 +29,7 @@ export const signUp = async (req: Request, res: Response) => {
     const profilePic = 'https://robohash.org/' + req.body.firstName + '.png';
 
     const user = await pool.query(
-      'SELECT * FROM users WHERE email = $1 AND username = $2',
+      'SELECT * FROM users WHERE email = $1 OR username = $2',
       [req.body.email, req.body.username]
     );
 
@@ -38,17 +38,16 @@ export const signUp = async (req: Request, res: Response) => {
     };
 
     await pool.query(
-      'INSERT INTO users (email, password_hash, full_name, profile_image_url) VALUES ($1, $2, $3, $4)',
-      [req.body.email, hashedPassword, full_name, profilePic]
+      'INSERT INTO users (email, password_hash, full_name, profile_image_url, username) VALUES ($1, $2, $3, $4, $5)',
+      [req.body.email, hashedPassword, full_name, profilePic, req.body.username]
     );
 
-    const profileURL = process.env.CLIENT_URL + '/profile/' + req.body.username;
-
-    try {
-      await sendWelcomeEmail(req.body.email, full_name, profileURL);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const profileURL = process.env.CLIENT_URL + '/profile/' + req.body.username;
+    //   await sendWelcomeEmail(req.body.email, full_name, profileURL);
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     return res.status(200).json({ message: 'Signed Up' });
 
