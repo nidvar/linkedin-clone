@@ -7,7 +7,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 
 // Local imports
-import pool from './lib/db.js';
+import { connectDB } from './lib/db.js';
 
 // Routes
 import authRoutes from './routes/authRoutes.js';
@@ -16,11 +16,7 @@ import userRoutes from './routes/userRoutes.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.get("/api/health", async (req, res) => {
-  const result = await pool.query("SELECT NOW()");
-  console.log('rows ==== ', result.rows[0]);
-  return res.json({ dbTime: result.rows[0] });
-});
+connectDB();
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));

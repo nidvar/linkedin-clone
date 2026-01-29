@@ -4,7 +4,7 @@ dotenv.config();
 
 import jwt from 'jsonwebtoken';
 
-export const generateAccessToken = function(id:string, res:Response) {
+export const generateAccessToken = function(id:Object, res:Response) {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT secrets not defined in environment variables");
   }
@@ -17,7 +17,7 @@ export const generateAccessToken = function(id:string, res:Response) {
   });
 };
 
-export const generateRefreshToken = function(id:string, res:Response) {
+export const generateRefreshToken = function(id:Object, res:Response) {
   if (!process.env.JWT_REFRESH_SECRET) {
     throw new Error("JWT secrets not defined in environment variables");
   }

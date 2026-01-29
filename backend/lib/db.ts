@@ -1,13 +1,13 @@
 import dotenv from 'dotenv';
-import { Pool } from 'pg';
-
 dotenv.config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+import mongoose from 'mongoose';
 
-export default pool;
+export const connectDB = async ()=>{
+    try{
+        await mongoose.connect(process.env.MONGODB_URI || '');
+        console.log('Connected to jarro_mongodb cluster jarro')
+    }catch(error){
+        console.log(error);
+    }
+};
