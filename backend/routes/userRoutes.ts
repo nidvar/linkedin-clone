@@ -5,11 +5,12 @@ import express from 'express';
 import { protectRoute } from '../middleware/protectRoute.js';
 
 // Controllers
-import { getPublicProfile, suggestedUsers } from '../controllers/userControllers.js';
+import { getPublicProfile, suggestedUsers, updateUserDetails } from '../controllers/userControllers.js';
 
 const router = express.Router();
 
 router.get('/suggestedusers', protectRoute, suggestedUsers);
 router.get('/profile/:username', protectRoute, getPublicProfile);
+router.post('/update', protectRoute, updateUserDetails);
 
 export default router;

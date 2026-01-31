@@ -2,15 +2,19 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: "",
-    },
     refreshToken: {
       type: String,
       default: "",
     },
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    fullName: {
       type: String,
       required: true,
     },
