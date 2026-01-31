@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 
 // Local imports
 import User from '../models/userModel.js';
+import cloudinary from '../lib/cloudinary.js';
 
 export const updateUserDetails = async (req: Request, res: Response)=>{
   try {
@@ -23,7 +24,19 @@ export const updateUserDetails = async (req: Request, res: Response)=>{
       experience: req.body.experience,
       education: req.body.education,
       fullName: `${req.body.firstName} ${req.body.lastName}`,
+      profilePic: req.body.profilePic,
+      bannerImg: req.body.bannerImg
     };
+
+    if(req.body.profilePic !== ''){
+      const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-profile' });
+      updateObject.profilePic = cloudinaryURL.secure_url;
+    }
+
+    if(req.body.bannerImg !== ''){
+      const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-banner' });
+      updateObject.bannerImg = cloudinaryURL.secure_url;
+    }
 
     const updatedUser = await User.findByIdAndUpdate(user._id, { $set: updateObject }, { new: true }).select(
       "-password"
