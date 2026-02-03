@@ -2,8 +2,11 @@
 import type { Request, Response } from 'express';
 
 // Local imports
-import User from '../models/userModel.js';
 import cloudinary from '../lib/cloudinary.js';
+
+// Models
+import User from '../models/userModel.js';
+
 
 export const updateUserDetails = async (req: Request, res: Response)=>{
   try {

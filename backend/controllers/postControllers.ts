@@ -1,7 +1,12 @@
+// Third party packages
 import type { Request, Response } from 'express';
+
+// Local imports
+import cloudinary from '../lib/cloudinary.js';
+
+// models
 import Post from '../models/postModel.js';
 import Notification from '../models/notificationModel.js';
-import cloudinary from '../lib/cloudinary.js';
 import User from '../models/userModel.js';
 
 export const getFeedPosts = async (req: Request, res: Response)=>{

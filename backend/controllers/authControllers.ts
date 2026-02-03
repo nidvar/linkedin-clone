@@ -1,9 +1,11 @@
+// Third party
 import type { Request, Response } from 'express';
-
 import bcrypt from 'bcryptjs';
 
+// Models
 import User from '../models/userModel.js';
 
+// Functions
 import { generateAccessToken, generateRefreshToken } from '../utils/generateToken.js';
 import { sendWelcomeEmail } from '../utils/handleEmails.js';
 
