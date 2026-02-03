@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import Post from '../models/postModel.js';
+import Notification from '../models/notificationModel.js';
 import cloudinary from '../lib/cloudinary.js';
 import User from '../models/userModel.js';
 
@@ -60,5 +61,46 @@ export const deletePost = async (req: Request, res: Response)=>{
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error deleting post' });
+  }
+};
+
+export const getPostById = async (req: Request, res: Response)=>{
+  try {
+    const post = await Post.findById(req.params.id)
+    .populate('author', 'name username profilePicture headline')
+    .populate('comments.user', 'name profilePicture');
+    if(!post){
+      return res.status(400).json({ message: 'Post does not exist' });
+    };
+    return res.status(200).json({ post });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error getting post by id' });
+  }
+};
+
+export const createComment = async (req: Request, res: Response)=>{
+  try {
+    const post = await Post.findByIdAndUpdate(
+        req.params.id,
+        {$push: { comments: {content: req.body.content, user: res.locals.id}}},
+        { new: true}
+    )
+    .populate(
+      'author',
+      'name email username headline profilePicture'
+    );
+    if(post && post.author.toString() !== res.locals.id.toString()){
+      await Notification.create({
+        recipient: post.author,
+        type: 'comment',
+        relatedUser: res.locals.id,
+        relatedPost: req.params.id as string,
+      });
+    }
+    return res.status(200).json({ message: 'Comment created' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error creating comment' });
   }
 };
