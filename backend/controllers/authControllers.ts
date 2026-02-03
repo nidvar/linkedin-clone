@@ -44,7 +44,7 @@ export const signUp = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Username already exists' });
     };
 
-    const newUser = await User.create({
+    await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       fullName: full_name,

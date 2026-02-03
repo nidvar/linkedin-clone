@@ -38,7 +38,7 @@ export const updateUserDetails = async (req: Request, res: Response)=>{
       updateObject.bannerImg = cloudinaryURL.secure_url;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(user._id, { $set: updateObject }, { new: true }).select(
+    await User.findByIdAndUpdate(user._id, { $set: updateObject }, { new: true }).select(
       "-password"
     );
 
