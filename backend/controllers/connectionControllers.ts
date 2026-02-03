@@ -6,7 +6,13 @@ import ConnectionRequest from '../models/notificationModel.js';
 
 export const getConnectionRequests = async (req: Request, res: Response) => {
   try {
-    
+    const connectionRequests = await ConnectionRequest.find({ recipient: res.locals.id });
+
+    if(!connectionRequests) return res.status(400).json({ message: 'No connection requests found' });
+
+    console.log(connectionRequests);
+
+    return res.status(200).json({ connectionRequests });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error getting connection requests' });
