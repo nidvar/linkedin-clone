@@ -2,8 +2,8 @@ import Layout from './components/layout/Layout'
 import { Routes, Route } from 'react-router-dom'
 
 import HomePage from './pages/HomePage'
-import SignUpPage from './pages/SignUpPage'
-import LoginPage from './pages/LoginPage'
+import SignUpPage from './pages/auth/SignUpPage'
+import LoginPage from './pages/auth/LoginPage'
 
 function App() {
   return (
