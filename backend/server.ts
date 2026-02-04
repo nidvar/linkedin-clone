@@ -23,7 +23,7 @@ connectDB();
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({limit: '5mb'}));
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
