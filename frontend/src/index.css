@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.signup-form {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 600px;
+  margin: auto;
+}
+
+/* SIGN UP PAGE ===============================================*/
+
+.signup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 800px;
+  margin: auto;
+
+  border: 1px solid black;
+}
+
+
+/* UTILITIES ===============================================*/
+
+input {
+  border: 1px solid grey;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #0d6efd;
+  color: white;
+}
+
+.link {
+  color:#0d6efd;
+}

@@ -23,8 +23,7 @@ export const signUp = async (req: Request, res: Response) => {
       !validation(req.body.email) ||
       !validation(req.body.password) ||
       !validation(req.body.firstName) ||
-      !validation(req.body.lastName) ||
-      !validation(req.body.username)
+      !validation(req.body.lastName)
     ){
       return res.status(400).json({ message: 'User details incomplete' });
     };
@@ -33,24 +32,16 @@ export const signUp = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const profilePic = 'https://robohash.org/' + req.body.firstName + '.png';
 
-    const [existingEmail, existingUsername] = await Promise.all([
-      User.findOne({ email: req.body.email }),
-      User.findOne({ username: req.body.username }),
-    ]);
+    const existingEmail = await User.findOne({ email: req.body.email });
 
     if(existingEmail){
       return res.status(400).json({ message: 'Email already exists' });
-    };
-
-    if(existingUsername){
-      return res.status(400).json({ message: 'Username already exists' });
     };
 
     await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       fullName: full_name,
-      username: req.body.username.toLowerCase(),
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
       profilePicture: profilePic,
