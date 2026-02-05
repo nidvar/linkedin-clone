@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({limit: '5mb'}));
 
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/connections', connectionRoutes);
 
