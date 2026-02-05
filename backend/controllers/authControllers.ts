@@ -113,8 +113,13 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const getMe = async (req: Request, res: Response) => {
+  console.log('get me')
   try {
-
+    const user = await User.findById(res.locals.id).select('-password -refreshToken');
+    if(!user){
+      return res.status(400).json({ message: 'User does not exist' });
+    };
+    return res.status(200).json({ user });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error' });

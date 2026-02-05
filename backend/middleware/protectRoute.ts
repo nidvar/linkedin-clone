@@ -4,6 +4,7 @@ import type { NextFunction, Request, Response } from 'express';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 
 export const protectRoute = (req: Request, res:Response, next:NextFunction)=>{
+  console.log('protect route')
   try {
     const token = req.cookies['linkedIn-Access'];
     if(!token){
