@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { getRequest, postRequest } from "../../utils/utilFunctions";
+import type { AuthUser } from "../../utils/types";
 
 const Navbar = () => {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const authUser = queryClient.getQueryData(['authUser']);
+  const authUser = queryClient.getQueryData<AuthUser | null>(['authUser']);
 
   const query = useQuery({ 
     queryKey: ['notifications'], 
@@ -21,8 +22,6 @@ const Navbar = () => {
     },
     enabled: authUser !== null
   });
-
-  console.log(query.data);
 
   const mutateObj = useMutation({
     mutationFn: async () => {
@@ -44,7 +43,10 @@ const Navbar = () => {
       <Link to='/'>Home</Link>
       <Link to='/login'>Login</Link>
       <Link to='/signup'>Sign up</Link>
-      <button onClick={function(){mutateObj.mutate()}}>LOGOUT</button>
+      {
+        authUser && authUser.user?
+        <button onClick={function(){mutateObj.mutate()}}>LOGOUT</button>:''
+      }
     </div>
   )
 }
