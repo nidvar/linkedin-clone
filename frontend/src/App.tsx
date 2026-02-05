@@ -10,7 +10,7 @@ import { getRequest } from './utils/utilFunctions'
 
 function App() {
 
-  const data = useQuery({ 
+  const query = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
       const authUser = await getRequest('/auth/me');
@@ -19,15 +19,12 @@ function App() {
     }
   });
 
-  console.log(data.data);
-  console.log(data);
-
   return (
     <Layout>
       <Routes>
-        <Route path='/' element={ data?.data ? <HomePage /> : <LoginPage />}/>
-        <Route path='/signup' element={ data?.data ? <HomePage /> : <SignUpPage />}/>
-        <Route path='/login' element={ data?.data ? <HomePage /> : <LoginPage />}/>
+        <Route path='/' element={ query.data != null? <HomePage /> : <LoginPage />}/>
+        <Route path='/signup' element={ query.data != null? <HomePage /> : <SignUpPage />}/>
+        <Route path='/login' element={ query.data != null? <HomePage /> : <LoginPage />}/>
       </Routes>
     </Layout>
   )

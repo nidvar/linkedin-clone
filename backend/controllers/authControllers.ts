@@ -122,6 +122,20 @@ export const getMe = async (req: Request, res: Response) => {
     return res.status(200).json({ user });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: 'Internal Server Error getting current user' });
+  }
+};
+
+export const refreshAccessToken = async (req: Request, res: Response)=>{
+  try {
+    const user = await User.findById(res.locals.id);
+    if(!user){
+      return res.status(400).json({ message: 'User does not exist' });
+    };
+    generateAccessToken(user._id, res);
+    return res.status(200).json({ message: 'Access token refreshed' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error refreshing access token' });
   }
 };
