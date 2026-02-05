@@ -1,11 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, type SubmitEvent } from 'react';
 import { postRequest } from '../../utils/utilFunctions';
-import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
 
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +16,7 @@ function LoginForm() {
       await postRequest('/auth/login', body);
     },
     onSuccess: ()=>{
-      navigate('/');
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (error)=>{
       setError(error.message || 'Login failed');

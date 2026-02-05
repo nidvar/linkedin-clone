@@ -61,27 +61,21 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-
     const user = await User.findOne({ email: req.body.email.toLowerCase() });
-
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     };
 
     const compareHashedPassword = await bcrypt.compare(req.body.password, user.password);
-
     if(compareHashedPassword === false){
       return res.status(400).json({ message: 'Incorrect Password' });
     };
 
     generateAccessToken(user._id, res);
-
     user.refreshToken = generateRefreshToken(user._id, res);
-
     await user.save();
 
     return res.status(200).json({ message: 'logged in' });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -90,22 +84,18 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-
     res.clearCookie('linkedIn-Refresh');
     res.clearCookie('linkedIn-Access');
 
-    const user = await User.findOne({ email: req.body.email.toLowerCase() });
-
+    const user = await User.findOne({ _id: res.locals.id });
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     };
 
     user.refreshToken = '';
-
     await user.save();
 
     return res.status(200).json({ message: 'logged out' });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error' });
