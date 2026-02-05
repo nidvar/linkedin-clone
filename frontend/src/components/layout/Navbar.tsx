@@ -9,7 +9,7 @@ const Navbar = () => {
   const authUser = queryClient.getQueryData(['authUser']);
 
   const query = useQuery({ 
-    queryKey: ['authUser'], 
+    queryKey: ['notifications'], 
     queryFn: async () => {
       try {
         const notifications = await getRequest('/notifications');
@@ -36,6 +36,8 @@ const Navbar = () => {
       console.log(error);
     }
   });
+
+  if (query.isLoading) return null;
 
   return (
     <div className='border m-10 bg-blue-100 flex gap-10'>

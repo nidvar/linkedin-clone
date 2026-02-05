@@ -21,6 +21,8 @@ function App() {
     }
   });
 
+  if (query.isLoading) return null;
+
   return (
     <Layout>
       <Routes>
