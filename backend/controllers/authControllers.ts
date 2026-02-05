@@ -38,7 +38,7 @@ export const signUp = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Email already exists' });
     };
 
-    await User.create({
+    const user = await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       fullName: full_name,
@@ -47,7 +47,11 @@ export const signUp = async (req: Request, res: Response) => {
       profilePicture: profilePic,
     });
 
-    return res.status(200).json({ message: 'Signed Up' });
+    generateAccessToken(user._id, res);
+    user.refreshToken = generateRefreshToken(user._id, res);
+    await user.save();
+
+    return res.status(200).json({ success: true });
 
   } catch (error) {
     console.log(error);

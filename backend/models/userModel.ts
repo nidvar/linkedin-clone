@@ -20,7 +20,10 @@ const userSchema = new mongoose.Schema(
     },
     username: { 
       type: String, 
-      unique: true 
+      unique: true,
+      default: function() {
+        return `user_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+      }
     },
     email: { 
       type: String, 
