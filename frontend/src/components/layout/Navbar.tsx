@@ -1,11 +1,28 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { postRequest } from "../../utils/utilFunctions";
+import { getRequest, postRequest } from "../../utils/utilFunctions";
 
 const Navbar = () => {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const authUser = queryClient.getQueryData(['authUser']);
+
+  const query = useQuery({ 
+    queryKey: ['authUser'], 
+    queryFn: async () => {
+      try {
+        const notifications = await getRequest('/notifications');
+        console.log(notifications);
+        return notifications;
+      } catch (error) {
+        return error;
+      }
+    },
+    enabled: authUser !== null
+  });
+
+  console.log(query.data);
 
   const mutateObj = useMutation({
     mutationFn: async () => {
