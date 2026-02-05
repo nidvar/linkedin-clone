@@ -9,22 +9,24 @@ import LoginPage from './pages/auth/LoginPage'
 import { getRequest } from './utils/utilFunctions'
 
 function App() {
-
   const query = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
-      const authUser = await getRequest('/auth/me');
-      console.log(authUser);
-      return authUser
+      try {
+        const authUser = await getRequest('/auth/me');
+        return authUser;
+      } catch (error) {
+        return error;
+      }
     }
   });
 
   return (
     <Layout>
       <Routes>
-        <Route path='/' element={ query.data != null? <HomePage /> : <LoginPage />}/>
-        <Route path='/signup' element={ query.data != null? <HomePage /> : <SignUpPage />}/>
-        <Route path='/login' element={ query.data != null? <HomePage /> : <LoginPage />}/>
+        <Route path='/' element={ query.data?.user? <HomePage /> : <LoginPage />}/>
+        <Route path='/signup' element={ query.data?.user? <HomePage /> : <SignUpPage />}/>
+        <Route path='/login' element={ query.data?.user? <HomePage /> : <LoginPage />}/>
       </Routes>
     </Layout>
   )
