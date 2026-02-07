@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
+import { Bell, Home, LogOut, User, Users } from 'lucide-react';
+
+// local imports
 import { getRequest, postRequest } from "../../utils/utilFunctions";
 import type { AuthUser } from "../../utils/types";
 
@@ -39,16 +42,27 @@ const Navbar = () => {
   if (query.isLoading) return null;
 
   return (
-    <div className='border m-10 bg-blue-100 flex gap-10'>
-      <Link to='/'>Home</Link>
-      {
-        authUser && authUser.user?
-        <button onClick={function(){mutateObj.mutate()}}>LOGOUT</button>:
-        <>
-          <Link to='/login'>Login</Link>
-          <Link to='/signup'>Sign up</Link>
-        </>
-      }
+    <div className="my-nav-container relative">
+      <div className='my-nav flex justify-between py-2'>
+        <div className="nav-left-side">
+          <Link to='/'><img src="/long-logo.png" alt="logo" className="logo-img"/></Link>
+        </div>
+        <div className="nav-right-side">
+          {
+            authUser && authUser.user?
+            <>
+              <Users className="hand-hover"/>
+              <User className="hand-hover"/>
+              <Bell className="hand-hover"/>
+              <LogOut onClick={function(){mutateObj.mutate()}} className="hand-hover"/>
+            </>:
+            <>
+              <Link to='/signup' className="blue-button-shell">Join now</Link>
+              <Link to='/login' className="blue-button">Login</Link>
+            </>
+          }
+        </div>
+      </div>
     </div>
   )
 }

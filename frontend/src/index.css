@@ -2,13 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-.signup-form {
-  border: 1px solid black;
+
+/* NAVBAR ===============================================*/
+
+.my-nav-container {
+  border-bottom: 1px solid grey;
+  margin:auto;
+}
+
+.my-nav {
+  max-width: 1200px;
+  margin:auto;
+  min-height: 60px;
+}
+
+.nav-right-side {
   display: flex;
-  flex-direction: column;
-  padding: 20px;
-  width: 600px;
-  margin: auto;
+  align-items: center;
+  gap: 15px;
+  font-weight: 600;
+}
+
+.nav-left-side {
+  display: flex;
+  align-items: center;
 }
 
 /* SIGN UP PAGE ===============================================*/
@@ -24,6 +41,15 @@
   border: 1px solid black;
 }
 
+.signup-form {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 600px;
+  margin: auto;
+}
+
 
 /* UTILITIES ===============================================*/
 
@@ -37,13 +63,35 @@ input {
   border-radius: 4px;
 }
 
-button {
+button{
   padding: 4px 8px;
   border-radius: 4px;
   background-color: #0d6efd;
   color: white;
 }
 
+.blue-button {
+  padding: 10px 12px;
+  border-radius: 40px;
+  background-color: #0d6efd;
+  color: white;
+}
+
+.blue-button-shell {
+  padding: 10px 12px;
+  border-radius: 40px;
+  border: 1px solid #0d6efd;
+  color: #0d6efd;
+}
+
 .link {
   color:#0d6efd;
+}
+
+.hand-hover:hover {
+  cursor: pointer;
+}
+
+.logo-img {
+  max-height: 30px;
 }
