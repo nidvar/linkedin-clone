@@ -4,11 +4,9 @@ import type { NextFunction, Request, Response } from 'express';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 
 export const protectRoute = (req: Request, res:Response, next:NextFunction)=>{
-  console.log('protect route')
   try {
-    const token = req.cookies['linkedIn-Access'];
+    const token = req.cookies.linkedInAccess;
     if(!token){
-      console.log('no token');
       return res.status(401).json({ message: 'Invalid token' });
     };
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;

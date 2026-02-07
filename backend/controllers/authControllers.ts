@@ -1,6 +1,7 @@
 // Third party
 import type { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import jwt, { type JwtPayload } from 'jsonwebtoken';
 
 // Models
 import User from '../models/userModel.js';
@@ -84,8 +85,8 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.clearCookie('linkedIn-Refresh');
-    res.clearCookie('linkedIn-Access');
+    res.clearCookie('linkedInRefresh');
+    res.clearCookie('linkedInAccess');
 
     const user = await User.findOne({ _id: res.locals.id });
     if(!user){
@@ -118,11 +119,23 @@ export const getMe = async (req: Request, res: Response) => {
 
 export const refreshAccessToken = async (req: Request, res: Response)=>{
   try {
-    const user = await User.findById(res.locals.id);
+    const refreshToken = req.cookies.linkedInRefresh;
+    if(!refreshToken){
+      return res.status(400).json({ message: 'Refresh token not found' });
+    };
+
+    const decodedRefreshToken = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string) as JwtPayload;
+    if(!decodedRefreshToken){
+      return res.status(400).json({ message: 'Invalid refresh token' });
+    };
+
+    const user = await User.findById(decodedRefreshToken.id);
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     };
+
     generateAccessToken(user._id, res);
+
     return res.status(200).json({ message: 'Access token refreshed' });
   } catch (error) {
     console.log(error);
