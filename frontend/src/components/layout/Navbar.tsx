@@ -41,11 +41,13 @@ const Navbar = () => {
   return (
     <div className='border m-10 bg-blue-100 flex gap-10'>
       <Link to='/'>Home</Link>
-      <Link to='/login'>Login</Link>
-      <Link to='/signup'>Sign up</Link>
       {
         authUser && authUser.user?
-        <button onClick={function(){mutateObj.mutate()}}>LOGOUT</button>:''
+        <button onClick={function(){mutateObj.mutate()}}>LOGOUT</button>:
+        <>
+          <Link to='/login'>Login</Link>
+          <Link to='/signup'>Sign up</Link>
+        </>
       }
     </div>
   )
