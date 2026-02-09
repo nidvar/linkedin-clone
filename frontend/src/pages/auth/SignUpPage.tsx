@@ -33,7 +33,7 @@ function SignUpPage() {
 
   return (
     <>
-      <h1 className="text-3xl m-5 text-center">Make the most of your professional life</h1>
+      <h1 className="text-3xl mb-8 text-center">Make the most of your professional life</h1>
       <form className='signup-form' onSubmit={handleSubmit}>
         <label className='label'>First Name</label>
         <input
@@ -66,7 +66,7 @@ function SignUpPage() {
           value={password}
           onChange={function (e) { setPassword(e.target.value) }}
         />
-        <p className='agreement'>By clicking Agree & Join or Continue, you agree to the LinkedIn <Link 
+        <p className='agreement m-5'>By clicking Agree & Join or Continue, you agree to the LinkedIn <Link 
             className='link bold'
             to='https://www.linkedin.com/legal/user-agreement?trk=registration-frontend_join-form-user-agreement'
             target="_blank"
@@ -87,7 +87,6 @@ function SignUpPage() {
         {error}
         <div>
           <p className='text-center mt-5'>Already on LinkedIn? <Link to='/login' className="link bold">Sign in</Link></p>
-          
         </div>
       </form>
     </>

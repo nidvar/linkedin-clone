@@ -55,11 +55,7 @@ const Navbar = () => {
               <User className="hand-hover"/>
               <Bell className="hand-hover"/>
               <LogOut onClick={function(){mutateObj.mutate()}} className="hand-hover"/>
-            </>:
-            <>
-              <Link to='/signup' className="blue-button-shell">Join now</Link>
-              <Link to='/login' className="blue-button">Login</Link>
-            </>
+            </>:''
           }
         </div>
       </div>
