@@ -55,7 +55,16 @@ export const updateUserDetails = async (req: Request, res: Response)=>{
 
 export const suggestedUsers = async (req: Request, res: Response)=>{
   try {
+    const currentUser = await User.findById(res.locals.id);
+    if(!currentUser){
+      return res.status(400).json({ message: 'User does not exist' });
+    };
+    const suggestedUsers = await User.find({ 
+      _id: { $ne: res.locals.id, $nin: currentUser.connections },
 
+    }).select('fullName profilePicture headline');
+
+    return res.status(200).json({ suggestedUsers });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error for suggested users' });
