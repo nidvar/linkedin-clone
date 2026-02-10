@@ -11,8 +11,12 @@ import User from '../models/userModel.js';
 
 export const getFeedPosts = async (req: Request, res: Response)=>{
   try {
+    const user = await User.findById(res.locals.id);
+    if(!user){
+      return res.status(400).json({ message: 'User does not exist' });
+    };
     const posts = await Post.find({
-      author: { $in: res.locals.id.connections }
+      author: { $in: [...user.connections, res.locals.id] }
     })
     .populate('author', 'name username profilePicture headline')
     .populate('comments.user', 'name profilePicture')
