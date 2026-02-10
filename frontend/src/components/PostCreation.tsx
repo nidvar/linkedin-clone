@@ -13,7 +13,7 @@ function PostCreation({profile} : {profile: string}) {
 
   const mutateObj = useMutation({
     mutationFn: async () => {
-      const result =  await postRequest('/post/create', {content: post, image: image});
+      const result =  await postRequest('/post/create', {post: post, image: imagePreview});
       if (result.success === true) { 
         console.log('post success')
       }else{
@@ -82,7 +82,7 @@ function PostCreation({profile} : {profile: string}) {
           <textarea 
             className='p-2'
             placeholder={'What\'s on your mind?'} 
-            onChange={(e) => setPost({content: e.target.value})}>
+            onChange={(e) => setPost(e.target.value)}>
           </textarea>
         </div>
         <div className='flex justify-between'>

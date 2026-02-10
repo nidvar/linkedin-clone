@@ -33,7 +33,7 @@ export const createPost = async (req: Request, res: Response)=>{
       cloudinaryImg = await cloudinary.uploader.upload(req.body.image, { folder: 'linkedin-posts' });
     };
     newPost = await Post.create({
-      content: req.body.content,
+      content: req.body.post,
       author: res.locals.id,
       image: cloudinaryImg ? cloudinaryImg.secure_url : ''
     });
