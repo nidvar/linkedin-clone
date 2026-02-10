@@ -9,26 +9,27 @@ import LoginPage from './pages/auth/LoginPage'
 import { getRequest } from './utils/utilFunctions'
 
 function App() {
-  const query = useQuery({ 
+  const userData = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
       try {
         const authUser = await getRequest('/auth/me');
-        return authUser;
+        const user = authUser.user;
+        return user;
       } catch (error) {
         return error;
       }
     }
   });
 
-  if (query.isLoading) return null;
+  if (userData.isLoading) return null;
 
   return (
     <Layout>
       <Routes>
-        <Route path='/' element={ query.data?.user? <HomePage /> : <LoginPage />}/>
-        <Route path='/signup' element={ query.data?.user? <HomePage /> : <SignUpPage />}/>
-        <Route path='/login' element={ query.data?.user? <HomePage /> : <LoginPage />}/>
+        <Route path='/' element={ userData.data? <HomePage /> : <LoginPage />}/>
+        <Route path='/signup' element={ userData.data? <HomePage /> : <SignUpPage />}/>
+        <Route path='/login' element={ userData.data? <HomePage /> : <LoginPage />}/>
       </Routes>
     </Layout>
   )
