@@ -184,3 +184,7 @@ button{
   max-height: 50px;
   background-color: wheat;
 }
+
+.image-preview {
+  width: 100%;
+}
