@@ -1,11 +1,13 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postRequest } from '../utils/utilFunctions';
 import { useRef, useState, type SubmitEvent } from 'react';
 import { Image } from 'lucide-react';
 
 function PostCreation({profile} : {profile: string}) {
 
-  const [post, setPost] = useState({});
+   const queryClient = useQueryClient();
+
+  const [post, setPost] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   
@@ -14,8 +16,9 @@ function PostCreation({profile} : {profile: string}) {
   const mutateObj = useMutation({
     mutationFn: async () => {
       const result =  await postRequest('/post/create', {post: post, image: imagePreview});
-      if (result.success === true) { 
-        console.log('post success')
+      if (result.message === 'Post created') { 
+        queryClient.invalidateQueries({ queryKey: ["posts"] });
+        setPost('');
       }else{
         console.log(result.message);
       }
@@ -81,7 +84,8 @@ function PostCreation({profile} : {profile: string}) {
           <img src={profile} alt="Preview" className='profile-img'/>
           <textarea 
             className='p-2'
-            placeholder={'What\'s on your mind?'} 
+            placeholder={'What\'s on your mind?'}
+            value={post}
             onChange={(e) => setPost(e.target.value)}>
           </textarea>
         </div>

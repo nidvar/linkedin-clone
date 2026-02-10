@@ -35,6 +35,8 @@ const HomePage = () => {
     },
   });
 
+  console.log(posts.data);
+
   return (
     <>
       <div className="homepage flex gap-8">
