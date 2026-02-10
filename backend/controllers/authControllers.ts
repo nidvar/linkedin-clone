@@ -29,7 +29,18 @@ export const signUp = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'User details incomplete' });
     };
 
-    const full_name = `${req.body.firstName} ${req.body.lastName}`;
+    function capitalizeFirstLetter(str: string) {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+
+    const firstNameLowerCase = req.body.firstName.toLowerCase();
+    const lastNameLowerCase = req.body.lastName.toLowerCase();
+
+    const firstName = capitalizeFirstLetter(firstNameLowerCase);
+    const lastName = capitalizeFirstLetter(lastNameLowerCase);
+
+    const full_name = `${firstName} ${lastName}`;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const profilePic = 'https://robohash.org/' + req.body.firstName + '.png';
 

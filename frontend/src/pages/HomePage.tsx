@@ -1,9 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRequest } from "../utils/utilFunctions";
-import Sidebar from '../components/layout/Sidebar';
+import Sidebar from '../components/Sidebar';
+import type { AuthUser } from "../utils/types";
+import PostCreation from "../components/PostCreation";
 
 const HomePage = () => {
-  const query = useQuery({ 
+
+  const queryClient = useQueryClient();
+  const authUser = queryClient.getQueryData< AuthUser | null>(['authUser']);
+
+  const recommendedUsers = useQuery({
     queryKey: ['recommendedUsers'], 
     queryFn: async () => {
       try {
@@ -15,11 +21,28 @@ const HomePage = () => {
       }
     },
   });
-  console.log(query.data);
+
+  const posts = useQuery({
+    queryKey: ['posts'], 
+    queryFn: async () => {
+      try {
+        const posts = await getRequest('/post/feed');
+        console.log(posts);
+        return posts;
+      } catch (error) {
+        return error;
+      }
+    },
+  });
+
+  console.log(recommendedUsers.data);
+  console.log(posts.data);
+
   return (
     <>
-      <div className="homepage">
-        <Sidebar />
+      <div className="homepage flex gap-8">
+        <Sidebar user={authUser? authUser.user : null}/>
+        <PostCreation profile={authUser? authUser.user.profilePicture : ''}/>
       </div>
     </>
   )

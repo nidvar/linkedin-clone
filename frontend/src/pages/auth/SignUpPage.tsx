@@ -1,11 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, type SubmitEvent } from 'react';
 import { postRequest } from '../../utils/utilFunctions';
 import { Link, useNavigate } from 'react-router-dom';
+import type { AuthUser } from '../../utils/types';
 
 function SignUpPage() {
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -18,7 +21,7 @@ function SignUpPage() {
       const body = { firstName, lastName, email, password };
       const result = await postRequest('/auth/signup', body);
       if (result.success === true) { 
-        navigate('/login'); 
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
       }else{
         setError(result.message);
       }
@@ -82,7 +85,7 @@ function SignUpPage() {
             target="_blank"
           >Cookie Policy</Link>.</p>
         {
-          mutateObj.isPending ? <p>Signing up...</p> : <button type="submit" className='blue-button'>Agree & Join</button>
+          mutateObj.isPending ? <p className='text-center'>Signing up...</p> : <button type="submit" className='blue-button'>Agree & Join</button>
         }
         {error}
         <div>

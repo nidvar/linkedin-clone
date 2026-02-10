@@ -12,7 +12,7 @@ import User from '../models/userModel.js';
 export const getFeedPosts = async (req: Request, res: Response)=>{
   try {
     const posts = await Post.find({
-      author: { $in: res.locals.user.connections }
+      author: { $in: res.locals.id.connections }
     })
     .populate('author', 'name username profilePicture headline')
     .populate('comments.user', 'name profilePicture')
