@@ -41,6 +41,10 @@
 
 .post-container {
   border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
 }
 
 
@@ -70,9 +74,9 @@
 
 .sidebar {
   border: 1px solid black;
-  max-width: 300px;
-  max-height: 450px;
+  max-width: 280px;
   width: 100%;
+  max-height: 450px;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -110,7 +114,7 @@
   margin: 0 0 30px 0;
 }
 
-/* POST CREATION ===============================================*/
+/* NEW POST ===============================================*/
 
 .post-section {
   max-width: 700px;
@@ -120,7 +124,7 @@
   gap: 15px;
 }
 
-.post-creation-container {
+.new-post-container {
   align-self: flex-start;
   padding: 15px;
   width: 100%;
@@ -131,7 +135,7 @@
   background-color: wheat;
 }
 
-.post-creation-container textarea {
+.new-post-container textarea {
   border: 1px solid gray;
   height: 100px;
   width: 100%;

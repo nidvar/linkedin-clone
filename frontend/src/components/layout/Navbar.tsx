@@ -4,13 +4,13 @@ import { Bell, Home, LogOut, User, Users } from 'lucide-react';
 
 // local imports
 import { getRequest, postRequest } from "../../utils/utilFunctions";
-import type { AuthUser } from "../../utils/types";
+import type { AuthUserType } from "../../utils/types";
 
 const Navbar = () => {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const authUser = queryClient.getQueryData<AuthUser | null>(['authUser']);
+  const authUser = queryClient.getQueryData<AuthUserType | null>(['authUser']);
 
   const query = useQuery({ 
     queryKey: ['notifications'], 
@@ -49,7 +49,7 @@ const Navbar = () => {
         </div>
         <div className="nav-right-side">
           {
-            authUser && authUser.user?
+            authUser?
             <>
               <Users className="hand-hover"/>
               <User className="hand-hover"/>

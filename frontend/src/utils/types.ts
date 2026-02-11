@@ -25,6 +25,7 @@ export type PostType = {
       profilePicture: string
       headline: string
       username: string
+      fullName: string
   },
   content: string
   image: string,

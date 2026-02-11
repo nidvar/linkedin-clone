@@ -71,7 +71,7 @@ function PostCreation({profile} : {profile: string}) {
   }
 
   return (
-    <div className='post-creation-container'>
+    <div className='new-post-container'>
       {
         imagePreview !==null?
         <div className='image-preview text-center m-auto'>

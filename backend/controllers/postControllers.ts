@@ -18,8 +18,8 @@ export const getFeedPosts = async (req: Request, res: Response)=>{
     const posts = await Post.find({
       author: { $in: [...user.connections, res.locals.id] }
     })
-    .populate('author', 'name username profilePicture headline')
-    .populate('comments.user', 'name profilePicture')
+    .populate('author', 'fullName username profilePicture headline')
+    .populate('comments.user', 'fullName profilePicture')
     .sort({ createdAt: -1 }).limit(10);
 
     return res.status(200).json({ posts });
@@ -76,8 +76,8 @@ export const deletePost = async (req: Request, res: Response)=>{
 export const getPostById = async (req: Request, res: Response)=>{
   try {
     const post = await Post.findById(req.params.id)
-    .populate('author', 'name username profilePicture headline')
-    .populate('comments.user', 'name profilePicture');
+    .populate('author', 'fullName profilePicture headline')
+    .populate('comments.user', 'fullName profilePicture');
     if(!post){
       return res.status(400).json({ message: 'Post does not exist' });
     };
@@ -97,7 +97,7 @@ export const createComment = async (req: Request, res: Response)=>{
     )
     .populate(
       'author',
-      'name email username headline profilePicture'
+      'fullName email headline profilePicture'
     );
     if(post && post.author.toString() !== res.locals.id.toString()){
       await Notification.create({

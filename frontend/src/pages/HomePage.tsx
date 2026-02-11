@@ -51,7 +51,7 @@ const HomePage = () => {
           <>
             {posts.map((item)=>{
               return (
-                <Post post={item} />
+                <Post post={item} key={item._id}/>
               )
             })}
           </>:''
