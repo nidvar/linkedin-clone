@@ -23,7 +23,6 @@ const Navbar = () => {
       }
     },
     enabled: authUser !== null,
-    refetchOnWindowFocus: false
   });
 
   const connectionRequests = useQuery({ 
@@ -37,7 +36,6 @@ const Navbar = () => {
       }
     },
     enabled: authUser !== null,
-    refetchOnWindowFocus: false
   });
 
   const mutateObj = useMutation({

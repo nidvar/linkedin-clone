@@ -18,12 +18,12 @@ const HomePage = () => {
       try {
         const data = await getRequest('/user/suggestedusers');
         const randomizedUsers = data.usersNotConnected.sort(() => Math.random() - 0.5).slice(0, 3);
+        console.log(randomizedUsers)
         return randomizedUsers
       } catch (error) {
         return error;
       }
     },
-    refetchOnWindowFocus: false
   });
 
   const postsData = useQuery({
@@ -31,12 +31,12 @@ const HomePage = () => {
     queryFn: async () => {
       try {
         const data = await getRequest('/post/feed');
+        console.log(data);
         return data.posts;
       } catch (error) {
         return error;
       }
     },
-    refetchOnWindowFocus: false
   });
 
   return (

@@ -6,8 +6,6 @@ function NetworkPage() {
   const queryClient = useQueryClient();
   const requests = queryClient.getQueryData<ConnectionRequestType[] | null>(['requests']);
 
-  console.log(requests)
-
   return (
     <div className='main'>
       <div className='connection-container shaded-border'>
