@@ -1,5 +1,4 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 
 import { getRequest } from "../utils/utilFunctions";
 import Sidebar from '../components/Sidebar';
@@ -10,8 +9,6 @@ import RecommendedUsers from "../components/RecommendedUsers";
 
 const HomePage = () => {
 
-  const [posts, setPosts] = useState<PostType[]>([]);
-
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
 
@@ -19,8 +16,8 @@ const HomePage = () => {
     queryKey: ['recommendedUsers'], 
     queryFn: async () => {
       try {
-        const suggstedUsers = await getRequest('/user/suggestedusers');
-        return suggstedUsers;
+        const data = await getRequest('/user/suggestedusers');
+        return data.suggestedUsers;
       } catch (error) {
         return error;
       }
@@ -32,8 +29,6 @@ const HomePage = () => {
     queryFn: async () => {
       try {
         const data = await getRequest('/post/feed');
-        console.log(data.posts);
-        setPosts(data.posts);
         return data.posts;
       } catch (error) {
         return error;
@@ -47,17 +42,17 @@ const HomePage = () => {
       <div className="post-section">
         <PostCreation profile={authUser? authUser.profilePicture : ''} />
         {
-          posts.length > 0?
-          <>
-            {posts.map((item)=>{
-              return (
-                <Post post={item} key={item._id}/>
-              )
-            })}
-          </>:''
+          postsData.data && postsData.data.length > 0?
+            <>
+              {postsData.data.map((item: PostType)=>{
+                return (
+                  <Post post={item} key={item._id}/>
+                )
+              })}
+            </>:''
         }
       </div>
-      <RecommendedUsers />
+      <RecommendedUsers recommendedUsers={recommendedUsers.data}/>
     </div>
   )
 }

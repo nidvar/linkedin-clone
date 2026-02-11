@@ -34,3 +34,10 @@ export type PostType = {
   createdAt: string
   updatedAt: string
 }
+
+export type SuggestedUsersType = {
+  _id: string
+  fullName: string
+  profilePicture: string
+  headline: string
+}

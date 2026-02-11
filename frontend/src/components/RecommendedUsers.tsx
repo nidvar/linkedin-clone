@@ -1,9 +1,34 @@
-import React from 'react'
+import { Link } from 'react-router-dom';
+import type { SuggestedUsersType } from '../utils/types';
+import { UserPlus } from 'lucide-react';
 
-function RecommendedUsers() {
+function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUsersType[]}) {
   return (
     <div className='recommended-container shaded-border'>
-      <h1>Recommended Users</h1>
+      <h1 className='font-semibold text-lg'>People you may know</h1>
+      {
+        recommendedUsers && recommendedUsers.length > 0?
+        <>
+          {
+            recommendedUsers.map((user) => {
+              return (
+                <div className='flex justify-between items-center'>
+                  <Link to='/' className='flex gap-2 items-center'>
+                    <img src={user.profilePicture} alt="" className='profile-img'/>
+                    <div className='flex flex-col '>
+                      <p className="font-semibold text-sm">{user.fullName}</p>
+                      <p className="text-xs">{user.headline}</p>
+                    </div>
+                  </Link>
+                  <div>
+                    <button className='connect-button flex gap-2 items-center'><UserPlus size={14}/>Connect</button>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </>:''
+      }
     </div>
   )
 }
