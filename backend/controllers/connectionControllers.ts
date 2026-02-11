@@ -100,6 +100,15 @@ export const rejectConnectionRequest = async (req: Request, res: Response) => {
 
 export const sendConnectionRequest = async (req: Request, res: Response) => {
   try {
+
+    const sender = new mongoose.Types.ObjectId(res.locals.id);
+    const recipient = new mongoose.Types.ObjectId(req.params.id?.toString());
+
+    if(sender === recipient) return res.status(400).json({ message: 'You cannot send a connection request to yourself' });
+
+    const existsingRequest = await ConnectionRequest.findOne({recipient: recipient, sender: sender});
+    if(existsingRequest) return res.status(400).json({ message: 'Connection request already sent' });
+
     const connectionRequest = new ConnectionRequest({ 
       sender: res.locals.id,
       recipient: req.params.id

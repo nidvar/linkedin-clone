@@ -19,6 +19,8 @@ function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUser
     }
   });
 
+  console.log(recommendedUsers);
+
   return (
     <div className='recommended-container shaded-border'>
       <h1 className='font-semibold text-lg'>People you may know</h1>
