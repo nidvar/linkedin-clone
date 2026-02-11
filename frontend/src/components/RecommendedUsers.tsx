@@ -2,8 +2,23 @@ import { Link } from 'react-router-dom';
 
 import type { SuggestedUsersType } from '../utils/types';
 import { UserPlus } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { postRequest } from '../utils/utilFunctions';
 
 function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUsersType[]}) {
+
+  const mutateObj = useMutation({
+    mutationFn: async (arg: string) => {
+      await postRequest('/connections/sendRequest/' + arg, {});
+    },
+    onSuccess: ()=>{
+      console.log('success')
+    },
+    onError: (error)=>{
+      console.log(error);
+    }
+  });
+
   return (
     <div className='recommended-container shaded-border'>
       <h1 className='font-semibold text-lg'>People you may know</h1>
@@ -22,7 +37,7 @@ function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUser
                     </div>
                   </Link>
                   <div>
-                    <button className='connect-button flex gap-2 items-center'><UserPlus size={14}/>Connect</button>
+                    <button className='connect-button flex gap-2 items-center' onClick={function(){mutateObj.mutate(user._id)}} ><UserPlus size={14} />Connect</button>
                   </div>
                 </div>
               )

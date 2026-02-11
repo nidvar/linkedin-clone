@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, Home, LogOut, User, Users } from 'lucide-react';
+import { Bell, LogOut, Users } from 'lucide-react';
 
 // local imports
 import { getRequest, postRequest } from "../../utils/utilFunctions";
@@ -12,13 +12,26 @@ const Navbar = () => {
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData<AuthUserType | null>(['authUser']);
 
-  const query = useQuery({ 
+  const notifications = useQuery({ 
     queryKey: ['notifications'], 
     queryFn: async () => {
       try {
-        const notifications = await getRequest('/notifications');
-        console.log(notifications);
-        return notifications;
+        const data = await getRequest('/notifications');
+        return data.notifications;
+      } catch (error) {
+        return error;
+      }
+    },
+    enabled: authUser !== null,
+    refetchOnWindowFocus: false
+  });
+
+  const connectionRequests = useQuery({ 
+    queryKey: ['requests'], 
+    queryFn: async () => {
+      try {
+        const data = await getRequest('/connections/requests');
+        return data.connectionRequests;
       } catch (error) {
         return error;
       }
@@ -29,7 +42,7 @@ const Navbar = () => {
 
   const mutateObj = useMutation({
     mutationFn: async () => {
-      return await postRequest('/auth/logout', {});
+      return await postRequest('/auth/logout', {userId: authUser?._id});
     },
     onSuccess: ()=>{
       queryClient.setQueryData(['authUser'], null);
@@ -40,7 +53,8 @@ const Navbar = () => {
     }
   });
 
-  if (query.isLoading) return null;
+  if (notifications.isLoading) return null;
+  if (connectionRequests.isLoading) return null;
 
   return (
     <div className="my-nav-container relative">
@@ -60,17 +74,23 @@ const Navbar = () => {
               <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">
                 <Users height={24}/>
                 <span title="Connections" className="text-xs">My Network</span>
-                <span className='notification-dot'>
-                  30
-                </span>
+                {
+                  connectionRequests.data && connectionRequests.data.length > 0?
+                  <span className='notification-dot'>
+                    {connectionRequests.data.length}
+                  </span>:''
+                }
               </Link>
 
               <Link to='/notifications' className="flex flex-col items-center gap-1 hand-hover relative">
                 <Bell height={24}/>
                 <span title="Notifications" className="text-xs">Notifications</span>
-                <span className='notification-dot'>
-                  30
-                </span>
+                {
+                  notifications.data && notifications.data.length > 0?
+                  <span className='notification-dot'>
+                    {notifications.data.length}
+                  </span>:''
+                }
               </Link>
 
               <div className="flex flex-col items-center gap-1 hand-hover" onClick={function(){mutateObj.mutate()}}>

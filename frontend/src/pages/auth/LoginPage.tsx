@@ -49,7 +49,7 @@ function LoginPage() {
           onChange={function (e) { setPassword(e.target.value) }}
         />
         {
-          mutateObj.isPending ? <p>Logging in...</p> : <button type="submit" className='blue-button'>Sign In</button>
+          mutateObj.isPending ? <p className='text-center'>Logging in...</p> : <button type="submit" className='blue-button'>Sign In</button>
         }
         {
           error !== '' ? <p className='error'>{error}</p> : null

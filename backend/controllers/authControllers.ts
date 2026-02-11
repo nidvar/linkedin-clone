@@ -99,7 +99,7 @@ export const logout = async (req: Request, res: Response) => {
     res.clearCookie('linkedInRefresh');
     res.clearCookie('linkedInAccess');
 
-    const user = await User.findOne({ _id: res.locals.id });
+    const user = await User.findOne({ _id: req.body.userId });
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     };

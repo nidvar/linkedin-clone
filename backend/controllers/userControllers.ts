@@ -7,7 +7,6 @@ import cloudinary from '../lib/cloudinary.js';
 // Models
 import User from '../models/userModel.js';
 
-
 export const updateUserDetails = async (req: Request, res: Response)=>{
   try {
     const user = await User.findOne({ email: req.body.email.toLowerCase() });
