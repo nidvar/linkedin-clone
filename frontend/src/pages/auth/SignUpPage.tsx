@@ -1,12 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, type SubmitEvent } from 'react';
 import { postRequest } from '../../utils/utilFunctions';
-import { Link, useNavigate } from 'react-router-dom';
-import type { AuthUser } from '../../utils/types';
+import { Link } from 'react-router-dom';
 
 function SignUpPage() {
-
-  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 

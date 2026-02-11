@@ -24,9 +24,9 @@ export const getRequest = async function(url: string) {
   return data;
 };
 
-export const postRequest = async function(url: string, payloadData: object){
+export const postRequest = async function(url: string, payloadData: object, method?: string) {
   const payload = {
-    method: 'POST',
+    method: method ||'POST',
     credentials: "include" as RequestCredentials,
     headers: {
       'Content-Type': 'application/json',

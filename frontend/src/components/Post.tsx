@@ -1,9 +1,23 @@
-import { MessageCircle, Send, Share2, ThumbsUp, Trash2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MessageCircle, Share2, ThumbsUp, Trash2 } from "lucide-react";
 
-import type { PostType } from '../utils/types';
-import { daysAgo } from "../utils/utilFunctions";
+import type { AuthUserType, PostType } from '../utils/types';
+import { daysAgo, postRequest } from "../utils/utilFunctions";
+
 
 function Post({post} : {post: PostType}) {
+
+  const queryClient = useQueryClient();
+  const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
+
+  const mutateObj = useMutation({
+    mutationFn: async () => {
+      const result = await postRequest('/post/delete/' + post._id, {}, 'DELETE');
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      return result;
+    }
+  });
+
   return (
     <div className="post-container shaded-border">
 
@@ -18,7 +32,12 @@ function Post({post} : {post: PostType}) {
             <p className="text-xs text-gray-600">{daysAgo(post.createdAt)}</p>
           </div>
         </div>
-        <Trash2  size={20} color={'red'} className="hand-hover"/>
+        {
+          authUser && authUser._id === post.author._id &&
+          <div onClick={function(){mutateObj.mutate()}}>
+            <Trash2  size={20} color={'red'} className="hand-hover"/>
+          </div>
+        }
       </div>
 
       <div>
