@@ -145,7 +145,7 @@
 }
 
 .new-post-container textarea {
-  border: 1px solid lightgray;
+  border: 1px solid rgb(230, 230, 230);
   background-color: rgb(243, 242, 240);
   height: 100px;
   width: 100%;
@@ -240,6 +240,12 @@ button{
 .profile-img {
   border-radius: 50%;
   max-height: 50px;
+  background-color: rgb(209, 216, 222);
+}
+
+.profile-img-small {
+  border-radius: 50%;
+  height: 24px;
   background-color: rgb(209, 216, 222);
 }
 

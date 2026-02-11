@@ -46,7 +46,7 @@ function Post({post} : {post: PostType}) {
       </div>
 
       <div className="flex justify-between">
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <ThumbsUp size={20} className="hand-hover"/>
           <MessageCircle  size={20} className="hand-hover"/>
         </div>

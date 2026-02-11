@@ -41,3 +41,13 @@ export type SuggestedUsersType = {
   profilePicture: string
   headline: string
 }
+
+export type NotificationType = {
+  _id: string
+  type: string
+  relatedUser: string
+  relatedPost: string
+  read: boolean
+  createdAt: string
+  updatedAt: string
+}
