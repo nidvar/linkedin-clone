@@ -5,7 +5,7 @@ import { daysAgo } from "../utils/utilFunctions";
 
 function Post({post} : {post: PostType}) {
   return (
-    <div className="post-container">
+    <div className="post-container shaded-border">
 
       <div className='flex justify-between items-center'>
         <div className='flex gap-2 items-center'>

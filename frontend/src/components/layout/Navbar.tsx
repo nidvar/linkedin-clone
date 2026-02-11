@@ -51,10 +51,22 @@ const Navbar = () => {
           {
             authUser?
             <>
-              <Users className="hand-hover"/>
-              <User className="hand-hover"/>
-              <Bell className="hand-hover"/>
-              <LogOut onClick={function(){mutateObj.mutate()}} className="hand-hover"/>
+              <Link to='/' className="flex flex-col items-center gap-1 hand-hover">
+                <Users/>
+                <span title="Connections" className="text-xs">My Network</span>
+              </Link>
+              <Link to='/' className="flex flex-col items-center gap-1 hand-hover">
+                <User/>
+                <span title="Profile" className="text-xs">Me</span>
+              </Link>
+              <Link to='/' className="flex flex-col items-center gap-1 hand-hover">
+                <Bell/>
+                <span title="Notifications" className="text-xs">Notifications</span>
+              </Link>
+              <div className="flex flex-col items-center gap-1 hand-hover">
+                <LogOut onClick={function(){mutateObj.mutate()}}/>
+                <span title="Logout" className="text-xs">Logout</span>
+              </div>
             </>:''
           }
         </div>

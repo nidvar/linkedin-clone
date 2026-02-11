@@ -1,11 +1,11 @@
 import { Bell, Home, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import type { AuthUser } from '../utils/types';
+import type { AuthUserType } from '../utils/types';
 
-function Sidebar({user} : {user: AuthUser["user"] | null}) {
+function Sidebar({user} : {user: AuthUserType | null}) {
   if(!user) return null;
   return (
-    <div className='sidebar'>
+    <div className='sidebar shaded-border'>
       <div className='sidebar-profile-container relative'>
         <div className='banner absolute'
           style={{
@@ -14,9 +14,9 @@ function Sidebar({user} : {user: AuthUser["user"] | null}) {
         ></div>
         <div className='sidebar-profile'>
           <img src={user.profilePicture || 'avatar.png'} className='sidebar-profile-img'/>
-          <h1 className='font-bold text-xl my-2'>{user.fullName}</h1>
-          <p>{user.headline}</p>
-          <p>{user.connections.length} connections</p>
+          <h1 className='font-bold text-xl mt-2'>{user.fullName}</h1>
+          <p className='text-gray-600'>{user.headline}</p>
+          <p className='text-xs text-gray-600'>{user.connections.length} connections</p>
         </div>
       </div>
       <div className='sidebar-profile-options'>
