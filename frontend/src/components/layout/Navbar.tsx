@@ -54,17 +54,23 @@ const Navbar = () => {
             <>
               <Link to='/' className="flex flex-col items-center hand-hover">
                 <img src={authUser.profilePicture} alt="" className="profile-img-small"/>
-                <span title="Profile" className="text-xs mt-1">Me</span>
+                <span title="Profile" className="text-xs mt-1">Profile</span>
               </Link>
 
-              <Link to='/network' className="flex flex-col items-center gap-1 hand-hover">
+              <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">
                 <Users height={24}/>
                 <span title="Connections" className="text-xs">My Network</span>
+                <span className='notification-dot'>
+                  30
+                </span>
               </Link>
 
-              <Link to='/notifications' className="flex flex-col items-center gap-1 hand-hover">
+              <Link to='/notifications' className="flex flex-col items-center gap-1 hand-hover relative">
                 <Bell height={24}/>
                 <span title="Notifications" className="text-xs">Notifications</span>
+                <span className='notification-dot'>
+                  30
+                </span>
               </Link>
 
               <div className="flex flex-col items-center gap-1 hand-hover" onClick={function(){mutateObj.mutate()}}>

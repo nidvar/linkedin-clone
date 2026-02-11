@@ -22,7 +22,7 @@ function Post({post} : {post: PostType}) {
     <div className="post-container shaded-border">
 
       <div className='flex justify-between items-center'>
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-3 items-center'>
           <div>
             <img src={post.author.profilePicture} alt="" className='profile-img'/>
           </div>
