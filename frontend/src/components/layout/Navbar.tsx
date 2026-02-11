@@ -23,7 +23,8 @@ const Navbar = () => {
         return error;
       }
     },
-    enabled: authUser !== null
+    enabled: authUser !== null,
+    refetchOnWindowFocus: false
   });
 
   const mutateObj = useMutation({
@@ -63,8 +64,8 @@ const Navbar = () => {
                 <Bell/>
                 <span title="Notifications" className="text-xs">Notifications</span>
               </Link>
-              <div className="flex flex-col items-center gap-1 hand-hover">
-                <LogOut onClick={function(){mutateObj.mutate()}}/>
+              <div className="flex flex-col items-center gap-1 hand-hover" onClick={function(){mutateObj.mutate()}}>
+                <LogOut />
                 <span title="Logout" className="text-xs">Logout</span>
               </div>
             </>:''

@@ -18,7 +18,7 @@ function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUser
                     <img src={user.profilePicture} alt="" className='profile-img'/>
                     <div className='flex flex-col '>
                       <p className="font-semibold text-sm">{user.fullName}</p>
-                      <p className="text-xs">{user.headline}</p>
+                      <p className="text-xs text-gray-600">{user.headline}</p>
                     </div>
                   </Link>
                   <div>

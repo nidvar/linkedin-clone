@@ -23,6 +23,7 @@ const HomePage = () => {
         return error;
       }
     },
+    refetchOnWindowFocus: false
   });
 
   const postsData = useQuery({
@@ -35,6 +36,7 @@ const HomePage = () => {
         return error;
       }
     },
+    refetchOnWindowFocus: false
   });
 
   return (

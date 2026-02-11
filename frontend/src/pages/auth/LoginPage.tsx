@@ -31,7 +31,7 @@ function LoginPage() {
 
   return (
     <div className='signup-page login-page'>
-      <form className='signup-form login-form' onSubmit={handleSubmit}>
+      <form className='signup-form login-form shaded-border' onSubmit={handleSubmit}>
         <h1 className='text-3xl mb-4'>Sign in</h1>
         <input
           id="email"

@@ -34,7 +34,7 @@ function SignUpPage() {
   return (
     <>
       <h1 className="text-3xl mb-8 text-center">Make the most of your professional life</h1>
-      <form className='signup-form' onSubmit={handleSubmit}>
+      <form className='signup-form shaded-border' onSubmit={handleSubmit}>
         <label className='label'>First Name</label>
         <input
           id="firstName"
