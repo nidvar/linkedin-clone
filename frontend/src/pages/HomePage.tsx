@@ -17,7 +17,8 @@ const HomePage = () => {
     queryFn: async () => {
       try {
         const data = await getRequest('/user/suggestedusers');
-        return data.suggestedUsers;
+        const randomizedUsers = data.suggestedUsers.sort(() => Math.random() - 0.5).slice(0, 3);
+        return randomizedUsers
       } catch (error) {
         return error;
       }

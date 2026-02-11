@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import type { SuggestedUsersType } from '../utils/types';
 import { UserPlus } from 'lucide-react';
 
@@ -12,7 +13,7 @@ function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUser
           {
             recommendedUsers.map((user) => {
               return (
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center' key={user._id}>
                   <Link to='/' className='flex gap-2 items-center'>
                     <img src={user.profilePicture} alt="" className='profile-img'/>
                     <div className='flex flex-col '>
