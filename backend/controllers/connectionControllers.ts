@@ -11,7 +11,7 @@ import User from '../models/userModel.js';
 // get information
 export const getConnectionRequests = async (req: Request, res: Response) => {
   try {
-    const connectionRequests = await ConnectionRequest.find({ recipient: res.locals.id, status: 'pending' });
+    const connectionRequests = await ConnectionRequest.find({ recipient: res.locals.id, status: 'pending' }).populate('sender', 'fullName profilePicture headline connections');
     if(!connectionRequests) return res.status(400).json({ message: 'No connection requests found' });
     return res.status(200).json({ connectionRequests });
   } catch (error) {
@@ -33,7 +33,7 @@ export const getSentConnectionRequests = async (req: Request, res: Response) => 
 
 export const getAllConnections = async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(res.locals.id).populate('connections', 'name username profilePicture headline connections');
+    const user = await User.findById(res.locals.id).populate('connections', 'fullName profilePicture headline connections');
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     }

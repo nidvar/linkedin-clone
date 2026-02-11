@@ -51,3 +51,18 @@ export type NotificationType = {
   createdAt: string
   updatedAt: string
 }
+
+export type ConnectionRequestType = {
+  _id: string
+  sender: {
+    connections: string[]
+    fullName: string
+    profilePicture: string
+    headline: string
+    _id: string
+  }
+  recipient: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}

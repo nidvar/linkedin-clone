@@ -38,13 +38,34 @@
   align-items: center;
 }
 
-/* HOMEPAGE ===============================================*/
+/* HOME PAGE ===============================================*/
 
-.homepage {
+.main {
   display: flex;
   gap: 15px;
   max-width: 1200px;
   margin: auto;
+}
+
+/* NETWORK PAGE ===============================================*/
+
+.main {
+  display: flex;
+  gap: 15px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.connection-container {
+  background-color: wheat;
+  width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.request-box {
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(207, 207, 207);
 }
 
 /* POST COMPONENT ===============================================*/

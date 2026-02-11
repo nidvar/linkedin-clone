@@ -40,7 +40,7 @@ const HomePage = () => {
   });
 
   return (
-    <div className="homepage">
+    <div className="main">
       <Sidebar user={authUser? authUser : null} />
       <div className="post-section">
         <PostCreation profile={authUser? authUser.profilePicture : ''} />
