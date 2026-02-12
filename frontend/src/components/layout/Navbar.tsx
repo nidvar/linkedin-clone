@@ -4,13 +4,24 @@ import { Bell, LogOut, Users } from 'lucide-react';
 
 // local imports
 import { getRequest, postRequest } from "../../utils/utilFunctions";
-import type { AuthUserType } from "../../utils/types";
 
 const Navbar = () => {
 
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const authUser = queryClient.getQueryData<AuthUserType | null>(['authUser']);
+  const navigate = useNavigate();
+
+  const userData = useQuery({ 
+    queryKey: ['authUser'], 
+    queryFn: async () => {
+      try {
+        const authUser = await getRequest('/auth/me');
+        const user = authUser.user;
+        return user;
+      } catch (error) {
+        return null;
+      }
+    }
+  });
 
   const notifications = useQuery({
     queryKey: ['notifications'], 
@@ -22,7 +33,7 @@ const Navbar = () => {
         return error;
       }
     },
-    enabled: authUser !== null,
+    enabled: userData.data !== null,
   });
 
   const connectionRequests = useQuery({ 
@@ -35,12 +46,12 @@ const Navbar = () => {
         return error;
       }
     },
-    enabled: authUser !== null,
+    enabled: userData.data !== null,
   });
 
   const mutateObj = useMutation({
     mutationFn: async () => {
-      return await postRequest('/auth/logout', {userId: authUser?._id});
+      return await postRequest('/auth/logout', {userId: userData.data?._id});
     },
     onSuccess: ()=>{
       queryClient.setQueryData(['authUser'], null);
@@ -51,6 +62,7 @@ const Navbar = () => {
     }
   });
 
+  if (userData.isLoading) return null;
   if (notifications.isLoading) return null;
   if (connectionRequests.isLoading) return null;
 
@@ -62,11 +74,11 @@ const Navbar = () => {
         </div>
         <div className="nav-right-side">
           {
-            authUser?
+            userData.data?
             <>
               <Link to='/' className="flex flex-col items-center hand-hover">
-                <img src={authUser.profilePicture} alt="" className="profile-img-small"/>
-                <span title="Profile" className="text-xs mt-1">{authUser.fullName}</span>
+                <img src={userData.data.profilePicture} alt="" className="profile-img-small"/>
+                <span title="Profile" className="text-xs mt-1">{userData.data.fullName}</span>
               </Link>
 
               <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">

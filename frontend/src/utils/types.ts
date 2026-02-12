@@ -45,7 +45,11 @@ export type SuggestedUsersType = {
 export type NotificationType = {
   _id: string
   type: string
-  relatedUser: string
+  relatedUser: {
+    _id: string
+    profilePicture: string
+    fullName: string
+  }
   relatedPost: string
   read: boolean
   createdAt: string

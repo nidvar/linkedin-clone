@@ -1,24 +1,35 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { getRequest } from "../utils/utilFunctions";
+import type { PostType } from "../utils/types";
+
 import Sidebar from '../components/Sidebar';
-import type { AuthUserType, PostType } from "../utils/types";
 import PostCreation from "../components/PostCreation";
 import Post from "../components/Post";
 import RecommendedUsers from "../components/RecommendedUsers";
 
 const HomePage = () => {
-
-  const queryClient = useQueryClient();
-  const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
+  
+  const userData = useQuery({ 
+    queryKey: ['authUser'], 
+    queryFn: async () => {
+      try {
+        const authUser = await getRequest('/auth/me');
+        const user = authUser.user;
+        return user;
+      } catch (error) {
+        return null;
+      }
+    }
+  });
 
   const recommendedUsers = useQuery({
-    queryKey: ['recommendedUsers'], 
+    queryKey: ['recommendedUsers', userData.data?._id],
+    enabled: !!userData.data,
     queryFn: async () => {
       try {
         const data = await getRequest('/user/suggestedusers');
         const randomizedUsers = data.usersNotConnected.sort(() => Math.random() - 0.5).slice(0, 3);
-        console.log(randomizedUsers)
         return randomizedUsers
       } catch (error) {
         return error;
@@ -27,11 +38,11 @@ const HomePage = () => {
   });
 
   const postsData = useQuery({
-    queryKey: ['posts'], 
+    queryKey: ['posts', userData.data?._id], 
+    enabled: !!userData.data,
     queryFn: async () => {
       try {
         const data = await getRequest('/post/feed');
-        console.log(data);
         return data.posts;
       } catch (error) {
         return error;
@@ -41,9 +52,9 @@ const HomePage = () => {
 
   return (
     <div className="main">
-      <Sidebar user={authUser? authUser : null} />
+      <Sidebar user={userData.data? userData.data : null} />
       <div className="post-section">
-        <PostCreation profile={authUser? authUser.profilePicture : ''} />
+        <PostCreation profile={userData.data? userData.data.profilePicture : ''} />
         {
           postsData.data && postsData.data.length > 0?
             <>
