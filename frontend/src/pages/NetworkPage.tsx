@@ -48,6 +48,17 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
     }
   });
 
+  const rejectMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      const result =  await postRequest('/connections/reject/' + arg, {});
+      if(result.message === 'Connection request rejected'){
+        queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
+        queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
+      }
+      return result;
+    }
+  });
+
   const deleteConnectionMutation = useMutation({
     mutationFn: async (arg: string) => {
       const result =  await postRequest('/connections/removeconnection/' + arg, {}, 'DELETE');
@@ -83,7 +94,7 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
 
                 <div>
                   <button className='mr-2' onClick={function(){acceptMutation.mutate(item.sender._id)}}>Accept</button>
-                  <button className='bg-slate-400'>Decline</button>
+                  <button className='bg-slate-400' onClick={function(){rejectMutation.mutate(item.sender._id)}}>Decline</button>
                 </div>
 
               </div>
