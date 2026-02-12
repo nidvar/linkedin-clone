@@ -130,12 +130,24 @@ export const likePost = async (req: Request, res: Response)=>{
     }else{
       post.likes.push(res.locals.id);
       if(post && post.author.toString() !== res.locals.id.toString()){
-        await Notification.create({
+        const checkNotification = await Notification.findOne({
           recipient: post.author,
           type: 'like',
           relatedUser: res.locals.id,
           relatedPost: postId as string,
-        })
+        });
+
+        if(!checkNotification){
+          console.log('new notification')
+          await Notification.create({
+            recipient: post.author,
+            type: 'like',
+            relatedUser: res.locals.id,
+            relatedPost: postId as string,
+          });
+        }else{
+          console.log('notification already exists');
+        }
       };
     };
 
