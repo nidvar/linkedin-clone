@@ -51,17 +51,17 @@ export const getAllConnections = async (req: Request, res: Response) => {
 // perform action
 export const acceptConnectionRequest = async (req: Request, res: Response) => {
   try {
-    const recipient = new mongoose.Types.ObjectId(res.locals.id);
+    const currentUser = new mongoose.Types.ObjectId(res.locals.id);
     const senderId = new mongoose.Types.ObjectId(req.params.id?.toString());
 
     const [user, sender] = await Promise.all([
-      User.findById(recipient),
+      User.findById(currentUser),
       User.findById(senderId),
     ]);
 
     if(!user || !sender) return res.status(400).json({ message: 'Error finding user / sender' });
 
-    const connectionRequest = await ConnectionRequest.findOne({recipient: recipient, sender: senderId});
+    const connectionRequest = await ConnectionRequest.findOne({recipient: currentUser, sender: senderId});
     if(!connectionRequest) return res.status(400).json({ message: 'No connection request found' });
     connectionRequest.status = 'accepted';
 
@@ -69,13 +69,13 @@ export const acceptConnectionRequest = async (req: Request, res: Response) => {
 
     user.connections.push(senderId);
     await user.save();
-    sender.connections.push(recipient);
+    sender.connections.push(currentUser);
     await sender.save();
 
     await Notification.create({
-      recipient: recipient,
+      recipient: senderId,
       type: 'connectionAccepted',
-      relatedUser: senderId,
+      relatedUser: currentUser,
     });
 
     return res.status(200).json({ message: 'Connection request accepted' });

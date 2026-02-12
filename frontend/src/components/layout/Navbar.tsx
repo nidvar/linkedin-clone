@@ -12,7 +12,7 @@ const Navbar = () => {
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData<AuthUserType | null>(['authUser']);
 
-  const notifications = useQuery({ 
+  const notifications = useQuery({
     queryKey: ['notifications'], 
     queryFn: async () => {
       try {

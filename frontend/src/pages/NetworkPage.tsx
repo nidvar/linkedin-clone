@@ -1,13 +1,27 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { ConnectionRequestType, ConnectionType } from '../utils/types';
+import type { AuthUserType, ConnectionRequestType, ConnectionType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 
 function NetworkPage() {
+
   const queryClient = useQueryClient();
-  const requests = queryClient.getQueryData<ConnectionRequestType[] | null>(['requests']);
+  const authUser = queryClient.getQueryData<AuthUserType | null>(['authUser']);
+
+  const requests = useQuery({ 
+    queryKey: ['requests'], 
+    queryFn: async () => {
+      try {
+        const data = await getRequest('/connections/requests');
+        return data.connectionRequests;
+      } catch (error) {
+        return error;
+      }
+    },
+    enabled: authUser !== null,
+  });
 
   const allConnections = useQuery({
     queryKey: ['connections'], 
@@ -35,12 +49,12 @@ function NetworkPage() {
 
   return (
     <div className='main'>
-      <div className='connection-container shaded-border'>
+      <div className='main-container shaded-border'>
         <h1 className='font-bold text-2xl my-3'>My Network</h1>
         <p className='font-semibold text-l mb-3'>Connection Requests</p>
         {
-          requests && requests.length > 0?
-          requests.map((item)=>{
+          requests.data && requests.data.length > 0?
+          requests.data.map((item: ConnectionRequestType)=>{
             return (
               <div key={item._id} className='flex justify-between p-3 items-center request-box'>
 
