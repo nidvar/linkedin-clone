@@ -8,8 +8,8 @@ const router = express.Router();
 router.get('/requests', protectRoute, getConnectionRequests);
 router.get('/getallconnections', protectRoute, getAllConnections);
 
-router.get('/accept/:id', protectRoute, acceptConnectionRequest);
-router.get('/reject/:id', protectRoute, rejectConnectionRequest);
+router.post('/accept/:id', protectRoute, acceptConnectionRequest);
+router.post('/reject/:id', protectRoute, rejectConnectionRequest);
 
 router.post('/sendRequest/:id', protectRoute, sendConnectionRequest);
 

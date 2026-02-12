@@ -68,6 +68,17 @@
   border-bottom: 1px solid rgb(207, 207, 207);
 }
 
+.connection-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 170px;
+  width: 100%;
+  padding: 20px;
+  margin-top: 10px;
+}
+
 /* POST COMPONENT ===============================================*/
 
 .post-container {
@@ -267,6 +278,12 @@ button{
 .profile-img-small {
   border-radius: 50%;
   height: 24px;
+  background-color: rgb(209, 216, 222);
+}
+
+.profile-img-large {
+  border-radius: 50%;
+  height: 100px;
   background-color: rgb(209, 216, 222);
 }
 

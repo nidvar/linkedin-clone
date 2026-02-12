@@ -1,10 +1,33 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { ConnectionRequestType } from '../utils/types';
+import type { ConnectionRequestType, ConnectionType } from '../utils/types';
+import { getRequest, postRequest } from '../utils/utilFunctions';
+import { Link } from 'react-router-dom';
+import { UserPlus } from 'lucide-react';
 
 function NetworkPage() {
   const queryClient = useQueryClient();
   const requests = queryClient.getQueryData<ConnectionRequestType[] | null>(['requests']);
+
+  const allConnections = useQuery({
+    queryKey: ['recommendedUsers'], 
+    queryFn: async () => {
+      try {
+        const data = await getRequest('/connections/getallconnections');
+        console.log(data)
+        return data.connections
+      } catch (error) {
+        return error;
+      }
+    },
+  });
+
+  console.log(allConnections.data);
+
+  const acceptConnection = async (id: string) => {
+    const result = await postRequest('/connections/accept/' + id, {});
+    console.log(result);
+  };
 
   return (
     <div className='main'>
@@ -29,14 +52,37 @@ function NetworkPage() {
                 </div>
 
                 <div>
-                  <button className='mr-2'>Accept</button>
+                  <button className='mr-2' onClick={function(){acceptConnection(item.sender._id)}}>Accept</button>
                   <button className='bg-slate-400'>Decline</button>
                 </div>
 
               </div>
             )
-          }):''
+          }): 
+          <div className='flex flex-col gap-1 items-center my-10'>
+            <UserPlus size={54} color={'gray'} />
+            <p className='text-xl my-3'>No connection requests</p>
+          </div>
         }
+        <p className='font-semibold text-l my-3'>My Connections</p>
+        <div className='flex gap-3'>
+          {
+            allConnections.data && allConnections.data.length > 0?
+            allConnections.data.map((item: ConnectionType)=>{
+              return (
+                <Link to={'/profile/' + item._id} key={item._id} className='connection-card shaded-border hand-hover'>
+                  <div>
+                    <img src={item.profilePicture} className='profile-img-large'/>
+                  </div>
+                  <div>
+                    <h1 className='font-bold'>{item.fullName}</h1>
+                    <p className='text-sm text-gray-600'>{item.headline}</p>
+                  </div>
+                </Link>
+              )
+            }):''
+          }
+        </div>
       </div>
     </div>
   )

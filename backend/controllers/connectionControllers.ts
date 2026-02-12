@@ -52,8 +52,8 @@ export const acceptConnectionRequest = async (req: Request, res: Response) => {
     const senderId = new mongoose.Types.ObjectId(req.params.id?.toString());
 
     const [user, sender] = await Promise.all([
-      User.findOne({ email: req.body.email }),
-      User.findOne({ username: req.body.username }),
+      User.findById(recipient),
+      User.findById(senderId),
     ]);
 
     if(!user || !sender) return res.status(400).json({ message: 'Error finding user / sender' });

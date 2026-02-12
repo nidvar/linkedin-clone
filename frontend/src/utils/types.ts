@@ -66,3 +66,11 @@ export type ConnectionRequestType = {
   createdAt: string
   updatedAt: string
 }
+
+export type ConnectionType = {
+  _id: string
+  fullName: string
+  profilePicture: string
+  headline: string
+  connections: string[]
+}
