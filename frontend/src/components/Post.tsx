@@ -5,16 +5,26 @@ import type { AuthUserType, PostType } from '../utils/types';
 import { daysAgo, postRequest } from "../utils/utilFunctions";
 
 
-function Post({post} : {post: PostType}) {
+function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
 
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
 
   const mutateObj = useMutation({
     mutationFn: async () => {
-      const result = await postRequest('/post/delete/' + post._id, {}, 'DELETE');
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      return result;
+      postRequest('/post/delete/' + post._id, {}, 'DELETE');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
+    }
+  });
+
+  const likePostMutation = useMutation({
+    mutationFn: async () => {
+      await postRequest( '/post/' + post._id + '/like', {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
     }
   });
 
@@ -46,9 +56,13 @@ function Post({post} : {post: PostType}) {
       </div>
 
       <div className="flex justify-between">
-        <div className="flex gap-3">
-          <ThumbsUp size={20} className="hand-hover"/>
-          <MessageCircle  size={20} className="hand-hover"/>
+        <div className="flex gap-5">
+          <div className="flex gap-1 items-center">
+            <ThumbsUp size={20} className="hand-hover" onClick={function(){likePostMutation.mutate()}}/>Like({post.likes.length})
+          </div>
+          <div className="flex gap-1 items-center">
+            <MessageCircle  size={20} className="hand-hover"/>Comment({post.comments.length})
+          </div>
         </div>
         <Share2  size={20} className="hand-hover"/>
       </div>

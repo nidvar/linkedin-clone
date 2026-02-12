@@ -39,34 +39,31 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
 
   const acceptMutation = useMutation({
     mutationFn: async (arg: string) => {
-      const result =  await postRequest('/connections/accept/' + arg, {});
-      if(result.message === 'Connection request accepted'){
-        queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
-        queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
-      }
-      return result;
+      await postRequest('/connections/accept/' + arg, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
+      queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
     }
   });
 
   const rejectMutation = useMutation({
     mutationFn: async (arg: string) => {
-      const result =  await postRequest('/connections/reject/' + arg, {});
-      if(result.message === 'Connection request rejected'){
-        queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
-        queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
-      }
-      return result;
+      await postRequest('/connections/reject/' + arg, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
+      queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
     }
   });
 
   const deleteConnectionMutation = useMutation({
     mutationFn: async (arg: string) => {
-      const result =  await postRequest('/connections/removeconnection/' + arg, {}, 'DELETE');
-      if(result.message === 'Connection removed'){
-        queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
-        queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
-      }
-      return result;
+      await postRequest('/connections/removeconnection/' + arg, {}, 'DELETE');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
+      queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
     }
   });
 

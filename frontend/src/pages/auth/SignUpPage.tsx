@@ -17,12 +17,14 @@ function SignUpPage() {
     mutationFn: async () => {
       const body = { firstName, lastName, email, password };
       const result = await postRequest('/auth/signup', body);
-      if (result.success === true) { 
-        queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      }else{
-        setError(result.message);
-      }
+      if (!result.success) throw new Error(result.message);
       return result;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+    onError: (error: any) => {
+      setError(error.message);
     }
   });
 
@@ -84,7 +86,7 @@ function SignUpPage() {
         {
           mutateObj.isPending ? <p className='text-center'>Signing up...</p> : <button type="submit" className='blue-button'>Agree & Join</button>
         }
-        {error}
+        <p className='text-center text-red-600'>{error}</p>
         <div>
           <p className='text-center mt-5'>Already on LinkedIn? <Link to='/login' className="link bold">Sign in</Link></p>
         </div>

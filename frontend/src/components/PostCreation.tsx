@@ -15,14 +15,11 @@ function PostCreation({profile} : {profile: string}) {
 
   const mutateObj = useMutation({
     mutationFn: async () => {
-      const result =  await postRequest('/post/create', {post: post, image: imagePreview});
-      if (result.message === 'Post created') { 
-        queryClient.invalidateQueries({ queryKey: ["posts"] });
-        setPost('');
-      }else{
-        console.log(result.message);
-      }
-      return result;
+      await postRequest('/post/create', {post: post, image: imagePreview});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      setPost('');
     }
   });
 

@@ -38,7 +38,7 @@ const HomePage = () => {
   });
 
   const postsData = useQuery({
-    queryKey: ['posts', userData.data?._id], 
+    queryKey: ['posts', userData.data?._id ?? ''], 
     enabled: !!userData.data,
     queryFn: async () => {
       try {
@@ -60,7 +60,7 @@ const HomePage = () => {
             <>
               {postsData.data.map((item: PostType)=>{
                 return (
-                  <Post post={item} key={item._id}/>
+                  <Post post={item} key={item._id} userData={userData.data}/>
                 )
               })}
             </>:''
