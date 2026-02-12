@@ -1,13 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AuthUserType, NotificationType } from '../utils/types';
-import { daysAgo, getRequest } from '../utils/utilFunctions';
+import { daysAgo, getRequest, postRequest } from '../utils/utilFunctions';
 import { Eye, ThumbsUp, Trash2, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 function NotificationPage({userData}: {userData: AuthUserType}) {
 
+  const queryClient = useQueryClient();
+
   const notifications = useQuery({
-    queryKey: ['notifications', userData?._id],
+    queryKey: userData ? ['notifications', userData._id] : ['notifications', 'guest'],
     enabled: !!userData,
     queryFn: async () => {
       try {
@@ -38,6 +40,18 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
     }
   }
 
+  const readMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      const result = await postRequest('/notifications/' +arg + '/markasread', {});
+      console.log(result)
+      return result
+    },
+    onSuccess: (arg) => {
+      console.log(arg)
+      queryClient.invalidateQueries({ queryKey: ['notifications', userData?._id] });
+    }
+  });
+
   return (
     <div className='main'>
       <div className='main-container shaded-border'>
@@ -48,7 +62,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
             {
               notifications.data.map((notification: NotificationType) => {
                 return(
-                  <div key={notification._id} className='flex justify-between'>
+                  <div key={notification._id} className='flex justify-between my-4'>
                     <div className='flex gap-5'>
                       <Link to={`/profile/${notification.relatedUser._id}`}>
                         <img src={notification.relatedUser.profilePicture} className='profile-img'/>
@@ -62,7 +76,11 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                       </div>
                     </div>
                     <div className='flex gap-4'>
-                      <Eye color={'skyblue'} className='hand-hover'/>
+                      {
+                        notification.read === true?
+                        <Eye color={'skyblue'} />:
+                        <Eye color={'black'} className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}/>
+                      }
                       <Trash2 color={'red'} className='hand-hover' />
                     </div>
                   </div>

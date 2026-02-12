@@ -1,11 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { Bell, LogOut, Users } from 'lucide-react';
+import { useEffect, useState } from "react";
 
 // local imports
 import { getRequest, postRequest } from "../../utils/utilFunctions";
+import type { NotificationType } from "../../utils/types";
 
 const Navbar = () => {
+
+  const [unread, setUnreadCount] = useState([]);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -24,7 +28,7 @@ const Navbar = () => {
   });
 
   const notifications = useQuery({
-    queryKey: ['notifications'], 
+    queryKey: userData.data ? ['notifications', userData.data._id] : ['notifications', 'guest'], 
     queryFn: async () => {
       try {
         const data = await getRequest('/notifications');
@@ -62,6 +66,13 @@ const Navbar = () => {
     }
   });
 
+  useEffect(() => {
+  if (notifications.data) {
+    const count = notifications.data.filter((item: NotificationType) => item.read === false).length;
+    setUnreadCount(count);
+  }
+}, [notifications.data]);
+
   if (userData.isLoading) return null;
   if (notifications.isLoading) return null;
   if (connectionRequests.isLoading) return null;
@@ -98,7 +109,7 @@ const Navbar = () => {
                 {
                   notifications.data && notifications.data.length > 0?
                   <span className='notification-dot'>
-                    {notifications.data.length}
+                    {unread}
                   </span>:''
                 }
               </Link>
