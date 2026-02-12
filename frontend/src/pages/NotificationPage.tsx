@@ -46,8 +46,17 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
       console.log(result)
       return result
     },
-    onSuccess: (arg) => {
-      console.log(arg)
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications', userData?._id] });
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      const result = await postRequest('/notifications/delete/' + arg, {}, 'DELETE');
+      return result
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications', userData?._id] });
     }
   });
@@ -81,7 +90,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                         <Eye color={'skyblue'} />:
                         <Eye color={'black'} className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}/>
                       }
-                      <Trash2 color={'red'} className='hand-hover' />
+                      <Trash2 color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}/>
                     </div>
                   </div>
                 )
