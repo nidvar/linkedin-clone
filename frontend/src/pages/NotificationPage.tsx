@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { AuthUserType, NotificationType } from '../utils/types';
 import { daysAgo, getRequest } from '../utils/utilFunctions';
-import { Eye, Trash2, UserPlus } from 'lucide-react';
+import { Eye, ThumbsUp, Trash2, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 function NotificationPage({userData}: {userData: AuthUserType}) {
@@ -24,11 +24,17 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
     if(arg === 'connectionAccepted'){
       return 'accepted your connection request';
     }
+    if(arg === 'like'){
+      return 'liked your post';
+    }
   };
 
   const notificationIcon = function(arg: string){
     if(arg === 'connectionAccepted'){
       return <UserPlus />
+    }
+    if(arg === 'like'){
+      return <ThumbsUp />
     }
   }
 
