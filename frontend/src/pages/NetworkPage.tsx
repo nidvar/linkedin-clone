@@ -10,11 +10,10 @@ function NetworkPage() {
   const requests = queryClient.getQueryData<ConnectionRequestType[] | null>(['requests']);
 
   const allConnections = useQuery({
-    queryKey: ['recommendedUsers'], 
+    queryKey: ['connections'], 
     queryFn: async () => {
       try {
         const data = await getRequest('/connections/getallconnections');
-        console.log(data)
         return data.connections
       } catch (error) {
         return error;
@@ -29,6 +28,11 @@ function NetworkPage() {
     console.log(result);
   };
 
+  const deleteConnection = async (id: string) => {
+    const result = await postRequest('/connections/removeConnection/' + id, {}, 'DELETE');
+    console.log(result);
+  };
+
   return (
     <div className='main'>
       <div className='connection-container shaded-border'>
@@ -39,7 +43,7 @@ function NetworkPage() {
           requests.map((item)=>{
             return (
               <div key={item._id} className='flex justify-between p-3 items-center request-box'>
-                
+
                 <div className='flex gap-3'>
                   <div>
                     <img src={item.sender.profilePicture} className='profile-img'/>
@@ -70,15 +74,18 @@ function NetworkPage() {
             allConnections.data && allConnections.data.length > 0?
             allConnections.data.map((item: ConnectionType)=>{
               return (
-                <Link to={'/profile/' + item._id} key={item._id} className='connection-card shaded-border hand-hover'>
-                  <div>
-                    <img src={item.profilePicture} className='profile-img-large'/>
-                  </div>
-                  <div>
-                    <h1 className='font-bold'>{item.fullName}</h1>
-                    <p className='text-sm text-gray-600'>{item.headline}</p>
-                  </div>
-                </Link>
+                <div className='shaded-border connection-card' key={item._id}>
+                  <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                    <div>
+                      <img src={item.profilePicture} className='profile-img-large'/>
+                    </div>
+                    <div>
+                      <h1 className='font-bold'>{item.fullName}</h1>
+                      <p className='text-sm text-gray-600'>{item.headline}</p>
+                    </div>
+                  </Link>
+                  <button onClick={function(){deleteConnection(item._id)}}>DELETE</button>
+                </div>
               )
             }):''
           }

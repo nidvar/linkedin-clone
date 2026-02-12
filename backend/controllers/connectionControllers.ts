@@ -11,7 +11,8 @@ import User from '../models/userModel.js';
 // get information
 export const getConnectionRequests = async (req: Request, res: Response) => {
   try {
-    const connectionRequests = await ConnectionRequest.find({ recipient: res.locals.id, status: 'pending' }).populate('sender', 'fullName profilePicture headline connections');
+    const userId = new mongoose.Types.ObjectId(res.locals.id);
+    const connectionRequests = await ConnectionRequest.find({ recipient: userId, status: 'pending' }).populate('sender', 'fullName profilePicture headline connections');
     if(!connectionRequests) return res.status(400).json({ message: 'No connection requests found' });
     return res.status(200).json({ connectionRequests });
   } catch (error) {
@@ -22,7 +23,8 @@ export const getConnectionRequests = async (req: Request, res: Response) => {
 
 export const getSentConnectionRequests = async (req: Request, res: Response) => {
   try {
-    const connectionRequests = await ConnectionRequest.find({ sender: res.locals.id, status: 'pending' });
+    const userId = new mongoose.Types.ObjectId(res.locals.id);
+    const connectionRequests = await ConnectionRequest.find({ sender: userId, status: 'pending' });
     if(!connectionRequests) return res.status(400).json({ message: 'No connection requests found' });
     return res.status(200).json({ connectionRequests });
   } catch (error) {
@@ -33,7 +35,8 @@ export const getSentConnectionRequests = async (req: Request, res: Response) => 
 
 export const getAllConnections = async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(res.locals.id).populate('connections', 'fullName profilePicture headline connections');
+    const userId = new mongoose.Types.ObjectId(res.locals.id);
+    const user = await User.findById(userId).populate('connections', 'fullName profilePicture headline connections');
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     }
@@ -70,8 +73,9 @@ export const acceptConnectionRequest = async (req: Request, res: Response) => {
     await sender.save();
 
     await Notification.create({
-      recipient: senderId,
-      type: 'connectionAccepted'
+      recipient: recipient,
+      type: 'connectionAccepted',
+      relatedUser: senderId,
     });
 
     return res.status(200).json({ message: 'Connection request accepted' });
@@ -124,28 +128,18 @@ export const sendConnectionRequest = async (req: Request, res: Response) => {
 
 export const removeConnection = async (req: Request, res: Response) => {
   try {
-    const otherUser = await User.findById(req.params.id);
-    const user = await User.findById(res.locals.id);
+    const otherUserId = new mongoose.Types.ObjectId(req.params.id?.toString());
+    const userId = new mongoose.Types.ObjectId(res.locals.id);
+
+    const otherUser = await User.findById(otherUserId);
+    const user = await User.findById(userId);
 
     if(!user || !otherUser){
       return res.status(400).json({ message: 'User / sender does not exist' });
     };
 
-    const userConnections = user.connections;
-    const newUserConnectionList = userConnections.filter((item)=>{
-      if(item._id.toString() != req.params._id){
-        return true;
-      }
-    });
-    user.connections = newUserConnectionList;
-
-    const otherUserConnections = otherUser.connections;
-    const newOtherUserConnectionList = otherUserConnections.filter((item)=>{
-      if(item._id.toString() != res.locals.id){
-        return true;
-      }
-    });
-    otherUser.connections = newOtherUserConnectionList;
+    user.connections = user.connections.filter((id) => id.toString() !== otherUserId.toString());
+    otherUser.connections = otherUser.connections.filter((id) => id.toString() !== userId.toString());
 
     await user.save();
     await otherUser.save();

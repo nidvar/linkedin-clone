@@ -66,7 +66,7 @@ const Navbar = () => {
             <>
               <Link to='/' className="flex flex-col items-center hand-hover">
                 <img src={authUser.profilePicture} alt="" className="profile-img-small"/>
-                <span title="Profile" className="text-xs mt-1">Profile</span>
+                <span title="Profile" className="text-xs mt-1">{authUser.fullName}</span>
               </Link>
 
               <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">

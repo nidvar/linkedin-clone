@@ -6,7 +6,11 @@ import Notification from '../models/notificationModel.js';
 
 export const getNotifications = async (req: Request, res: Response) => {
   try {
-    const notifications = await Notification.find({ recipient: res.locals.id });
+    const notifications = await Notification.find({ recipient: res.locals.id })
+    .sort({ createdAt: -1 })
+    .populate("relatedUser", "fullName profilePicture")
+    .populate("relatedPost", "content image");
+
     return res.status(200).json({ notifications });
   } catch (error) {
     console.log(error);

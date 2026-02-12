@@ -7,6 +7,7 @@ import cloudinary from '../lib/cloudinary.js';
 // Models
 import User from '../models/userModel.js';
 import ConnectionRequest from '../models/connectionModel.js';
+import mongoose from 'mongoose';
 
 export const updateUserDetails = async (req: Request, res: Response)=>{
   try {
@@ -55,12 +56,11 @@ export const updateUserDetails = async (req: Request, res: Response)=>{
 
 export const suggestedUsers = async (req: Request, res: Response)=>{
   try {
-    const currentUser = await User.findById(res.locals.id);
+    const currentUserId = new mongoose.Types.ObjectId(res.locals.id.toString());
+    const currentUser = await User.findById(currentUserId);
     if(!currentUser){
       return res.status(400).json({ message: 'User does not exist' });
     };
-
-    const currentUserId = res.locals.id;
 
     const connections = await ConnectionRequest.find({
       $or: [
