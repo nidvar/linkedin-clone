@@ -1,18 +1,21 @@
 import { Link } from 'react-router-dom';
 
-import type { SuggestedUsersType } from '../utils/types';
+import type { AuthUserType, SuggestedUsersType } from '../utils/types';
 import { UserPlus } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '../utils/utilFunctions';
 
-function RecommendedUsers({ recommendedUsers }: {recommendedUsers: SuggestedUsersType[]}) {
+function RecommendedUsers({ recommendedUsers, userData }: {recommendedUsers: SuggestedUsersType[], userData: AuthUserType}) {
 
+  const queryClient = useQueryClient();
+  
   const mutateObj = useMutation({
     mutationFn: async (arg: string) => {
       await postRequest('/connections/sendRequest/' + arg, {});
     },
     onSuccess: ()=>{
-      console.log('success')
+      console.log('success');
+      queryClient.invalidateQueries({ queryKey: ['recommendedUsers', userData._id] });
     },
     onError: (error)=>{
       console.log(error);

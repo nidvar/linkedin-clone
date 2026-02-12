@@ -66,7 +66,11 @@ const HomePage = () => {
             </>:''
         }
       </div>
-      <RecommendedUsers recommendedUsers={recommendedUsers.data}/>
+      {
+        recommendedUsers.isPending?
+        <>{null}</>:
+        <RecommendedUsers recommendedUsers={recommendedUsers.data || []} userData={userData.data}/>
+      }
     </div>
   )
 }
