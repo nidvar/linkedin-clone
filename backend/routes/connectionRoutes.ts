@@ -11,8 +11,8 @@ router.get('/getallconnections', protectRoute, getAllConnections);
 router.post('/accept/:id', protectRoute, acceptConnectionRequest);
 router.post('/reject/:id', protectRoute, rejectConnectionRequest);
 
-router.post('/sendRequest/:id', protectRoute, sendConnectionRequest);
+router.post('/sendrequest/:id', protectRoute, sendConnectionRequest);
 
-router.delete('/removeConnection/:id', protectRoute, removeConnection);
+router.delete('/removeconnection/:id', protectRoute, removeConnection);
 
 export default router;

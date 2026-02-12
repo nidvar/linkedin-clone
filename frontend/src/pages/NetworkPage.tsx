@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { AuthUserType, ConnectionRequestType, ConnectionType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 
 function NetworkPage({userData}: {userData: AuthUserType}) {
+
+  const queryClient = useQueryClient();
 
   const requests = useQuery({ 
     queryKey: ['requests', userData._id],
@@ -35,15 +37,27 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
 
   console.log(allConnections.data);
 
-  const acceptConnection = async (id: string) => {
-    const result = await postRequest('/connections/accept/' + id, {});
-    console.log(result);
-  };
+  const acceptMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      const result =  await postRequest('/connections/accept/' + arg, {});
+      if(result.message === 'Connection request accepted'){
+        queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
+        queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
+      }
+      return result;
+    }
+  });
 
-  const deleteConnection = async (id: string) => {
-    const result = await postRequest('/connections/removeConnection/' + id, {}, 'DELETE');
-    console.log(result);
-  };
+  const deleteConnectionMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      const result =  await postRequest('/connections/removeconnection/' + arg, {}, 'DELETE');
+      if(result.message === 'Connection removed'){
+        queryClient.invalidateQueries({ queryKey: ['requests', userData._id] });
+        queryClient.invalidateQueries({ queryKey: ['connections', userData._id] });
+      }
+      return result;
+    }
+  });
 
   return (
     <div className='main'>
@@ -68,7 +82,7 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
                 </div>
 
                 <div>
-                  <button className='mr-2' onClick={function(){acceptConnection(item.sender._id)}}>Accept</button>
+                  <button className='mr-2' onClick={function(){acceptMutation.mutate(item.sender._id)}}>Accept</button>
                   <button className='bg-slate-400'>Decline</button>
                 </div>
 
@@ -96,7 +110,7 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
                       <p className='text-sm text-gray-600'>{item.headline}</p>
                     </div>
                   </Link>
-                  <button onClick={function(){deleteConnection(item._id)}}>DELETE</button>
+                  <button onClick={function(){deleteConnectionMutation.mutate(item._id)}}>DELETE</button>
                 </div>
               )
             }):''
