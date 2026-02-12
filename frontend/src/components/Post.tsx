@@ -45,7 +45,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
         {
           authUser && authUser._id === post.author._id &&
           <div onClick={function(){mutateObj.mutate()}}>
-            <Trash2  size={20} color={'red'} className="hand-hover"/>
+            <Trash2  size={18} color={'red'} className="hand-hover"/>
           </div>
         }
       </div>
@@ -55,16 +55,16 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
         {post.image? <img src={post.image} alt="" />:''}
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between text-sm">
         <div className="flex gap-5">
           <div className="flex gap-1 items-center">
-            <ThumbsUp size={20} className="hand-hover" onClick={function(){likePostMutation.mutate()}}/>Like({post.likes.length})
+            <ThumbsUp size={16} className="hand-hover" onClick={function(){likePostMutation.mutate()}}/>Like({post.likes.length})
           </div>
           <div className="flex gap-1 items-center">
-            <MessageCircle  size={20} className="hand-hover"/>Comment({post.comments.length})
+            <MessageCircle  size={16} className="hand-hover"/>Comment({post.comments.length})
           </div>
         </div>
-        <Share2  size={20} className="hand-hover"/>
+        <Share2 size={16} className="hand-hover"/>
       </div>
 
     </div>
