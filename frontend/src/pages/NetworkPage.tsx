@@ -1,17 +1,14 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import type { AuthUserType, ConnectionRequestType, ConnectionType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 
-function NetworkPage() {
-
-  const queryClient = useQueryClient();
-  const authUser = queryClient.getQueryData<AuthUserType | null>(['authUser']);
+function NetworkPage({userData}: {userData: AuthUserType}) {
 
   const requests = useQuery({ 
-    queryKey: ['requests'], 
+    queryKey: ['requests', userData._id],
     queryFn: async () => {
       try {
         const data = await getRequest('/connections/requests');
@@ -20,11 +17,12 @@ function NetworkPage() {
         return error;
       }
     },
-    enabled: authUser !== null,
+    enabled: userData !== null,
   });
 
   const allConnections = useQuery({
-    queryKey: ['connections'], 
+    queryKey: ['connections', userData._id], 
+    enabled: !!userData,
     queryFn: async () => {
       try {
         const data = await getRequest('/connections/getallconnections');

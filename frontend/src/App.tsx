@@ -32,8 +32,8 @@ function App() {
         <Route path='/' element={ userData.data? <HomePage /> : <LoginPage />}/>
         <Route path='/signup' element={ userData.data? <HomePage /> : <SignUpPage />}/>
         <Route path='/login' element={ userData.data? <HomePage /> : <LoginPage />}/>
-        <Route path='/network' element={ userData.data? <NetworkPage /> : <LoginPage />}/>
-        <Route path='/notifications' element={ userData.data? <NotificationPage /> : <LoginPage />}/>
+        <Route path='/network' element={ userData.data? <NetworkPage userData={userData.data}/> : <LoginPage />}/>
+        <Route path='/notifications' element={ userData.data? <NotificationPage userData={userData.data} /> : <LoginPage />}/>
       </Routes>
     </Layout>
   )

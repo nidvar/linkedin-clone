@@ -1,27 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import type { NotificationType } from '../utils/types';
+import type { AuthUserType, NotificationType } from '../utils/types';
 import { daysAgo, getRequest } from '../utils/utilFunctions';
 import { Eye, Trash2, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-function NotificationPage() {
-
-  const userData = useQuery({ 
-    queryKey: ['authUser'], 
-    queryFn: async () => {
-      try {
-        const authUser = await getRequest('/auth/me');
-        const user = authUser.user;
-        return user;
-      } catch (error) {
-        return null;
-      }
-    }
-  });
+function NotificationPage({userData}: {userData: AuthUserType}) {
 
   const notifications = useQuery({
-    queryKey: ['notifications', userData.data?._id],
-    enabled: !!userData.data,
+    queryKey: ['notifications', userData?._id],
+    enabled: !!userData,
     queryFn: async () => {
       try {
         const data = await getRequest('/notifications');
