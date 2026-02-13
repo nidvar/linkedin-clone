@@ -30,7 +30,6 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
 
   return (
     <div className="post-container shaded-border">
-
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
           <div>
@@ -49,24 +48,27 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
           </div>
         }
       </div>
-
       <div>
         <p>{post.content}</p>
         {post.image? <img src={post.image} alt="" />:''}
       </div>
-
       <div className="flex justify-between text-sm">
-        <div className="flex gap-5">
+        {
+          likePostMutation.isPending?
           <div className="flex gap-1 items-center">
-            <ThumbsUp size={16} className="hand-hover" onClick={function(){likePostMutation.mutate()}}/>Like({post.likes.length})
+            <ThumbsUp size={16} color="gray"/> Like ({post.likes.length})
+          </div>:
+          <div className="hand-hover flex gap-1 items-center" onClick={function(){likePostMutation.mutate()}} >
+            <ThumbsUp size={16} /> Like ({post.likes.length})
           </div>
-          <div className="flex gap-1 items-center">
-            <MessageCircle  size={16} className="hand-hover"/>Comment({post.comments.length})
-          </div>
+        }
+        <div className="flex gap-1 items-center hand-hover">
+          <MessageCircle  size={16} />Comment ({post.comments.length})
         </div>
-        <Share2 size={16} className="hand-hover"/>
+        <div className="flex gap-1 items-center hand-hover">
+          <Share2 size={16} />Share
+        </div>
       </div>
-
     </div>
   )
 }
