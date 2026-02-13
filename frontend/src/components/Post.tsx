@@ -53,15 +53,9 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
         {post.image? <img src={post.image} alt="" />:''}
       </div>
       <div className="flex justify-between text-sm">
-        {
-          likePostMutation.isPending?
-          <div className="flex gap-1 items-center">
-            <ThumbsUp size={16} color="gray"/> Like ({post.likes.length})
-          </div>:
-          <div className="hand-hover flex gap-1 items-center" onClick={function(){likePostMutation.mutate()}} >
-            <ThumbsUp size={16} /> Like ({post.likes.length})
-          </div>
-        }
+        <div className="hand-hover flex gap-1 items-center" onClick={function(){!likePostMutation.isPending?likePostMutation.mutate(): null}} >
+          <ThumbsUp size={16} /> Like ({post.likes.length})
+        </div>
         <div className="flex gap-1 items-center hand-hover">
           <MessageCircle  size={16} />Comment ({post.comments.length})
         </div>
