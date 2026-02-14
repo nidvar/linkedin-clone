@@ -175,9 +175,18 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
+.comment-container {
+  width: 100%;
+}
+
 .comment-form {
   min-height: 100px;
   width: 100%;
+}
+
+.single-comment-box {
+  display: flex;
+  flex-direction: column;
 }
 
 /* RECOMMENDED USERS ===============================================*/
@@ -282,6 +291,12 @@ button{
 .profile-img-small {
   border-radius: 50%;
   height: 24px;
+  background-color: rgb(209, 216, 222);
+}
+
+.profile-img-medium {
+  border-radius: 50%;
+  height: 34px;
   background-color: rgb(209, 216, 222);
 }
 

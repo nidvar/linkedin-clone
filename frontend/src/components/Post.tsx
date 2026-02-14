@@ -9,13 +9,14 @@ import { daysAgo, postRequest } from "../utils/utilFunctions";
 function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
 
   const [showComments, setShowComments] = useState(false);
+  const [comment, setComment] = useState('');
 
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
 
   const mutateObj = useMutation({
     mutationFn: async () => {
-      postRequest('/post/delete/' + post._id, {}, 'DELETE');
+      await postRequest('/post/delete/' + post._id, {}, 'DELETE');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
@@ -41,7 +42,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
 
   const sendCommentMutation = useMutation({
     mutationFn: async () => {
-      await postRequest( '/post/' + post._id + '/createcomment', {});
+      await postRequest( '/post/' + post._id + '/createcomment', {content: comment});
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
@@ -92,10 +93,31 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
       </div>
       {
         showComments?
-        <form className="comment-form flex flex-col gap-3" onSubmit={handleSubmit}>
-          <textarea onChange={function(){}} />
-          <button className="justify-end" type='submit'>Comment</button>
-        </form>:null
+        <>
+          <form className="comment-form flex flex-col gap-3" onSubmit={handleSubmit}>
+            <input value={comment} onChange={function(e){setComment(e.target.value)}} />
+            <button className="justify-end" type='submit'>Comment</button>
+          </form>
+          {
+            post.comments.map((item: any) => {
+              return (
+                <div className="comment-container flex gap-3 items-center">
+                  <div className="self-start">
+                    <img src={item.user.profilePicture} alt="" className='profile-img-medium'/>
+                  </div>
+                  <div className='single-comment-box'>
+                    <div className="flex justify-between text-xs">
+                      <p>
+                        <span className="font-semibold">{item.user.fullName}</span> - <span className="text-gray-500">{daysAgo(item.createdAt)}</span>
+                      </p>
+                    </div>
+                    <p className="text my-1">{item.content}</p>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </>:null
       }
     </div>
   )

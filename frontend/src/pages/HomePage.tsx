@@ -9,7 +9,6 @@ import Post from "../components/Post";
 import RecommendedUsers from "../components/RecommendedUsers";
 
 const HomePage = () => {
-  
   const userData = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
