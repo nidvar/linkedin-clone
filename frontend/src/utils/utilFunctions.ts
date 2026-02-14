@@ -1,26 +1,36 @@
+const refreshAccessToken = async function(){
+  const res = await fetch(import.meta.env.VITE_BACKEND_API + '/auth/refreshaccesstoken', {
+    method: 'POST',
+    credentials: "include" as RequestCredentials,
+    headers: { 'Content-Type': 'application/json' },
+  });
+  const data = await res.json();
+  return data;
+};
+
 export const getRequest = async function(url: string) {
   const res = await fetch(import.meta.env.VITE_BACKEND_API + url, {
     credentials: "include" as RequestCredentials,
   });
   const data = await res.json();
+
   if(data.message === 'Token expired'){
-    const res = await fetch(import.meta.env.VITE_BACKEND_API + '/auth/refreshaccesstoken', {
-      method: 'POST',
-      credentials: "include" as RequestCredentials,
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const data = await res.json();
-    if(data.message === 'Access token refreshed'){
+    const refreshResult = await refreshAccessToken();
+    if(refreshResult.message === 'Access token refreshed'){
       const res = await fetch(import.meta.env.VITE_BACKEND_API + url, {
         credentials: "include" as RequestCredentials,
       });
       const data = await res.json();
       return data;
+    }else{
+      throw new Error('refreshing token fail');
     }
   };
+
   if (!res.ok) {
     throw data
   }
+  
   return data;
 };
 
@@ -33,12 +43,21 @@ export const postRequest = async function(url: string, payloadData: object, meth
     },
     body: JSON.stringify(payloadData),
   }
+
   const res = await fetch(import.meta.env.VITE_BACKEND_API + url, payload);
   const data = await res.json();
-  console.log(data);
-  if (!res.ok) {
-    throw new Error(data.message || res.statusText);
-  }
+
+  if(data.message === 'Token expired'){
+    const refreshResult = await refreshAccessToken();
+    if(refreshResult.message === 'Access token refreshed'){
+      const res = await fetch(import.meta.env.VITE_BACKEND_API + url, payload);
+      const data = await res.json();
+      return data;
+    }else{
+      throw new Error('refreshing token fail');
+    }
+  };
+
   return data;
 };
 

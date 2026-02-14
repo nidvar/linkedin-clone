@@ -1,11 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MessageCircle, Share2, ThumbsUp, Trash2 } from "lucide-react";
+import { useState, type SubmitEvent } from 'react';
 
 import type { AuthUserType, PostType } from '../utils/types';
 import { daysAgo, postRequest } from "../utils/utilFunctions";
 
 
 function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
+
+  const [showComments, setShowComments] = useState(false);
 
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
@@ -28,6 +31,28 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
     }
   });
 
+  const addComment = function(){
+    if(showComments){
+      setShowComments(false);
+    }else{
+      setShowComments(true);
+    }
+  }
+
+  const sendCommentMutation = useMutation({
+    mutationFn: async () => {
+      await postRequest( '/post/' + post._id + '/createcomment', {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
+    }
+  })
+
+  const handleSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+    sendCommentMutation.mutate();
+  };
+
   return (
     <div className="post-container shaded-border">
       <div className='flex justify-between items-center'>
@@ -48,21 +73,30 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
           </div>
         }
       </div>
+
       <div>
         <p>{post.content}</p>
         {post.image? <img src={post.image} alt="" />:''}
       </div>
+
       <div className="flex justify-between text-sm">
         <div className="hand-hover flex gap-1 items-center" onClick={function(){!likePostMutation.isPending?likePostMutation.mutate(): null}} >
           <ThumbsUp size={16} /> Like ({post.likes.length})
         </div>
-        <div className="flex gap-1 items-center hand-hover">
-          <MessageCircle  size={16} />Comment ({post.comments.length})
+        <div className="flex gap-1 items-center hand-hover" onClick={function(){addComment()}}>
+          <MessageCircle size={16} />Comment ({post.comments.length})
         </div>
         <div className="flex gap-1 items-center hand-hover">
           <Share2 size={16} />Share
         </div>
       </div>
+      {
+        showComments?
+        <form className="comment-form flex flex-col gap-3" onSubmit={handleSubmit}>
+          <textarea onChange={function(){}} />
+          <button className="justify-end" type='submit'>Comment</button>
+        </form>:null
+      }
     </div>
   )
 }
