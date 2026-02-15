@@ -64,6 +64,7 @@ function PostCreation({profile} : {profile: string}) {
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
+    if(post.trim() === '') return;
     mutateObj.mutate();
   }
 

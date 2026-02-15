@@ -52,6 +52,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
+    if(comment.trim() === '') return;
     sendCommentMutation.mutate();
   };
 
