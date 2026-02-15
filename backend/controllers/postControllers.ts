@@ -100,9 +100,10 @@ export const createComment = async (req: Request, res: Response)=>{
       'author',
       'fullName email headline profilePicture'
     );
-    if(post && post.author.toString() !== res.locals.id.toString()){
+
+    if(post && post.author._id.toString() !== res.locals.id.toString()){
       await Notification.create({
-        recipient: post.author,
+        recipient: post.author._id,
         type: 'comment',
         relatedUser: res.locals.id,
         relatedPost: req.params.id as string,
@@ -130,9 +131,9 @@ export const likePost = async (req: Request, res: Response)=>{
       });
     }else{
       post.likes.push(res.locals.id);
-      if(post && post.author.toString() !== res.locals.id.toString()){
+      if(post && post.author._id.toString() !== res.locals.id.toString()){
         const checkNotification = await Notification.findOne({
-          recipient: post.author,
+          recipient: post.author._id,
           type: 'like',
           relatedUser: res.locals.id,
           relatedPost: postId as string,
@@ -141,7 +142,7 @@ export const likePost = async (req: Request, res: Response)=>{
         if(!checkNotification){
           console.log('new notification')
           await Notification.create({
-            recipient: post.author,
+            recipient: post.author._id,
             type: 'like',
             relatedUser: res.locals.id,
             relatedPost: postId as string,
