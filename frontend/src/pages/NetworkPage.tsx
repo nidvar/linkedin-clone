@@ -5,11 +5,11 @@ import { getRequest, postRequest } from '../utils/utilFunctions';
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 
-function NetworkPage({userData}: {userData: AuthUserType}) {
+function NetworkPage({ userData }: { userData: AuthUserType }) {
 
   const queryClient = useQueryClient();
 
-  const requests = useQuery({ 
+  const requests = useQuery({
     queryKey: ['requests', userData._id],
     queryFn: async () => {
       try {
@@ -23,7 +23,7 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
   });
 
   const allConnections = useQuery({
-    queryKey: ['connections', userData._id], 
+    queryKey: ['connections', userData._id],
     enabled: !!userData,
     queryFn: async () => {
       try {
@@ -36,7 +36,7 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
   });
 
   const sentRequests = useQuery({
-    queryKey: ['sentrequests', userData._id], 
+    queryKey: ['sentrequests', userData._id],
     enabled: !!userData,
     queryFn: async () => {
       try {
@@ -78,90 +78,104 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
     }
   });
 
+  const cancelRequestMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      await postRequest('/connections/cancel/' + arg, {}, 'DELETE');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['sentrequests', userData._id] });
+    }
+  });
+
   return (
     <div className='main'>
       <div className='main-container shaded-border'>
         <h1 className='font-bold text-2xl my-3'>My Network</h1>
         <p className='font-semibold text-l mb-3'>Connection Requests</p>
         {
-          requests.data && requests.data.length > 0?
-          requests.data.map((item: ConnectionRequestType)=>{
-            return (
-              <div key={item._id} className='flex justify-between p-3 items-center request-box'>
-
-                <div className='flex gap-3'>
-                  <div>
-                    <img src={item.sender.profilePicture} className='profile-img'/>
-                  </div>
-
-                  <div>
-                    <h1 className='font-bold'>{item.sender.fullName}</h1>
-                    <p className='text-sm text-gray-600'>{item.sender.headline}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <button className='mr-2' onClick={function(){acceptMutation.mutate(item.sender._id)}}>Accept</button>
-                  <button className='bg-slate-400' onClick={function(){rejectMutation.mutate(item.sender._id)}}>Decline</button>
-                </div>
-
-              </div>
-            )
-          }): 
-          <div className='flex flex-col gap-1 items-center my-10'>
-            <UserPlus size={54} color={'gray'} />
-            <p className='text-xl my-3'>No connection requests</p>
-          </div>
-        }
-        <p className='font-semibold text-l my-6'>Sent Requests</p>
-        <div className='flex gap-3'>
-          {
-            sentRequests.data && sentRequests.data.length > 0?
-            sentRequests.data.map((item: sentRequestType)=>{
+          requests.data && requests.data.length > 0 ?
+            requests.data.map((item: ConnectionRequestType) => {
               return (
-                <div className='shaded-border connection-card' key={item._id}>
-                  <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                <div key={item._id} className='flex justify-between p-3 items-center request-box'>
+                  <div className='flex gap-3'>
                     <div>
-                      <img src={item.recipient.profilePicture} className='profile-img-large'/>
+                      <img src={item.sender.profilePicture} className='profile-img' />
                     </div>
                     <div>
-                      <h1 className='font-bold'>{item.recipient.fullName}</h1>
-                      <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
+                      <h1 className='font-bold'>{item.sender.fullName}</h1>
+                      <p className='text-sm text-gray-600'>{item.sender.headline}</p>
                     </div>
-                  </Link>
-                  <button onClick={function(){}}>CANCEL</button>
+                  </div>
+                  <div>
+                    <button className='mr-2' onClick={function () { acceptMutation.mutate(item.sender._id) }}>Accept</button>
+                    <button className='bg-slate-400' onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
+                  </div>
                 </div>
               )
-            }):
+            }) :
+            <div className='flex flex-col gap-1 items-center my-10'>
+              <UserPlus size={54} color={'gray'} />
+              <p className='text-xl my-3'>No connection requests</p>
+            </div>
+        }
+
+        <p className='font-semibold text-l my-6'>Sent Requests</p>
+        {
+          sentRequests.data && sentRequests.data.length > 0 ?
+            <div className='flex gap-3'>
+              {
+                sentRequests.data.map((item: sentRequestType) => {
+                  return (
+                    <div className='shaded-border connection-card' key={item._id}>
+                      <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                        <div>
+                          <img src={item.recipient.profilePicture} className='profile-img-large' />
+                        </div>
+                        <div>
+                          <h1 className='font-bold'>{item.recipient.fullName}</h1>
+                          <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
+                        </div>
+                      </Link>
+                      <button onClick={function () { cancelRequestMutation.mutate(item.recipient._id) }}>CANCEL</button>
+                    </div>
+                  )
+                })
+              }
+            </div> :
             <div className='flex flex-col gap-1 items-center my-10'>
               <UserPlus size={54} color={'gray'} />
               <p className='text-xl my-3'>No sent requests</p>
             </div>
-          }
-        </div>
+        }
 
         <p className='font-semibold text-l my-6'>My Connections</p>
-        <div className='flex gap-3'>
-          {
-            allConnections.data && allConnections.data.length > 0?
-            allConnections.data.map((item: ConnectionType)=>{
-              return (
-                <div className='shaded-border connection-card' key={item._id}>
-                  <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
-                    <div>
-                      <img src={item.profilePicture} className='profile-img-large'/>
+        {
+          allConnections.data && allConnections.data.length > 0 ?
+            <div className='flex gap-3'>
+              {
+                allConnections.data.map((item: ConnectionType) => {
+                  return (
+                    <div className='shaded-border connection-card' key={item._id}>
+                      <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                        <div>
+                          <img src={item.profilePicture} className='profile-img-large' />
+                        </div>
+                        <div>
+                          <h1 className='font-bold'>{item.fullName}</h1>
+                          <p className='text-sm text-gray-600'>{item.headline}</p>
+                        </div>
+                      </Link>
+                      <button onClick={function () { deleteConnectionMutation.mutate(item._id) }}>DELETE</button>
                     </div>
-                    <div>
-                      <h1 className='font-bold'>{item.fullName}</h1>
-                      <p className='text-sm text-gray-600'>{item.headline}</p>
-                    </div>
-                  </Link>
-                  <button onClick={function(){deleteConnectionMutation.mutate(item._id)}}>DELETE</button>
-                </div>
-              )
-            }):''
-          }
-        </div>
+                  )
+                })
+              }
+            </div> :
+            <div className='flex flex-col gap-1 items-center my-10'>
+              <UserPlus size={54} color={'gray'} />
+              <p className='text-xl my-3'>No connections</p>
+            </div>
+        }
       </div>
     </div>
   )

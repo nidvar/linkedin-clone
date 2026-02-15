@@ -104,10 +104,26 @@ export const rejectConnectionRequest = async (req: Request, res: Response) => {
 
     const connectionRequest = await ConnectionRequest.findOne({recipient: recipient, sender: sender});
     if(!connectionRequest) return res.status(400).json({ message: 'No connection request found' });
+
     connectionRequest.status = 'rejected';
     await connectionRequest.save();
 
     return res.status(200).json({ message: 'Connection request rejected' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error rejecting connection request' });
+  }
+};
+
+export const cancelConnectionRequest = async (req: Request, res: Response) => {
+  try {
+    const currentUser = new mongoose.Types.ObjectId(res.locals.id);
+    const targetUser = new mongoose.Types.ObjectId(req.params.id?.toString());
+
+    const sentRequest = await ConnectionRequest.findOneAndDelete({sender: currentUser, recipient: targetUser});
+    if(!sentRequest) return res.status(400).json({ message: 'No sent request found' });
+
+    return res.status(200).json({ message: 'Connection request cancelled' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error rejecting connection request' });

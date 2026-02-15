@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { protectRoute } from '../middleware/protectRoute.js';
-import { acceptConnectionRequest, getAllConnections, getConnectionRequests, getSentRequests, rejectConnectionRequest, removeConnection, sendConnectionRequest } from '../controllers/connectionControllers.js';
+import { acceptConnectionRequest, cancelConnectionRequest, getAllConnections, getConnectionRequests, getSentRequests, rejectConnectionRequest, removeConnection, sendConnectionRequest } from '../controllers/connectionControllers.js';
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.get('/sentrequests', protectRoute, getSentRequests);
 
 router.post('/accept/:id', protectRoute, acceptConnectionRequest);
 router.post('/reject/:id', protectRoute, rejectConnectionRequest);
+router.delete('/cancel/:id', protectRoute, cancelConnectionRequest);
 
 router.post('/sendrequest/:id', protectRoute, sendConnectionRequest);
 
