@@ -177,6 +177,9 @@
 
 .comment-container {
   width: 100%;
+  background-color: rgb(243, 242, 240);
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .comment-form {
