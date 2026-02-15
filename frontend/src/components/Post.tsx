@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageCircle, Share2, ThumbsUp, Trash, Trash2 } from "lucide-react";
+import { MessageCircle, Share2, ThumbsUp, Trash2 } from "lucide-react";
 import { useState, type SubmitEvent } from 'react';
 
 import type { AuthUserType, PostType } from '../utils/types';
@@ -43,6 +43,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
   const sendCommentMutation = useMutation({
     mutationFn: async () => {
       await postRequest( '/post/' + post._id + '/createcomment', {content: comment});
+      setComment('');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
@@ -102,7 +103,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
         showComments?
         <>
           <form className="comment-form flex flex-col gap-3" onSubmit={handleSubmit}>
-            <input value={comment} onChange={function(e){setComment(e.target.value)}} />
+            <input value={comment} onChange={function(e){setComment(e.target.value)}} placeholder="Leave a comment"/>
             <button className="justify-end" type='submit'>Comment</button>
           </form>
           {

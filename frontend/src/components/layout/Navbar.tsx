@@ -107,7 +107,7 @@ const Navbar = () => {
                 <Bell height={24}/>
                 <span title="Notifications" className="text-xs">Notifications</span>
                 {
-                  notifications.data && notifications.data.length > 0?
+                  notifications.data && unread.length > 0?
                   <span className='notification-dot'>
                     {unread}
                   </span>:''
