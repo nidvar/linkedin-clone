@@ -18,6 +18,17 @@ export type AuthUserType = {
   updatedAt?: string,
 };
 
+export type CommentType = {
+  user: {
+    _id: string
+    fullName: string
+    profilePicture: string
+  },
+  _id: string
+  createdAt: string
+  content?: string
+}
+
 export type PostType = {
   _id: string,
   author: {
@@ -30,7 +41,7 @@ export type PostType = {
   content: string
   image: string,
   likes: string[],
-  comments: string[],
+  comments: CommentType[],
   createdAt: string
   updatedAt: string
 }

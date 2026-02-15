@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageCircle, Share2, ThumbsUp, Trash2 } from "lucide-react";
+import { MessageCircle, Share2, ThumbsUp, Trash, Trash2 } from "lucide-react";
 import { useState, type SubmitEvent } from 'react';
 
 import type { AuthUserType, PostType } from '../utils/types';
@@ -14,7 +14,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
   const queryClient = useQueryClient();
   const authUser = queryClient.getQueryData< AuthUserType | null>(['authUser']);
 
-  const mutateObj = useMutation({
+  const deletePostMutation = useMutation({
     mutationFn: async () => {
       await postRequest('/post/delete/' + post._id, {}, 'DELETE');
     },
@@ -54,6 +54,13 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
     sendCommentMutation.mutate();
   };
 
+  const deleteComment = async function(commentId: string, postId: string){
+    const result = await postRequest('/post/deletecomment/' + post._id, { commentId, postId }, 'DELETE');
+    if(result.message === 'Comment deleted'){
+      queryClient.invalidateQueries({ queryKey: ['posts', userData?._id ?? ''] });
+    };
+  }
+
   return (
     <div className="post-container shaded-border">
       <div className='flex justify-between items-center'>
@@ -69,7 +76,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
         </div>
         {
           authUser && authUser._id === post.author._id &&
-          <div onClick={function(){mutateObj.mutate()}}>
+          <div onClick={function(){deletePostMutation.mutate()}}>
             <Trash2  size={18} color={'red'} className="hand-hover"/>
           </div>
         }
@@ -99,19 +106,29 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
             <button className="justify-end" type='submit'>Comment</button>
           </form>
           {
-            post.comments.map((item: any) => {
+            post.comments.map((comment) => {
               return (
-                <div className="comment-container flex gap-3 items-center">
-                  <div className="self-start">
-                    <img src={item.user.profilePicture} alt="" className='profile-img-medium'/>
-                  </div>
-                  <div className='single-comment-box'>
-                    <div className="flex justify-between text-xs">
-                      <p>
-                        <span className="font-semibold">{item.user.fullName}</span> - <span className="text-gray-500">{daysAgo(item.createdAt)}</span>
-                      </p>
+                <div className="comment-container flex items-center justify-between" key={comment._id}>
+                  <div className="flex gap-2">
+                    <div className="self-start">
+                      <img src={comment.user.profilePicture} alt="" className='profile-img-medium'/>
                     </div>
-                    <p className="text my-1">{item.content}</p>
+                    <div className='single-comment-box'>
+                      <div className="flex justify-between text-xs">
+                        <p>
+                          <span className="font-semibold">{comment.user.fullName}</span> - <span className="text-gray-500">{daysAgo(comment.createdAt)}</span>
+                        </p>
+                      </div>
+                      <p className="text my-1">{comment.content}</p>
+                    </div>
+                  </div>
+                  <div className="self-start hand-hover" onClick={function(){}}>
+                    {
+                      authUser && authUser._id === comment.user._id &&
+                      <div onClick={function(){deleteComment(comment._id, post._id)}}>
+                        <Trash2 size={15} color='red'/>
+                      </div>
+                    }
                   </div>
                 </div>
               )

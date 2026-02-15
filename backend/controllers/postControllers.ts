@@ -1,5 +1,6 @@
 // Third party packages
 import type { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 // Local imports
 import cloudinary from '../lib/cloudinary.js';
@@ -159,3 +160,27 @@ export const likePost = async (req: Request, res: Response)=>{
     return res.status(500).json({ message: 'Internal Server Error liking post' });
   }
 };
+
+export const deleteComment = async (req: Request, res: Response)=>{
+  try {
+    const postId = new mongoose.Types.ObjectId(req.body.postId);
+    const commentId = new mongoose.Types.ObjectId(req.body.commentId);
+
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      { $pull: { comments: { _id: commentId } } },
+      { new: true }
+    );
+
+    if(!post){
+      console.log('post does not exist')
+      return res.status(400).json({ message: 'Post does not exist' });
+    };
+
+    return res.status(200).json({ message: 'Comment deleted' });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error deleting comment' });
+  }
+}
