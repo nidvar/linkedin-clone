@@ -9,7 +9,7 @@ import type { NotificationType } from "../../utils/types";
 
 const Navbar = () => {
 
-  const [unread, setUnreadCount] = useState([]);
+  const [unread, setUnreadCount] = useState(0);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -67,11 +67,14 @@ const Navbar = () => {
   });
 
   useEffect(() => {
-  if (notifications.data) {
-    const count = notifications.data.filter((item: NotificationType) => item.read === false).length;
-    setUnreadCount(count);
-  }
-}, [notifications.data]);
+    if (notifications.data) {
+      let unreadCount = 0;
+      notifications.data.forEach((item: NotificationType)=>{
+        if(item.read === false) unreadCount ++;
+      });
+      setUnreadCount(unreadCount);
+    }
+  }, [notifications.data]);
 
   if (userData.isLoading) return null;
   if (notifications.isLoading) return null;
@@ -107,7 +110,7 @@ const Navbar = () => {
                 <Bell height={24}/>
                 <span title="Notifications" className="text-xs">Notifications</span>
                 {
-                  notifications.data && unread.length > 0?
+                  notifications.data && unread > 0?
                   <span className='notification-dot'>
                     {unread}
                   </span>:''
