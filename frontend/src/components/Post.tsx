@@ -71,7 +71,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
           </div>
           <div className='flex flex-col'>
             <p className="font-semibold">{post.author.fullName}</p>
-            <p className="text-sm">{post.author.headline}</p>
+            <p className="text-xs">{post.author.headline}</p>
             <p className="text-xs text-gray-600">{daysAgo(post.createdAt)}</p>
           </div>
         </div>

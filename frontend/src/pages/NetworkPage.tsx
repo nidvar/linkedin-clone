@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { UserPlus } from 'lucide-react';
 
 import type { AuthUserType, ConnectionRequestType, ConnectionType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
-import { Link } from 'react-router-dom';
-import { UserPlus } from 'lucide-react';
 
 function NetworkPage({ userData }: { userData: AuthUserType }) {
 
@@ -16,7 +16,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
         const data = await getRequest('/connections/requests');
         return data.connectionRequests;
       } catch (error) {
-        return error;
+        console.log(error);
       }
     },
     enabled: userData !== null,
@@ -30,20 +30,20 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
         const data = await getRequest('/connections/getallconnections');
         return data.connections
       } catch (error) {
-        return error;
+        console.log(error);
       }
     },
   });
 
   const sentRequests = useQuery({
-    queryKey: ['sentrequests', userData._id],
+    queryKey: ['sentRequests', userData._id],
     enabled: !!userData,
     queryFn: async () => {
       try {
         const data = await getRequest('/connections/sentrequests');
         return data.sentRequests;
       } catch (error) {
-        return error;
+        console.log(error);
       }
     },
   });

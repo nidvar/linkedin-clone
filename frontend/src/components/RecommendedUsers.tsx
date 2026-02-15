@@ -16,6 +16,8 @@ function RecommendedUsers({ recommendedUsers, userData }: {recommendedUsers: Sug
     onSuccess: ()=>{
       console.log('success');
       queryClient.invalidateQueries({ queryKey: ['recommendedUsers', userData._id] });
+      queryClient.invalidateQueries({ queryKey: ['sentRequests', userData._id] });
+      queryClient.refetchQueries({ queryKey: ['sentRequests', userData._id] });
     },
     onError: (error)=>{
       console.log(error);
