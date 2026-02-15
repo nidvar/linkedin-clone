@@ -82,6 +82,21 @@ export type ConnectionRequestType = {
   updatedAt: string
 }
 
+export type sentRequestType = {
+  _id: string
+  recipient: {
+    connections: string[]
+    fullName: string
+    profilePicture: string
+    headline: string
+    _id: string
+  }
+  sender: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
 export type ConnectionType = {
   _id: string
   fullName: string

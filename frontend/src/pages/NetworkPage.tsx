@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { AuthUserType, ConnectionRequestType, ConnectionType } from '../utils/types';
+import type { AuthUserType, ConnectionRequestType, ConnectionType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
@@ -35,7 +35,18 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
     },
   });
 
-  console.log(allConnections.data);
+  const sentRequests = useQuery({
+    queryKey: ['sentrequests', userData._id], 
+    enabled: !!userData,
+    queryFn: async () => {
+      try {
+        const data = await getRequest('/connections/sentrequests');
+        return data.sentRequests;
+      } catch (error) {
+        return error;
+      }
+    },
+  });
 
   const acceptMutation = useMutation({
     mutationFn: async (arg: string) => {
@@ -102,7 +113,34 @@ function NetworkPage({userData}: {userData: AuthUserType}) {
             <p className='text-xl my-3'>No connection requests</p>
           </div>
         }
-        <p className='font-semibold text-l my-3'>My Connections</p>
+        <p className='font-semibold text-l my-6'>Sent Requests</p>
+        <div className='flex gap-3'>
+          {
+            sentRequests.data && sentRequests.data.length > 0?
+            sentRequests.data.map((item: sentRequestType)=>{
+              return (
+                <div className='shaded-border connection-card' key={item._id}>
+                  <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                    <div>
+                      <img src={item.recipient.profilePicture} className='profile-img-large'/>
+                    </div>
+                    <div>
+                      <h1 className='font-bold'>{item.recipient.fullName}</h1>
+                      <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
+                    </div>
+                  </Link>
+                  <button onClick={function(){}}>CANCEL</button>
+                </div>
+              )
+            }):
+            <div className='flex flex-col gap-1 items-center my-10'>
+              <UserPlus size={54} color={'gray'} />
+              <p className='text-xl my-3'>No sent requests</p>
+            </div>
+          }
+        </div>
+
+        <p className='font-semibold text-l my-6'>My Connections</p>
         <div className='flex gap-3'>
           {
             allConnections.data && allConnections.data.length > 0?

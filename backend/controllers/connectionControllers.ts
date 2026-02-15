@@ -21,6 +21,18 @@ export const getConnectionRequests = async (req: Request, res: Response) => {
   }
 };
 
+export const getSentRequests = async (req: Request, res: Response)=>{
+  try {
+    const userId = new mongoose.Types.ObjectId(res.locals.id);
+    const sentRequests = await ConnectionRequest.find({ sender: userId, status: 'pending' }).populate('recipient', 'fullName profilePicture headline connections');
+    if(!sentRequests) return res.status(400).json({ message: 'No connection requests found' });
+    return res.status(200).json({ sentRequests });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error getting connection requests' });
+  }
+};
+
 export const getSentConnectionRequests = async (req: Request, res: Response) => {
   try {
     const userId = new mongoose.Types.ObjectId(res.locals.id);
