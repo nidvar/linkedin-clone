@@ -12,13 +12,9 @@ const HomePage = () => {
   const userData = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
-      try {
-        const authUser = await getRequest('/auth/me');
-        const user = authUser.user;
-        return user;
-      } catch (error) {
-        return null;
-      }
+      const authUser = await getRequest('/auth/me');
+      const user = authUser.user;
+      return user;
     }
   });
 
@@ -26,13 +22,9 @@ const HomePage = () => {
     queryKey: ['recommendedUsers', userData.data?._id],
     enabled: !!userData.data,
     queryFn: async () => {
-      try {
-        const data = await getRequest('/user/suggestedusers');
-        const randomizedUsers = data.usersNotConnected.sort(() => Math.random() - 0.5).slice(0, 3);
-        return randomizedUsers
-      } catch (error) {
-        return error;
-      }
+      const data = await getRequest('/user/suggestedusers');
+      const randomizedUsers = data.usersNotConnected.sort(() => Math.random() - 0.5).slice(0, 3);
+      return randomizedUsers
     },
   });
 
@@ -40,12 +32,8 @@ const HomePage = () => {
     queryKey: ['posts', userData.data?._id ?? ''], 
     enabled: !!userData.data,
     queryFn: async () => {
-      try {
-        const data = await getRequest('/post/feed');
-        return data.posts;
-      } catch (error) {
-        return error;
-      }
+      const data = await getRequest('/post/feed');
+      return data.posts;
     },
   });
 

@@ -12,13 +12,9 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
     queryKey: userData ? ['notifications', userData._id] : ['notifications', 'guest'],
     enabled: !!userData,
     queryFn: async () => {
-      try {
-        const data = await getRequest('/notifications');
-        console.log(data);
-        return data.notifications;
-      } catch (error) {
-        return error;
-      }
+      const data = await getRequest('/notifications');
+      console.log(data);
+      return data.notifications;
     },
   });
 

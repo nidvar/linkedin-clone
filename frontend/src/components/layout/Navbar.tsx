@@ -17,25 +17,17 @@ const Navbar = () => {
   const userData = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
-      try {
-        const authUser = await getRequest('/auth/me');
-        const user = authUser.user;
-        return user;
-      } catch (error) {
-        return null;
-      }
+      const authUser = await getRequest('/auth/me');
+      const user = authUser.user;
+      return user;
     }
   });
 
   const notifications = useQuery({
     queryKey: userData.data ? ['notifications', userData.data._id] : ['notifications', 'guest'], 
     queryFn: async () => {
-      try {
-        const data = await getRequest('/notifications');
-        return data.notifications;
-      } catch (error) {
-        return error;
-      }
+      const data = await getRequest('/notifications');
+      return data.notifications;
     },
     enabled: userData.data !== null,
   });
@@ -43,12 +35,8 @@ const Navbar = () => {
   const connectionRequests = useQuery({ 
     queryKey: ['requests'], 
     queryFn: async () => {
-      try {
-        const data = await getRequest('/connections/requests');
-        return data.connectionRequests;
-      } catch (error) {
-        return error;
-      }
+      const data = await getRequest('/connections/requests');
+      return data.connectionRequests;
     },
     enabled: userData.data !== null,
   });

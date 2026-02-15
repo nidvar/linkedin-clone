@@ -14,13 +14,9 @@ function App() {
   const userData = useQuery({ 
     queryKey: ['authUser'], 
     queryFn: async () => {
-      try {
-        const authUser = await getRequest('/auth/me');
-        const user = authUser.user;
-        return user;
-      } catch (error) {
-        return null;
-      }
+      const authUser = await getRequest('/auth/me');
+      const user = authUser.user;
+      return user;
     }
   });
 

@@ -12,12 +12,8 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
   const requests = useQuery({
     queryKey: ['requests', userData._id],
     queryFn: async () => {
-      try {
-        const data = await getRequest('/connections/requests');
-        return data.connectionRequests;
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await getRequest('/connections/requests');
+      return data.connectionRequests;
     },
     enabled: userData !== null,
   });
@@ -26,12 +22,8 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
     queryKey: ['connections', userData._id],
     enabled: !!userData,
     queryFn: async () => {
-      try {
-        const data = await getRequest('/connections/getallconnections');
-        return data.connections
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await getRequest('/connections/getallconnections');
+      return data.connections
     },
   });
 
@@ -39,12 +31,8 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
     queryKey: ['sentRequests', userData._id],
     enabled: !!userData,
     queryFn: async () => {
-      try {
-        const data = await getRequest('/connections/sentrequests');
-        return data.sentRequests;
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await getRequest('/connections/sentrequests');
+      return data.sentRequests;
     },
   });
 
