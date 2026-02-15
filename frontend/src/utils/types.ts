@@ -61,7 +61,11 @@ export type NotificationType = {
     profilePicture: string
     fullName: string
   }
-  relatedPost: string
+  relatedPost: {
+    _id: string
+    content: string
+    image: string
+  }
   read: boolean
   createdAt: string
   updatedAt: string

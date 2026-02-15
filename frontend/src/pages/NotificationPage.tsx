@@ -29,6 +29,9 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
     if(arg === 'like'){
       return 'liked your post';
     }
+    if(arg === 'comment'){
+      return 'commented on your post';
+    }
   };
 
   const notificationIcon = function(arg: string){
@@ -72,16 +75,27 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
               notifications.data.map((notification: NotificationType) => {
                 return(
                   <div key={notification._id} className='flex justify-between my-4'>
-                    <div className='flex gap-5'>
-                      <Link to={`/profile/${notification.relatedUser._id}`}>
-                        <img src={notification.relatedUser.profilePicture} className='profile-img'/>
-                      </Link>
-                      <div>
-                        <div className='flex gap-2'>
-                        {notificationIcon(notification.type)}
-                        <h1><span className='font-bold'>{notification.relatedUser.fullName}</span> {notificationType(notification.type)}</h1>
+                    <div className='w-full'>
+                      <div className='flex gap-5 related-post-container'>
+                        <Link to={`/profile/${notification.relatedUser._id}`}>
+                          <img src={notification.relatedUser.profilePicture} className='profile-img'/>
+                        </Link>
+                        <div className='w-full'>
+                          <div className='flex gap-2'>
+                            {notificationIcon(notification.type)}
+                            <h1>
+                              <span className='font-bold'>{notification.relatedUser.fullName}</span> {notificationType(notification.type)}
+                            </h1>
+                          </div>
+                          <p className='text-gray-600 text-sm'>{daysAgo(notification.createdAt)}</p>
+                          {
+                            notification.type === 'comment' || notification.type === 'like'?
+                            <div className='related-post hand-hover'>
+                              <Link to='/' className='text-gray-600 text-sm mt-2'>{notification.relatedPost.content}</Link>
+                            </div>:
+                            ''
+                          }
                         </div>
-                        <p className='text-gray-600 text-sm mt-2'>{daysAgo(notification.createdAt)}</p>
                       </div>
                     </div>
                     <div className='flex gap-4'>

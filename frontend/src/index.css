@@ -78,6 +78,16 @@
   padding: 15px 0 15px 0;
 }
 
+/* NOTIFICATION PAGE ===============================================*/
+
+.related-post {
+  background-color: rgb(230, 228, 225);
+  padding: 10px 0 10px 15px;
+  margin-top: 10px;
+  border-radius: 4px;
+  width: 80%;
+}
+
 /* POST COMPONENT ===============================================*/
 
 .post-container {
