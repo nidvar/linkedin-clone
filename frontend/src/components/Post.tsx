@@ -4,6 +4,7 @@ import { useState, type SubmitEvent } from 'react';
 
 import type { AuthUserType, PostType } from '../utils/types';
 import { daysAgo, postRequest } from "../utils/utilFunctions";
+import { Link } from "react-router-dom";
 
 
 function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
@@ -67,9 +68,9 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
     <div className="post-container shaded-border">
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
-          <div>
+          <Link to={'/profile/' + post.author._id}>
             <img src={post.author.profilePicture} alt="" className='profile-img'/>
-          </div>
+          </Link>
           <div className='flex flex-col'>
             <p className="font-semibold">{post.author.fullName}</p>
             <p className="text-xs">{post.author.headline}</p>
@@ -112,9 +113,9 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
               return (
                 <div className="comment-container flex items-center justify-between" key={comment._id}>
                   <div className="flex gap-2">
-                    <div className="self-start">
+                    <Link to={'/profile/' + comment.user._id} className="self-start">
                       <img src={comment.user.profilePicture} alt="" className='profile-img-medium'/>
-                    </div>
+                    </Link>
                     <div className='single-comment-box'>
                       <div className="flex justify-between text-xs">
                         <p>
