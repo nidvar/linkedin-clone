@@ -12,11 +12,27 @@ export type AuthUserType = {
   skills: string[],
   connections: string[],
   username: string,
-  experience: string[],
-  education: string[],
+  experience: Experience[],
+  education: Education[],
   createdAt?: string,
   updatedAt?: string,
 };
+
+type Experience = {
+  title: String,
+  company: String,
+  startYear: String,
+  endYear: String,
+  numberOfMonths?: String
+  description: String,
+}
+
+type Education = {
+  school: String,
+  fieldOfStudy: String,
+  startYear: String,
+  endYear: String,
+}
 
 export type CommentType = {
   user: {

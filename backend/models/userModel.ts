@@ -59,8 +59,9 @@ const userSchema = new mongoose.Schema(
       {
         title: String,
         company: String,
-        startDate: Date,
-        endDate: Date,
+        startYear: Number,
+        endYear: Number,
+        numberOfMonths: Number,
         description: String,
       },
     ],
@@ -68,8 +69,8 @@ const userSchema = new mongoose.Schema(
       {
         school: String,
         fieldOfStudy: String,
-        startYear: Number,
-        endYear: Number,
+        startYear: String,
+        endYear: String,
       },
     ],
     connections: [

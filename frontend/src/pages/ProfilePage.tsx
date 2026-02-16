@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { getRequest } from '../utils/utilFunctions';
 import { MapPin } from 'lucide-react';
+import ProfileSections from '../components/ProfileSections';
 
 function ProfilePage() {
 
@@ -39,26 +40,10 @@ function ProfilePage() {
         </div>
       </div>
 
-      <div className='profile-section shaded-border'>
-        <h1>About</h1>
-        <p className='profile-section-content'>{profileData.data.about}</p>
-        <button className='edit-button'>Edit</button>
-      </div>
-
-      <div className='profile-section shaded-border'>
-        <h1>Experience</h1>
-        <button className='edit-button'>Edit</button>
-      </div>
-
-      <div className='profile-section shaded-border'>
-        <h1>Education</h1>
-        <button className='edit-button'>Edit</button>
-      </div>
-
-      <div className='profile-section shaded-border'>
-        <h1>Skills</h1>
-        <button className='edit-button'>Edit</button>
-      </div>
+      <ProfileSections section='About' profileData={profileData.data}/>
+      <ProfileSections section='Experiences' profileData={profileData.data}/>
+      <ProfileSections section='Education' profileData={profileData.data}/>
+      <ProfileSections section='Skills' profileData={profileData.data}/>
 
     </div>
   )
