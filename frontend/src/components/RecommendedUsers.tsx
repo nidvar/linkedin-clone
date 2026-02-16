@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-import type { AuthUserType, SuggestedUsersType } from '../utils/types';
-import { UserPlus } from 'lucide-react';
+import type { AuthUserType, sentRequestType, SuggestedUsersType } from '../utils/types';
+import { TimerIcon, UserPlus } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '../utils/utilFunctions';
 
-function RecommendedUsers({ recommendedUsers, userData }: {recommendedUsers: SuggestedUsersType[], userData: AuthUserType}) {
+function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recommendedUsers: SuggestedUsersType[], userData: AuthUserType, sentRequests: sentRequestType[]}) {
 
   const queryClient = useQueryClient();
   
@@ -50,6 +50,29 @@ function RecommendedUsers({ recommendedUsers, userData }: {recommendedUsers: Sug
           }
         </>:''
       }
+      {
+        sentRequests && sentRequests.length > 0?
+        <>
+          {
+            sentRequests.map((user, index) => {
+              if(index > 3) return;
+              return (
+                <div className='flex justify-between items-center' key={user._id}>
+                  <Link to='/' className='flex gap-2 items-center'>
+                    <img src={user.recipient.profilePicture} alt="" className='profile-img'/>
+                    <div className='flex flex-col '>
+                      <p className="font-semibold text-sm">{user.recipient.fullName}</p>
+                      <p className="text-xs text-gray-600">{user.recipient.headline}</p>
+                    </div>
+                  </Link>
+                  <div className='pending-button flex gap-2 items-center'><TimerIcon size={14} />Pending</div>
+                </div>
+              )
+            })
+          }
+        </>:''
+      }
+
     </div>
   )
 }

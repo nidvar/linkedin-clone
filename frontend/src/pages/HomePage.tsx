@@ -18,6 +18,15 @@ const HomePage = () => {
     }
   });
 
+  const sentRequests = useQuery({
+    queryKey: ['sentRequests', userData.data?._id],
+    enabled: !!userData,
+    queryFn: async () => {
+      const data = await getRequest('/connections/sentrequests');
+      return data.sentRequests;
+    },
+  });
+
   const recommendedUsers = useQuery({
     queryKey: ['recommendedUsers', userData.data?._id],
     enabled: !!userData.data,
@@ -56,7 +65,7 @@ const HomePage = () => {
       {
         recommendedUsers.isPending?
         <>{null}</>:
-        <RecommendedUsers recommendedUsers={recommendedUsers.data || []} userData={userData.data}/>
+        <RecommendedUsers recommendedUsers={recommendedUsers.data || []} userData={userData.data} sentRequests={sentRequests.data || []}  />
       }
     </div>
   )

@@ -33,18 +33,6 @@ export const getSentRequests = async (req: Request, res: Response)=>{
   }
 };
 
-export const getSentConnectionRequests = async (req: Request, res: Response) => {
-  try {
-    const userId = new mongoose.Types.ObjectId(res.locals.id);
-    const connectionRequests = await ConnectionRequest.find({ sender: userId, status: 'pending' });
-    if(!connectionRequests) return res.status(400).json({ message: 'No connection requests found' });
-    return res.status(200).json({ connectionRequests });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error getting connection requests' });
-  }
-};
-
 export const getAllConnections = async (req: Request, res: Response) => {
   try {
     const userId = new mongoose.Types.ObjectId(res.locals.id);
