@@ -19,8 +19,42 @@ function ProfilePage() {
   console.log(profileData.data);
 
   return (
-    <div className="main">
+    <div className="profile-page">
       <h1>Profile Page</h1>
+      <div className='profile-header shaded-border'>
+        <div className='profile-banner absolute'
+          style={{
+            backgroundImage: `url(${profileData.data.bannerImg || 'banner.png'})`,
+          }}
+        ></div>
+        <div className='profile-picture'>
+          <img src={profileData.data.profilePicture || 'avatar.png'} className='profile-img-large'/>
+          <h1 className='bold text-xl'>{profileData.data.fullName}</h1>
+          <p>{profileData.data.headline}</p>
+          <p>{profileData.data.connections.length} connections</p>
+          <p>Location</p>
+        </div>
+        <button>EDIT PROFILE</button>
+      </div>
+
+
+      <div className='profile-section shaded-border'>
+        <h1>About</h1>
+      </div>
+
+      <div className='profile-section shaded-border'>
+        <h1>Experience</h1>
+      </div>
+
+      <div className='profile-section shaded-border'>
+        <h1>Education</h1>
+      </div>
+
+      <div className='profile-section shaded-border'>
+        <h1>Skills</h1>
+      </div>
+
+
     </div>
   )
 }

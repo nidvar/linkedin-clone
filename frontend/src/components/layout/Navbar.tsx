@@ -4,7 +4,7 @@ import { Bell, LogOut, Users } from 'lucide-react';
 import { useEffect, useState } from "react";
 
 // local imports
-import { getRequest, postRequest } from "../../utils/utilFunctions";
+import { fetchUser, getRequest, postRequest } from "../../utils/utilFunctions";
 import type { NotificationType } from "../../utils/types";
 
 const Navbar = () => {
@@ -16,11 +16,7 @@ const Navbar = () => {
 
   const userData = useQuery({ 
     queryKey: ['authUser'], 
-    queryFn: async () => {
-      const authUser = await getRequest('/auth/me');
-      const user = authUser.user;
-      return user;
-    }
+    queryFn: fetchUser
   });
 
   const notifications = useQuery({

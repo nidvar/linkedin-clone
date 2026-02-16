@@ -7,21 +7,17 @@ import SignUpPage from './pages/auth/SignUpPage'
 import LoginPage from './pages/auth/LoginPage'
 import NetworkPage from './pages/NetworkPage'
 
-import { getRequest } from './utils/utilFunctions'
+import { fetchUser } from './utils/utilFunctions'
 import NotificationPage from './pages/NotificationPage'
 import ProfilePage from './pages/ProfilePage'
 
 function App() {
   const userData = useQuery({ 
     queryKey: ['authUser'], 
-    queryFn: async () => {
-      const authUser = await getRequest('/auth/me');
-      const user = authUser.user;
-      return user;
-    }
+    queryFn: fetchUser
   });
 
-  if (userData.isLoading) return null;
+  if (userData.isLoading) return <div>Loading...</div>;
 
   return (
     <Layout>

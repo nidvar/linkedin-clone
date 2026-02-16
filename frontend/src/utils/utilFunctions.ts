@@ -61,6 +61,17 @@ export const postRequest = async function(url: string, payloadData: object, meth
   return data;
 };
 
+export const fetchUser = async function(){
+  try {
+    const authUser = await getRequest('/auth/me');
+    const user = authUser.user;
+    return user || null;
+  } catch (error) {
+    console.log(error);
+    return 'error';
+  }
+}
+
 export function daysAgo(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();

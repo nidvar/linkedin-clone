@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getRequest } from "../utils/utilFunctions";
+import { fetchUser, getRequest } from "../utils/utilFunctions";
 import type { PostType } from "../utils/types";
 
 import Sidebar from '../components/Sidebar';
@@ -11,12 +11,10 @@ import RecommendedUsers from "../components/RecommendedUsers";
 const HomePage = () => {
   const userData = useQuery({ 
     queryKey: ['authUser'], 
-    queryFn: async () => {
-      const authUser = await getRequest('/auth/me');
-      const user = authUser.user;
-      return user;
-    }
+    queryFn: fetchUser
   });
+
+  console.log(userData);
 
   const sentRequests = useQuery({
     queryKey: ['sentRequests', userData.data?._id],
