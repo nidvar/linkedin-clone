@@ -87,12 +87,28 @@
 
 .edit-button-container {
   padding: 15px;
-  width: 100%;
+  width: 200px;
+  margin: auto;
 }
 
 .profile-header button {
   width: 100%;
   border-radius: 15px;
+}
+
+.profile-update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 300px;
+  margin: 15px auto;
+}
+
+.image-upload-input {
+  border-radius: 50%;
+  height: 250px;
+  width: 250px;
+  margin: auto;
 }
 
 

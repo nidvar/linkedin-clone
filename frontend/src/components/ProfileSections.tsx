@@ -28,7 +28,7 @@ function ProfileSections({section, profileData, canUpdate}: {section: string, pr
     if(section === 'Experiences'){
       profileData.experience.map((item)=>{
         return (
-          <div>
+          <div key={Math.random()}>
             <p>Title: {item.title}</p>
             <p>Company: {item.title}</p>
             <p>Time of Employment: {item.startYear} - {item.endYear}</p>
@@ -41,7 +41,7 @@ function ProfileSections({section, profileData, canUpdate}: {section: string, pr
     if(section === 'Education'){
       profileData.education.map((item)=>{
         return (
-          <div>
+          <div key={Math.random()}>
             <p>School: {item.school}</p>
             <p>Field of Study: {item.fieldOfStudy}</p>
             <p>Start Year: {item.startYear}</p>
@@ -53,7 +53,7 @@ function ProfileSections({section, profileData, canUpdate}: {section: string, pr
     if(section === 'Skills'){
       profileData.skills.map((item)=>{
         return (
-          <div className='flex gap-2'>
+          <div className='flex gap-2' key={Math.random()}>
             <p>{item}</p>
           </div>
         )
