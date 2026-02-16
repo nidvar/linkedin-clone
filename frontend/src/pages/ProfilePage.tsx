@@ -5,12 +5,12 @@ import { getRequest } from '../utils/utilFunctions';
 
 function ProfilePage() {
 
-  const { id } = useParams();
+  const { username } = useParams();
 
   const profileData = useQuery({ 
-    queryKey: ['profile', id], 
+    queryKey: ['profile', username], 
     queryFn: async () => {
-      const profileData = await getRequest('/user/profile/' + id);
+      const profileData = await getRequest('/user/profile/' + username);
       const user = profileData.user;
       return user;
     }

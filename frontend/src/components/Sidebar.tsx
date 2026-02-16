@@ -24,7 +24,7 @@ function Sidebar({user} : {user: AuthUserType | null}) {
         <Link to='/' className='flex gap-2'><User />My Network</Link>
         <Link to='/' className='flex gap-2'><Bell /> Notifications</Link>
       </div>
-      <Link to={'/profile/' + user._id} className='font-semibold'>Visit your profile</Link>
+      <Link to={'/profile/' + user.username} className='font-semibold'>Visit your profile</Link>
     </div>
   )
 }

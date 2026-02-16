@@ -8,8 +8,8 @@ export const getNotifications = async (req: Request, res: Response) => {
   try {
     const notifications = await Notification.find({ recipient: res.locals.id })
     .sort({ createdAt: -1 })
-    .populate("relatedUser", "fullName profilePicture")
-    .populate("relatedPost", "content image");
+    .populate("relatedUser", "fullName profilePicture username")
+    .populate("relatedPost", "content image username");
 
     return res.status(200).json({ notifications });
   } catch (error) {

@@ -23,6 +23,7 @@ export type CommentType = {
     _id: string
     fullName: string
     profilePicture: string
+    username?: string
   },
   _id: string
   createdAt: string
@@ -51,6 +52,7 @@ export type SuggestedUsersType = {
   fullName: string
   profilePicture: string
   headline: string
+  username?: string
 }
 
 export type NotificationType = {
@@ -60,6 +62,7 @@ export type NotificationType = {
     _id: string
     profilePicture: string
     fullName: string
+    username?: string
   }
   relatedPost: {
     _id: string
@@ -79,6 +82,7 @@ export type ConnectionRequestType = {
     profilePicture: string
     headline: string
     _id: string
+    username?: string
   }
   recipient: string
   status: string
@@ -94,6 +98,7 @@ export type sentRequestType = {
     profilePicture: string
     headline: string
     _id: string
+    username?: string
   }
   sender: string
   status: string
@@ -107,4 +112,5 @@ export type ConnectionType = {
   profilePicture: string
   headline: string
   connections: string[]
+  username?: string
 }

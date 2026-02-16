@@ -10,7 +10,7 @@ import { getPublicProfile, suggestedUsers, updateUserDetails } from '../controll
 const router = express.Router();
 
 router.get('/suggestedusers', protectRoute, suggestedUsers);
-router.get('/profile/:id', protectRoute, getPublicProfile);
+router.get('/profile/:username', protectRoute, getPublicProfile);
 router.post('/update', protectRoute, updateUserDetails);
 
 export default router;

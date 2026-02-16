@@ -14,7 +14,7 @@ export const getRequest = async function(url: string) {
   });
   const data = await res.json();
 
-  if(data.message === 'Token expired'){
+  if(data.message === 'Token expired' || data.message === 'Invalid token'){
     const refreshResult = await refreshAccessToken();
     if(refreshResult.message === 'Access token refreshed'){
       const res = await fetch(import.meta.env.VITE_BACKEND_API + url, {

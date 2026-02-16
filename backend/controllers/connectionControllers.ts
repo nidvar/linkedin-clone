@@ -12,7 +12,7 @@ import User from '../models/userModel.js';
 export const getConnectionRequests = async (req: Request, res: Response) => {
   try {
     const userId = new mongoose.Types.ObjectId(res.locals.id);
-    const connectionRequests = await ConnectionRequest.find({ recipient: userId, status: 'pending' }).populate('sender', 'fullName profilePicture headline connections');
+    const connectionRequests = await ConnectionRequest.find({ recipient: userId, status: 'pending' }).populate('sender', 'fullName profilePicture headline connections username');
     if(!connectionRequests) return res.status(400).json({ message: 'No connection requests found' });
     return res.status(200).json({ connectionRequests });
   } catch (error) {
@@ -24,7 +24,7 @@ export const getConnectionRequests = async (req: Request, res: Response) => {
 export const getSentRequests = async (req: Request, res: Response)=>{
   try {
     const userId = new mongoose.Types.ObjectId(res.locals.id);
-    const sentRequests = await ConnectionRequest.find({ sender: userId, status: 'pending' }).populate('recipient', 'fullName profilePicture headline connections');
+    const sentRequests = await ConnectionRequest.find({ sender: userId, status: 'pending' }).populate('recipient', 'fullName profilePicture headline connections username');
     if(!sentRequests) return res.status(400).json({ message: 'No connection requests found' });
     return res.status(200).json({ sentRequests });
   } catch (error) {
@@ -36,7 +36,7 @@ export const getSentRequests = async (req: Request, res: Response)=>{
 export const getAllConnections = async (req: Request, res: Response) => {
   try {
     const userId = new mongoose.Types.ObjectId(res.locals.id);
-    const user = await User.findById(userId).populate('connections', 'fullName profilePicture headline connections');
+    const user = await User.findById(userId).populate('connections', 'fullName profilePicture headline connections username');
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     }

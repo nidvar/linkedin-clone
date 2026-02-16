@@ -27,7 +27,7 @@ function App() {
     <Layout>
       <Routes>
         <Route path='/' element={ userData.data? <HomePage /> : <LoginPage />}/>
-        <Route path='/profile/:id' element={ userData.data? <ProfilePage /> : <LoginPage />}/>
+        <Route path='/profile/:username' element={ userData.data? <ProfilePage /> : <LoginPage />}/>
         <Route path='/signup' element={ userData.data? <HomePage /> : <SignUpPage />}/>
         <Route path='/login' element={ userData.data? <HomePage /> : <LoginPage />}/>
         <Route path='/network' element={ userData.data? <NetworkPage userData={userData.data}/> : <LoginPage />}/>

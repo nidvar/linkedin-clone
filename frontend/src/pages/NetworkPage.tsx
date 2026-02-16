@@ -115,7 +115,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                 sentRequests.data.map((item: sentRequestType) => {
                   return (
                     <div className='shaded-border connection-card' key={item._id}>
-                      <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                      <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2'>
                         <div>
                           <img src={item.recipient.profilePicture} className='profile-img-large' />
                         </div>
@@ -144,7 +144,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                 allConnections.data.map((item: ConnectionType) => {
                   return (
                     <div className='shaded-border connection-card' key={item._id}>
-                      <Link to={'/profile/' + item._id} className='hand-hover flex flex-col gap-2'>
+                      <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2'>
                         <div>
                           <img src={item.profilePicture} className='profile-img-large' />
                         </div>

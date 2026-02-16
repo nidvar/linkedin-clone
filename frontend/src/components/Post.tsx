@@ -68,7 +68,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
     <div className="post-container shaded-border">
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
-          <Link to={'/profile/' + post.author._id}>
+          <Link to={'/profile/' + post.author.username}>
             <img src={post.author.profilePicture} alt="" className='profile-img'/>
           </Link>
           <div className='flex flex-col'>
@@ -113,7 +113,7 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
               return (
                 <div className="comment-container flex items-center justify-between" key={comment._id}>
                   <div className="flex gap-2">
-                    <Link to={'/profile/' + comment.user._id} className="self-start">
+                    <Link to={'/profile/' + comment.user.username} className="self-start">
                       <img src={comment.user.profilePicture} alt="" className='profile-img-medium'/>
                     </Link>
                     <div className='single-comment-box'>

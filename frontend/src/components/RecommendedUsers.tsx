@@ -34,7 +34,7 @@ function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recomme
             recommendedUsers.map((user) => {
               return (
                 <div className='flex justify-between items-center' key={user._id}>
-                  <Link to={'/profile/' + user._id} className='flex gap-2 items-center'>
+                  <Link to={'/profile/' + user.username} className='flex gap-2 items-center'>
                     <img src={user.profilePicture} alt="" className='profile-img'/>
                     <div className='flex flex-col '>
                       <p className="font-semibold text-sm">{user.fullName}</p>
@@ -58,7 +58,7 @@ function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recomme
               if(index > 3) return;
               return (
                 <div className='flex justify-between items-center' key={user._id}>
-                  <Link to={'/profile/' + user.recipient._id} className='flex gap-2 items-center'>
+                  <Link to={'/profile/' + user.recipient.username} className='flex gap-2 items-center'>
                     <img src={user.recipient.profilePicture} alt="" className='profile-img'/>
                     <div className='flex flex-col '>
                       <p className="font-semibold text-sm">{user.recipient.fullName}</p>
