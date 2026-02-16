@@ -5,6 +5,7 @@ const refreshAccessToken = async function(){
     headers: { 'Content-Type': 'application/json' },
   });
   const data = await res.json();
+  console.log(data);
   return data;
 };
 
@@ -68,7 +69,7 @@ export const fetchUser = async function(){
     return user || null;
   } catch (error) {
     console.log(error);
-    return 'error';
+    return null;
   }
 }
 

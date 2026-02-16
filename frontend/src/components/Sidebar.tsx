@@ -9,11 +9,11 @@ function Sidebar({user} : {user: AuthUserType | null}) {
       <div className='sidebar-profile-container relative'>
         <div className='banner absolute'
           style={{
-            backgroundImage: `url(${user.bannerImg || 'banner.png'})`,
+            backgroundImage: `url(${user.bannerImg || '/banner.png'})`,
           }}
         ></div>
         <div className='sidebar-profile'>
-          <img src={user.profilePicture || 'avatar.png'} className='sidebar-profile-img'/>
+          <img src={user.profilePicture || 'avatar.png'} className='sidebar-profile-img circle'/>
           <h1 className='font-bold text-xl mt-2'>{user.fullName}</h1>
           <p className='text-gray-600'>{user.headline}</p>
           <p className='text-xs text-gray-600'>{user.connections.length} connections</p>

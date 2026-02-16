@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     },
     bannerImg: {
       type: String,
-      default: "",
+      default: null,
     },
     headline: {
       type: String,

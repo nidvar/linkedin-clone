@@ -14,8 +14,6 @@ const HomePage = () => {
     queryFn: fetchUser
   });
 
-  console.log(userData);
-
   const sentRequests = useQuery({
     queryKey: ['sentRequests', userData.data?._id],
     enabled: !!userData,

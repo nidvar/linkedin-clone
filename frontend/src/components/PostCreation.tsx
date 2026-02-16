@@ -79,7 +79,7 @@ function PostCreation({profile} : {profile: string}) {
       }
       <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
         <div className='flex gap-3'>
-          <img src={profile} alt="Preview" className='profile-img'/>
+          <img src={profile} alt="Preview" className='profile-img circle'/>
           <textarea 
             className='p-2'
             placeholder={'What\'s on your mind?'}

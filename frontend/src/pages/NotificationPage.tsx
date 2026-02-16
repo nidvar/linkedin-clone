@@ -68,41 +68,47 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
           notifications.data && notifications.data.length > 0?
           <>
             {
-              notifications.data.map((notification: NotificationType) => {
+              notifications.data.map((notification: NotificationType, index: number) => {
                 return(
-                  <div key={notification._id} className='flex justify-between my-4'>
-                    <div className='w-full'>
-                      <div className='flex gap-5 related-post-container'>
-                        <Link to={`/profile/${notification.relatedUser._id}`}>
-                          <img src={notification.relatedUser.profilePicture} className='profile-img'/>
-                        </Link>
-                        <div className='w-full'>
-                          <div className='flex gap-2'>
-                            {notificationIcon(notification.type)}
-                            <h1>
-                              <span className='font-bold'>{notification.relatedUser.fullName}</span> {notificationType(notification.type)}
-                            </h1>
+                  <>
+                    {
+                      index > 0?
+                      <div className='horizontal-line'></div>:''
+                    }
+                    <div key={notification._id} className='flex justify-between my-4'>
+                      <div className='w-full'>
+                        <div className='flex gap-5 related-post-container'>
+                          <Link to={`/profile/${notification.relatedUser._id}`}>
+                            <img src={notification.relatedUser.profilePicture} className='profile-img circle'/>
+                          </Link>
+                          <div className='w-full'>
+                            <div className='flex gap-2'>
+                              {notificationIcon(notification.type)}
+                              <h1>
+                                <span className='font-bold'>{notification.relatedUser.fullName}</span> {notificationType(notification.type)}
+                              </h1>
+                            </div>
+                            <p className='text-gray-600 text-sm'>{daysAgo(notification.createdAt)}</p>
+                            {
+                              notification.type === 'comment' || notification.type === 'like'?
+                              <div className='related-post hand-hover'>
+                                <Link to='/' className='text-gray-600 text-sm mt-2'>{notification.relatedPost.content}</Link>
+                              </div>:
+                              ''
+                            }
                           </div>
-                          <p className='text-gray-600 text-sm'>{daysAgo(notification.createdAt)}</p>
-                          {
-                            notification.type === 'comment' || notification.type === 'like'?
-                            <div className='related-post hand-hover'>
-                              <Link to='/' className='text-gray-600 text-sm mt-2'>{notification.relatedPost.content}</Link>
-                            </div>:
-                            ''
-                          }
                         </div>
                       </div>
+                      <div className='flex gap-4'>
+                        {
+                          notification.read === true?
+                          <Eye color={'skyblue'} />:
+                          <Eye color={'black'} className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}/>
+                        }
+                        <Trash2 color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}/>
+                      </div>
                     </div>
-                    <div className='flex gap-4'>
-                      {
-                        notification.read === true?
-                        <Eye color={'skyblue'} />:
-                        <Eye color={'black'} className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}/>
-                      }
-                      <Trash2 color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}/>
-                    </div>
-                  </div>
+                  </>
                 )
               })
             }

@@ -75,7 +75,7 @@ const Navbar = () => {
             userData.data?
             <>
               <Link to='/' className="flex flex-col items-center hand-hover">
-                <img src={userData.data.profilePicture} alt="" className="profile-img-small"/>
+                <img src={userData.data.profilePicture} alt="" className="profile-img-small circle"/>
                 <span title="Profile" className="text-xs mt-1">{userData.data.fullName}</span>
               </Link>
 
