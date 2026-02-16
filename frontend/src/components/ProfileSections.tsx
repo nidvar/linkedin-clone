@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 import { postRequest } from '../utils/utilFunctions';
 import type { AuthUserType } from '../utils/types';
@@ -8,6 +9,10 @@ function ProfileSections({section, profileData, canUpdate}: {section: string, pr
 
   const { username } = useParams();
   const queryClient = useQueryClient();
+
+  const [edit, setEdit] = useState(false);
+
+  const [about, setAbout] = useState('');
 
   const updateSectionMutation = useMutation({
     mutationFn: async () => {
@@ -66,8 +71,20 @@ function ProfileSections({section, profileData, canUpdate}: {section: string, pr
       <h1>{section}</h1>
       <p className='profile-section-content'>{displayData()}</p>
       {
+        section === 'About'?
+        <>
+        {
+          edit?
+          <>
+            <textarea value={about} className='p-3' placeholder='Type here...' onChange={function(e){setAbout(e.target.value)}}></textarea>
+            <button className='mr-3' onClick={function(){}}>Update</button>
+          </>:''
+        }
+        </>:''
+      }
+      {
         canUpdate === true?
-        <button className='edit-button' onClick={function(){}}>Edit</button>:''
+        <button className='edit-button' onClick={function(){setEdit(prev => !prev);}}>{edit?'Cancel':'Edit'}</button>:''
       }
     </div>
   )

@@ -70,12 +70,12 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
             {
               notifications.data.map((notification: NotificationType, index: number) => {
                 return(
-                  <>
+                  <div key={notification._id} >
                     {
                       index > 0?
                       <div className='horizontal-line'></div>:''
                     }
-                    <div key={notification._id} className='flex justify-between my-4'>
+                    <div className='flex justify-between my-4'>
                       <div className='w-full'>
                         <div className='flex gap-5 related-post-container'>
                           <Link to={`/profile/${notification.relatedUser._id}`}>
@@ -108,7 +108,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                         <Trash2 color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}/>
                       </div>
                     </div>
-                  </>
+                  </div>
                 )
               })
             }

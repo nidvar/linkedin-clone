@@ -18,16 +18,12 @@ export const updateUserDetails = async (req: Request, res: Response)=>{
     };
 
     const updateObject = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      username: req.body.username,
       headline: req.body.headline,
       about: req.body.about,
       location: req.body.location,
       skills: req.body.skills,
       experience: req.body.experience,
       education: req.body.education,
-      fullName: `${req.body.firstName} ${req.body.lastName}`,
       profilePic: req.body.profilePic,
       bannerImg: req.body.bannerImg
     };

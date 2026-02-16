@@ -5,7 +5,7 @@ import { Image } from 'lucide-react';
 
 function PostCreation({profile} : {profile: string}) {
 
-   const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const [post, setPost] = useState('');
   const [image, setImage] = useState<File | null>(null);
