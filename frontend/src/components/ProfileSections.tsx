@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { postRequest } from '../utils/utilFunctions';
 import type { AuthUserType } from '../utils/types';
 
-function ProfileSections({section, profileData}: {section: string, profileData: AuthUserType}) {
+function ProfileSections({section, profileData, canUpdate}: {section: string, profileData: AuthUserType, canUpdate: boolean}) {
 
   const { username } = useParams();
   const queryClient = useQueryClient();
@@ -65,7 +65,10 @@ function ProfileSections({section, profileData}: {section: string, profileData: 
     <div className='profile-section shaded-border'>
       <h1>{section}</h1>
       <p className='profile-section-content'>{displayData()}</p>
-      <button className='edit-button'>Edit</button>
+      {
+        canUpdate === true?
+        <button className='edit-button' onClick={function(){}}>Edit</button>:''
+      }
     </div>
   )
 }
