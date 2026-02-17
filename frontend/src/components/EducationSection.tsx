@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { postRequest } from '../utils/utilFunctions';
 
-function EducationSection({profileData, canUpdate}: {profileData: AuthUserType, canUpdate: boolean}) {
+function EducationSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
   
   const { username } = useParams();
   const queryClient = useQueryClient();
@@ -40,7 +40,7 @@ function EducationSection({profileData, canUpdate}: {profileData: AuthUserType, 
         }
       </div>
       {
-        canUpdate === true?
+        ownProfile === true?
         <button className='edit-button' onClick={function(){setEdit(prev => !prev);}}>{edit?'Cancel':'Edit'}</button>:''
       }
     </div>

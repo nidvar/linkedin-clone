@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { postRequest } from '../utils/utilFunctions';
 import type { AuthUserType } from '../utils/types';
 
-function AboutSection({profileData, canUpdate}: {profileData: AuthUserType, canUpdate: boolean}) {
+function AboutSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
 
   const { username } = useParams();
   const queryClient = useQueryClient();
@@ -36,7 +36,7 @@ function AboutSection({profileData, canUpdate}: {profileData: AuthUserType, canU
         </>:''
       }
       {
-        canUpdate === true?
+        ownProfile === true?
         <button className='edit-button' onClick={function(){setEdit(prev => !prev);}}>{edit?'Cancel':'Edit'}</button>:''
       }
     </div>

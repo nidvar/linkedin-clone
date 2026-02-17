@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '../utils/utilFunctions';
 
-function SkillSection({profileData, canUpdate}: {profileData: AuthUserType, canUpdate: boolean}) {
+function SkillSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
   const { username } = useParams();
   const queryClient = useQueryClient();
 
@@ -38,7 +38,7 @@ function SkillSection({profileData, canUpdate}: {profileData: AuthUserType, canU
         }
       </div>
       {
-        canUpdate === true?
+        ownProfile === true?
         <button className='edit-button' onClick={function(){setEdit(prev => !prev);}}>{edit?'Cancel':'Edit'}</button>:''
       }
     </div>

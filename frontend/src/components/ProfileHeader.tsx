@@ -3,7 +3,7 @@ import { useRef, useState, type SubmitEvent } from 'react';
 import type { AuthUserType } from '../utils/types';
 import { MapPin, UserPen } from 'lucide-react';
 
-function ProfileHeader({profileData, userData} : {profileData: AuthUserType, userData: AuthUserType}){
+function ProfileHeader({profileData, userData, ownProfile} : {profileData: AuthUserType, userData: AuthUserType, ownProfile: boolean}) {
 
   const [errorMessage, setErrorMessage] = useState('');
   
@@ -61,8 +61,8 @@ function ProfileHeader({profileData, userData} : {profileData: AuthUserType, use
         editProfilePic === true?
           <form className='profile-picture-update-form' onSubmit={handleSubmit}>
             <img 
-                src={imagePreview || "blank_profile.jpg"}
-                className='profile-image-preview'
+              src={imagePreview || "blank_profile.jpg"}
+              className='profile-image-preview'
             />
             <input
               className='profile-upload-input'
@@ -79,9 +79,12 @@ function ProfileHeader({profileData, userData} : {profileData: AuthUserType, use
           </form>:
           <>
             <img src={profileData.profilePicture || 'avatar.png'} className='profile-img-xlarge circle'/>
-            <div className='profile-update-button hand-hover'>
-              <UserPen size={20} onClick={function(){setEditProfilePic(true)}} />
-            </div>
+            {
+              ownProfile?
+              <div className='profile-update-button hand-hover'>
+                <UserPen size={20} onClick={function(){setEditProfilePic(true)}} />
+              </div>:null
+            }
           </>
       }
 
@@ -94,7 +97,7 @@ function ProfileHeader({profileData, userData} : {profileData: AuthUserType, use
           <p className='text-gray-500 text-sm'>{profileData.connections.length} {profileData.connections.length != 1 ? 'connections' : 'connection'}</p>
           <p className='text-gray-500 text-sm flex items-center gap-1'><MapPin size={14} />{profileData.location}</p>
           {
-            userData._id === profileData._id?
+            ownProfile?
             <>
               {
                 editProfile === false?
