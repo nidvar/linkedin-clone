@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useRef, useState, type SubmitEvent } from 'react';
 
 import { fetchUser, getRequest, postRequest } from '../utils/utilFunctions';
-import { MapPin } from 'lucide-react';
+import { MapPin, UserPen } from 'lucide-react';
 import ProfileSections from '../components/ProfileSections';
 
 function ProfilePage() {
@@ -12,6 +12,8 @@ function ProfilePage() {
   const queryClient = useQueryClient();
 
   const [editProfile, setEditProfile] = useState(false);
+  const [editProfilePic, setEditProfilePic] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState('');
   
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -39,12 +41,6 @@ function ProfilePage() {
       return user;
     }
   });
-
-  const grabData = function(arg: any, type: string){
-    if(type === 'about'){
-      console.log(arg);
-    }
-  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMessage('');
@@ -105,43 +101,63 @@ function ProfilePage() {
             backgroundImage: `url(${profileData.data.bannerImg || '/banner.png'})`,
           }}
         ></div>
-        <div className='profile-picture-container'>
-          <img src={profileData.data.profilePicture || 'avatar.png'} className='profile-img-xlarge circle'/>
-          <h1 className='bold text-xl mt-2'>{profileData.data.fullName}</h1>
-          <p className='text-gray-500 text-sm'>{profileData.data.headline}</p>
-          <p className='text-gray-500 text-sm'>{profileData.data.connections.length} {profileData.data.connections.length != 1 ? 'connections' : 'connection'}</p>
-          <p className='text-gray-500 text-sm flex items-center gap-1'><MapPin size={14} />Location</p>
-        </div>
-        <div className='edit-button-container'>
+        <div className='profile-picture-container relative'>
           {
-            userData.data._id === profileData.data._id?
+            editProfilePic === true?
+              <form className='profile-picture-update-form' onSubmit={handleSubmit}>
+                <img 
+                    src={imagePreview || "blank_profile.jpg"}
+                    className='profile-image-preview'
+                />
+                <input
+                  className='profile-upload-input'
+                  ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange}
+                />
+                {
+                  errorMessage != ''?
+                  <p className='text-red-500 text-sm text-center'>{errorMessage}</p>:null
+                }
+                <div className='flex gap-1'>
+                  <button onClick={function(){setEditProfilePic(false)}}>CANCEL</button>
+                  <button type="submit">UPDATE</button>
+                </div>
+              </form>:
+              <>
+                <img src={profileData.data.profilePicture || 'avatar.png'} className='profile-img-xlarge circle'/>
+                <div className='profile-update-button hand-hover'>
+                  <UserPen size={20} onClick={function(){setEditProfilePic(true)}} />
+                </div>
+              </>
+          }
+
+          {
+            editProfilePic === false?
             <>
+              <h1 className='bold text-xl mt-2'>{profileData.data.fullName}</h1>
+              <p className='text-gray-500 text-sm'>{profileData.data.username}</p>
+              <p className='text-gray-500 text-sm'>{profileData.data.headline}</p>
+              <p className='text-gray-500 text-sm'>{profileData.data.connections.length} {profileData.data.connections.length != 1 ? 'connections' : 'connection'}</p>
+              <p className='text-gray-500 text-sm flex items-center gap-1'><MapPin size={14} />Location</p>
               {
-                editProfile === true?
-                <button onClick={function(){setEditProfile(false)}}>CANCEL</button>:
-                <button onClick={function(){setEditProfile(true)}}>EDIT</button>
+                userData.data._id === profileData.data._id?
+                <>
+                  {
+                    editProfile === false?
+                    <button className='edit-button' onClick={function(){setEditProfile(true)}}>Edit</button>:null
+                  }
+                </>:null
               }
-            </>:''
+            </>:null
           }
         </div>
-
         {
           editProfile === true?
           <form className='profile-update-form' onSubmit={handleSubmit}>
-            <img 
-                src={imagePreview || "blank_profile.jpg"}
-                className='image-upload-input'
-            />
-            <input
-              ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange}
-            />
-            {
-              errorMessage != ''?
-              <p className='text-red-500 text-sm text-center'>{errorMessage}</p>:null
-            }
+            <input placeholder='Username'/>
             <input placeholder='Occupation'/>
             <input placeholder='Location'/>
             <div className='flex gap-1'>
+              <button onClick={function(){setEditProfile(false)}}>CANCEL</button>
               <button type="submit">UPDATE</button>
             </div>
           </form>:''

@@ -11,36 +11,52 @@ import mongoose from 'mongoose';
 
 export const updateUserDetails = async (req: Request, res: Response)=>{
   try {
+
+    console.log(req.body);
+
     const user = await User.findOne({ email: req.body.email.toLowerCase() });
 
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     };
 
-    const updateObject = {
-      headline: req.body.headline,
+    return res.status(200).json({ message: 'User updated' });
+
+
+    if(req.body.updateType === 'header'){
+      const updateHeader = {
+        headline: req.body.headline,
+        location: req.body.location,
+        profilePic: req.body.profilePic,
+        bannerImg: req.body.bannerImg,
+        username: req.body.username
+      };
+
+      if(req.body.profilePic !== ''){
+        const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-profile' });
+        updateHeader.profilePic = cloudinaryURL.secure_url;
+      }
+
+      if(req.body.bannerImg !== ''){
+        const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-banner' });
+        updateHeader.bannerImg = cloudinaryURL.secure_url;
+      };
+
+      // await User.findByIdAndUpdate(user._id, { $set: updateHeader }, { new: true }).select(
+      //   "-password"
+      // );
+    };
+
+    const updateDetails = {
       about: req.body.about,
-      location: req.body.location,
       skills: req.body.skills,
       experience: req.body.experience,
       education: req.body.education,
-      profilePic: req.body.profilePic,
-      bannerImg: req.body.bannerImg
     };
 
-    if(req.body.profilePic !== ''){
-      const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-profile' });
-      updateObject.profilePic = cloudinaryURL.secure_url;
-    }
-
-    if(req.body.bannerImg !== ''){
-      const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-banner' });
-      updateObject.bannerImg = cloudinaryURL.secure_url;
-    }
-
-    await User.findByIdAndUpdate(user._id, { $set: updateObject }, { new: true }).select(
-      "-password"
-    );
+    // await User.findByIdAndUpdate(user._id, { $set: updateDetails }, { new: true }).select(
+    //   "-password"
+    // );
 
     return res.status(200).json({ message: 'User details updated' });
 
