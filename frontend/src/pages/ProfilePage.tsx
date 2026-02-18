@@ -19,28 +19,18 @@ function ProfilePage() {
     queryFn: fetchUser
   });
 
-  const profileData = useQuery({ 
-    queryKey: ['profile', username], 
+  const profileData = useQuery({
+    queryKey: ['profile', username],
     queryFn: async () => {
-      const profileData = await getRequest('/user/profile/' + username);
-      const user = profileData.user;
-      console.log(user);
-      return user;
+      const res = await getRequest('/user/profile/' + username);
+      return res.user;
     },
+    enabled: !!username,
   });
 
   if(profileData.error) {
     navigate('/')
-  }
-
-  // const updateProfileMutation = useMutation({
-  //   mutationFn: async () => {
-  //     await postRequest('/user/update', {body: body});
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['profile', username] });
-  //   }
-  // });
+  };
 
   if(profileData.data === undefined) return <div>Loading...</div>;
 
@@ -52,18 +42,13 @@ function ProfilePage() {
             backgroundImage: `url(${profileData.data.bannerImg || '/banner.png'})`,
           }}
         ></div>
-        {
-          userData.data._id === profileData.data._id?
-            <ProfileHeader data={userData.data} ownProfile={userData.data._id === profileData.data._id}/>
-            :
-            <ProfileHeader data={profileData.data} ownProfile={userData.data._id === profileData.data._id}/>
-        }
+        <ProfileHeader data={profileData.data} ownProfile={userData.data._id === profileData.data._id}/>
       </div>
 
-      <AboutSection profileData={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
-      <ExperienceSection profileData={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
-      <EducationSection profileData={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
-      <SkillSection profileData={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
+      <AboutSection data={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
+      <ExperienceSection data={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
+      <EducationSection data={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
+      <SkillSection data={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
 
     </div>
   )

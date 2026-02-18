@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { postRequest } from '../utils/utilFunctions';
 
-function EducationSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
+function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: boolean}) {
   
   const { username } = useParams();
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ function EducationSection({profileData, ownProfile}: {profileData: AuthUserType,
       <h1>Education</h1>
       <div className='profile-section-content'>
         {
-          profileData.education.map((item)=>{
+          data.education.map((item)=>{
             return (
               <div key={Math.random()}>
                 <p>School: {item.school}</p>

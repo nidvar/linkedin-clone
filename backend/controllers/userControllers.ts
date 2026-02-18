@@ -45,7 +45,10 @@ export const updateImage = async (req: Request, res: Response)=>{
     if(!user) {
       return res.status(400).json({ message: 'User does not exist' });
     };
-    const result = await cloudinary.uploader.upload(req.body.image);
+    const result = await cloudinary.uploader.upload(req.body.image, {
+      public_id: `user_${res.locals.id}_${req.body.type}`,
+      overwrite: true,
+    });
     const cloudinaryImage = result.secure_url;
 
     if(req.body.type === 'profilePic'){
@@ -64,6 +67,30 @@ export const updateImage = async (req: Request, res: Response)=>{
     return res.status(500).json({ message: 'Internal Server Error for update profile picture' });
   }
 };
+
+export const updateDetails = async (req: Request, res: Response)=>{
+  try {
+    console.log(req.body);
+    const user = await User.findOne({ _id: res.locals.id });
+    if(!user){
+      return res.status(400).json({ message: 'User does not exist' });
+    };
+    const updatedUser = await User.findByIdAndUpdate(res.locals.id, { $set: req.body }, { new: true }).select(
+      "-password"
+    );
+    if(updatedUser){
+      console.log('win')
+      return res.status(200).json({ message: 'User details updated' });
+    }else{
+      console.log('fail')
+      return res.status(400).json({ message: 'User details not updated' });
+    }
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error for update details' });
+  }
+}
 
 export const suggestedUsers = async (req: Request, res: Response)=>{
   try {

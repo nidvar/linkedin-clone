@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '../utils/utilFunctions';
 
-function SkillSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
+function SkillSection({data, ownProfile}: {data: AuthUserType, ownProfile: boolean}) {
   const { username } = useParams();
   const queryClient = useQueryClient();
 
@@ -28,7 +28,7 @@ function SkillSection({profileData, ownProfile}: {profileData: AuthUserType, own
       <h1>Skills</h1>
       <div className='profile-section-content'>
         {
-          profileData.skills.map((item)=>{
+          data.skills.map((item)=>{
             return (
               <div className='flex gap-2' key={Math.random()}>
                 <p>{item}</p>

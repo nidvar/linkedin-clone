@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react'
+import { useRef, useState, type SubmitEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { postRequest } from '../utils/utilFunctions';
 import type { AuthUserType } from '../utils/types';
 
-function AboutSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
+function AboutSection({data, ownProfile}: {data: AuthUserType, ownProfile: boolean}) {
 
   const { username } = useParams();
   const queryClient = useQueryClient();
@@ -13,27 +13,37 @@ function AboutSection({profileData, ownProfile}: {profileData: AuthUserType, own
 
   const [about, setAbout] = useState('');
 
-  const updateSectionMutation = useMutation({
-    mutationFn: async () => {
-      const result = await postRequest('/user/update', {});
-      if (!result.success) throw new Error(result.message);
+  const updateAboutMutation = useMutation({
+    mutationFn: async (body: string) => {
+      const result = await postRequest('/user/updatedetails', {about: body});
       return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
+      setAbout('');
     },
   });
+
+  const handleSubmit = async function(e: SubmitEvent){
+    e.preventDefault();
+    updateAboutMutation.mutate(about);
+  }
 
   return (
     <div className='profile-section shaded-border'>
       <h1>About</h1>
-      <p className='profile-section-content'>{profileData.about}</p>
+      <p className='profile-section-content'>{data.about}</p>
       {
         edit?
-        <>
-          <textarea value={about} className='p-3' placeholder='Type here...' onChange={function(e){setAbout(e.target.value)}}></textarea>
-          <button className='mr-3' onClick={function(){}}>Update</button>
-        </>:''
+        <form onSubmit={handleSubmit}>
+          <textarea 
+            value={about} 
+            className='p-3 mb-3' 
+            placeholder='Type here...' 
+            onChange={function(e){setAbout(e.target.value)}}
+          ></textarea>
+          <button className='mr-3' type="submit">Update</button>
+        </form>:''
       }
       {
         ownProfile === true?

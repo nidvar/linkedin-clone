@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { postRequest } from '../utils/utilFunctions';
 
-function ExperienceSection({profileData, ownProfile}: {profileData: AuthUserType, ownProfile: boolean}) {
+function ExperienceSection({data, ownProfile}: {data: AuthUserType, ownProfile: boolean}) {
   
   const { username } = useParams();
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ function ExperienceSection({profileData, ownProfile}: {profileData: AuthUserType
       <h1>Expriences</h1>
       <div className='profile-section-content'>
         {
-          profileData.experience.map((item)=>{
+          data.experience.map((item)=>{
             return (
               <div key={Math.random()}>
                 <p>Title: {item.title}</p>
