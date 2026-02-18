@@ -24,7 +24,7 @@ function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: b
   
   return (
     <div className='profile-section shaded-border'>
-      <h1>Education</h1>
+      <h1 className='font-semibold'>Education</h1>
       <div className='profile-section-content'>
         {
           data.education.map((item)=>{

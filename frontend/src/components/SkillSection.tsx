@@ -25,7 +25,7 @@ function SkillSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
 
   return (
     <div className='profile-section shaded-border'>
-      <h1>Skills</h1>
+      <h1 className='font-semibold'>Skills</h1>
       <div className='profile-section-content'>
         {
           data.skills.map((item)=>{

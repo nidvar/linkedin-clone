@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRef, useState, type SubmitEvent } from 'react';
+import { useEffect, useState, type SubmitEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { postRequest } from '../utils/utilFunctions';
 import type { AuthUserType } from '../utils/types';
@@ -21,6 +21,7 @@ function AboutSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
       setAbout('');
+      setEdit(false);
     },
   });
 
@@ -29,24 +30,36 @@ function AboutSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
     updateAboutMutation.mutate(about);
   }
 
+  useEffect(()=>{
+    if(data.username != undefined || data.username != null || data.username != ''){
+      setAbout(data.about);
+    }
+  }, [data])
+
   return (
     <div className='profile-section shaded-border'>
-      <h1>About</h1>
+      <h1 className='font-semibold'>About</h1>
       {
         edit?
         <form onSubmit={handleSubmit}>
           <textarea 
             value={about} 
-            className='p-3 mb-3' 
+            className='p-3 my-3' 
             placeholder='Type here...' 
             onChange={function(e){setAbout(e.target.value)}}
           ></textarea>
           <button className='mr-3' type="submit">Update</button>
+          <button className='edit-button' onClick={function(){setEdit(prev => !prev)}}>{edit?'Cancel':'Edit'}</button>
         </form>:<p className='profile-section-content'>{data.about}</p>
       }
       {
         ownProfile === true?
-        <button className='edit-button' onClick={function(){setEdit(prev => !prev);}}>{edit?'Cancel':'Edit'}</button>:''
+        <>
+          {
+            edit === false?
+            <button className='edit-button' onClick={function(){setEdit(prev => !prev)}}>Edit</button>:''
+          }
+        </>:''
       }
     </div>
   )
