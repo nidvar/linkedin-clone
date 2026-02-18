@@ -32,7 +32,6 @@ function AboutSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
   return (
     <div className='profile-section shaded-border'>
       <h1>About</h1>
-      <p className='profile-section-content'>{data.about}</p>
       {
         edit?
         <form onSubmit={handleSubmit}>
@@ -43,7 +42,7 @@ function AboutSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
             onChange={function(e){setAbout(e.target.value)}}
           ></textarea>
           <button className='mr-3' type="submit">Update</button>
-        </form>:''
+        </form>:<p className='profile-section-content'>{data.about}</p>
       }
       {
         ownProfile === true?

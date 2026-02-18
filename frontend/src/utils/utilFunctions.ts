@@ -59,6 +59,10 @@ export const postRequest = async function(url: string, payloadData: object, meth
     }
   };
 
+  if (!res.ok) {
+    throw data
+  }
+
   return data;
 };
 

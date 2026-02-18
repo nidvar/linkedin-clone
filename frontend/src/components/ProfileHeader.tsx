@@ -1,4 +1,4 @@
-import { useRef, useState, type SubmitEvent } from 'react';
+import { useRef, useState, useEffect, type SubmitEvent } from 'react';
 
 import type { AuthUserType } from '../utils/types';
 import { Camera, MapPin } from 'lucide-react';
@@ -56,7 +56,6 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
 
   const headerUpdateMutation = useMutation({
     mutationFn: async (body: {
-      updateType: string;
       username: string | undefined;
       location: string;
       headline: string;
@@ -66,8 +65,11 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     onSuccess: () => {
       console.log('success')
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
-      queryClient.invalidateQueries({ queryKey: ['authUser'] });
       setEditProfile(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      setErrorMessage(error.message);
     }
   });
 
@@ -80,7 +82,6 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
-      queryClient.invalidateQueries({ queryKey: ['authUser'] });
       setEditProfile(false);
       setEditProfilePic(false);
       setDisabled(false);
@@ -104,27 +105,22 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     e.preventDefault();
 
     const body = {
-      updateType: 'header',
-      username: '',
-      location: '',
-      headline: ''
+      username: username,
+      location: location,
+      headline: occupation
     };
-
-    if(username !== data.username){
-      body.username = username;
-    };
-
-    if(location !== data.location){
-      body.location = location;
-    };
-
-    if(occupation !== data.headline){
-      body.headline = occupation;
-    }
 
     headerUpdateMutation.mutate(body);
     // updateProfileMutation.mutate();
   }
+
+  useEffect(()=>{
+    if(data.username != undefined || data.username != null || data.username != ''){
+      setUsername(data.username);
+      setLocation(data.location);
+      setOccupation(data.headline);
+    }
+  }, [data])
 
   return (
     <div className='profile-picture-container relative'>
@@ -190,6 +186,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
             <button onClick={function(){setEditProfile(false)}}>CANCEL</button>
             <button type="submit">UPDATE</button>
           </div>
+          <p className='text-red-500 text-sm text-center'>{errorMessage}</p>
         </form>:''
       }
     </div>
