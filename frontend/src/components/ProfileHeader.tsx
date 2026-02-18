@@ -181,9 +181,9 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
       {
         editProfile === true?
         <form className='profile-update-form' onSubmit={updateHeader}>
-          <input placeholder='Username' value={username} onChange={function(e){setUsername(e.target.value)}} />
-          <input placeholder='Occupation' value={occupation} onChange={function(e){setOccupation(e.target.value)}}/>
-          <input placeholder='Location' value={location} onChange={function(e){setLocation(e.target.value)}}/>
+          <input placeholder='Username' value={username} onChange={function(e){setUsername(e.target.value)}} maxLength={20}/>
+          <input placeholder='Occupation' value={occupation} onChange={function(e){setOccupation(e.target.value)}} maxLength={20}/>
+          <input placeholder='Location' value={location} onChange={function(e){setLocation(e.target.value)}} maxLength={20}/>
           <div className='flex gap-1'>
             <button onClick={function(){setEditProfile(false)}}>CANCEL</button>
             <button type="submit">UPDATE</button>
