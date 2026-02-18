@@ -86,9 +86,9 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
               return (
                 <div key={item._id} className='flex justify-between p-3 items-center request-box'>
                   <div className='flex gap-3'>
-                    <div>
+                    <Link to={'/profile/' + item.sender.username}>
                       <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
-                    </div>
+                    </Link>
                     <div>
                       <h1 className='font-bold'>{item.sender.fullName}</h1>
                       <p className='text-sm text-gray-600'>{item.sender.headline}</p>
@@ -144,7 +144,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                 allConnections.data.map((item: ConnectionType) => {
                   return (
                     <div className='shaded-border connection-card' key={item._id}>
-                      <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2'>
+                      <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2 items-center'>
                         <div>
                           <img src={item.profilePicture} className='profile-img-large circle img-fit' />
                         </div>

@@ -1,13 +1,15 @@
 import { useRef, useState, useEffect, type SubmitEvent } from 'react';
-
-import type { AuthUserType } from '../utils/types';
 import { Camera, MapPin } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+
+import type { AuthUserType } from '../utils/types';
 import { postRequest } from '../utils/utilFunctions';
 
 function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boolean}) {
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate()
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -63,9 +65,9 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
       return await postRequest('/user/updateheader', body);
     },
     onSuccess: () => {
-      console.log('success')
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
       setEditProfile(false);
+      navigate('/profile/' + username);
     },
     onError: (error) => {
       console.log(error);
@@ -82,6 +84,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
+      queryClient.invalidateQueries({ queryKey: ['authUser'] });
       setEditProfile(false);
       setEditProfilePic(false);
       setDisabled(false);
@@ -111,7 +114,6 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     };
 
     headerUpdateMutation.mutate(body);
-    // updateProfileMutation.mutate();
   }
 
   useEffect(()=>{

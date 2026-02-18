@@ -77,9 +77,9 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                     }
                     <div className='flex justify-between my-4'>
                       <div className='w-full'>
-                        <div className='flex gap-5 related-post-container'>
-                          <Link to={`/profile/${notification.relatedUser._id}`}>
-                            <img src={notification.relatedUser.profilePicture} className='profile-img circle img-fit'/>
+                        <div className='flex gap-3 related-post-container'>
+                          <Link to={`/profile/${notification.relatedUser._id}`} >
+                            <img src={notification.relatedUser.profilePicture} className='profile-img circle img-fit min-w-[50px]'/>
                           </Link>
                           <div className='w-full'>
                             <div className='flex gap-2'>
