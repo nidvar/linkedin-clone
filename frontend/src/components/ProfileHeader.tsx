@@ -1,7 +1,7 @@
 import { useRef, useState, type SubmitEvent } from 'react';
 
 import type { AuthUserType } from '../utils/types';
-import { MapPin, UserPen } from 'lucide-react';
+import { Camera, MapPin } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '../utils/utilFunctions';
 
@@ -17,9 +17,8 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
   const [username, setUsername] = useState('');
   const [location, setLocation] = useState('');
   const [occupation, setOccupation] = useState('');
-
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [disabled, setDisabled] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMessage('');
@@ -32,7 +31,6 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     if (file) {
       readFileAsDataURL(file)
         .then((result)=>{
-          console.log(result);
           setImagePreview(result as string)}
         )
         .catch(err => console.error(err));
@@ -73,7 +71,36 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     }
   });
 
-  const handleSubmit = async (e: SubmitEvent) => {
+  const profilePictureUpdateMutation = useMutation({
+    mutationFn: async (body: {
+      type: string;
+      image: string | undefined | null;
+    }) => {
+      return await postRequest('/user/updateimage', body);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile', username] });
+      queryClient.invalidateQueries({ queryKey: ['authUser'] });
+      setEditProfile(false);
+      setEditProfilePic(false);
+      setDisabled(false);
+    }
+  });
+
+  const updateImage = async (e: SubmitEvent, type: string)=>{
+    e.preventDefault();
+    if(imagePreview === null){
+      return
+    };
+    setDisabled(true);
+    const body = {
+      type: type,
+      image: imagePreview,
+    };
+    profilePictureUpdateMutation.mutate(body);
+  }
+
+  const updateHeader = async (e: SubmitEvent) => {
     e.preventDefault();
 
     const body = {
@@ -96,7 +123,6 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     }
 
     headerUpdateMutation.mutate(body);
-    console.log(occupation, location, username);
     // updateProfileMutation.mutate();
   }
 
@@ -104,13 +130,14 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     <div className='profile-picture-container relative'>
       {
         editProfilePic === true?
-          <form className='profile-picture-update-form' onSubmit={handleSubmit}>
+          <form className='profile-picture-update-form' onSubmit={function(e){updateImage(e,'profilePic')}}>
             <img 
               src={imagePreview || "blank_profile.jpg"}
               className='profile-image-preview'
             />
             <input
               className='profile-upload-input'
+              disabled={disabled}
               ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange}
             />
             {
@@ -118,8 +145,8 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
               <p className='text-red-500 text-sm text-center'>{errorMessage}</p>:null
             }
             <div className='flex gap-1'>
-              <button onClick={function(){setEditProfilePic(false)}}>CANCEL</button>
-              <button type="submit">UPDATE</button>
+              <button onClick={function(){setEditProfilePic(false); setImagePreview(null);}}>CANCEL</button>
+              <button disabled={disabled} type="submit">UPDATE</button>
             </div>
           </form>:
           <>
@@ -127,7 +154,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
             {
               ownProfile?
               <div className='profile-update-button hand-hover'>
-                <UserPen size={20} onClick={function(){setEditProfilePic(true)}} />
+                <Camera size={25} onClick={function(){setEditProfilePic(true)}} />
               </div>:null
             }
           </>
@@ -146,7 +173,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
             <>
               {
                 editProfile === false?
-                <button className='edit-button' onClick={function(){setEditProfile(true); console.log(data)}}>Edit</button>:null
+                <button className='edit-button' onClick={function(){setEditProfile(true)}}>Edit</button>:null
               }
             </>:null
           }
@@ -155,7 +182,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
 
       {
         editProfile === true?
-        <form className='profile-update-form' onSubmit={handleSubmit}>
+        <form className='profile-update-form' onSubmit={updateHeader}>
           <input placeholder='Username' value={username} onChange={function(e){setUsername(e.target.value)}} />
           <input placeholder='Occupation' value={occupation} onChange={function(e){setOccupation(e.target.value)}}/>
           <input placeholder='Location' value={location} onChange={function(e){setLocation(e.target.value)}}/>

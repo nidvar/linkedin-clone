@@ -113,12 +113,12 @@
 }
 
 .profile-update-button {
-  border: 2px solid black;
-  border-radius: 6px;
+  padding: 7px;
+  border-radius: 50%;
   position: absolute;
   background-color: white;
-  top: 130px;
-  right: 70px;
+  top: 115px;
+  right: 80px;
 }
 
 .profile-picture-update-form {

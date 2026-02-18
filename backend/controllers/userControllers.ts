@@ -39,11 +39,23 @@ export const updateHeaderDetails = async (req: Request, res: Response)=>{
   }
 }
 
-export const updateProfilePic = async (req: Request, res: Response)=>{
+export const updateImage = async (req: Request, res: Response)=>{
   try {
     const user = await User.findOne({ _id: res.locals.id });
     if(!user) {
       return res.status(400).json({ message: 'User does not exist' });
+    };
+    const result = await cloudinary.uploader.upload(req.body.image);
+    const cloudinaryImage = result.secure_url;
+
+    if(req.body.type === 'profilePic'){
+      const updatedUser = await User.findByIdAndUpdate(res.locals.id, { $set: { profilePicture: cloudinaryImage } }, { new: true }).select(
+        "-password"
+      );
+    }else{
+      const updatedUser = await User.findByIdAndUpdate(res.locals.id, { $set: { bannerImg: cloudinaryImage } }, { new: true }).select(
+        "-password"
+      );
     }
 
     return res.status(200).json({ message: 'Profile picture updated' });
