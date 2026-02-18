@@ -56,6 +56,7 @@
   max-width: 800px;
   width: 100%;
   margin: auto;
+  padding: 15px;
 }
 
 .profile-banner {
@@ -128,6 +129,12 @@
   gap: 10px;
 }
 
+.input-skills {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+  align-items: center;
+}
 
 /* NETWORK PAGE ===============================================*/
 
