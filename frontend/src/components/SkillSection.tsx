@@ -10,9 +10,7 @@ function SkillSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
   const queryClient = useQueryClient();
 
   const [edit, setEdit] = useState(false);
-
   const [skills, setSkills] = useState<string[]>([]);
-
   const [skillInput, setSkillInput] = useState('');
 
   const updateSkillsMutation = useMutation({
@@ -53,7 +51,7 @@ function SkillSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
   return (
     <div className='profile-section shaded-border'>
       <h1 className='font-semibold'>Skills</h1>
-      <div>
+      <div className='profile-section-content'>
         {
           skills.map((item, index)=>{
             return (
