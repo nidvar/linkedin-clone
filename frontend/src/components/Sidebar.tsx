@@ -13,8 +13,10 @@ function Sidebar({user} : {user: AuthUserType | null}) {
           }}
         ></div>
         <div className='sidebar-profile'>
-          <img src={user.profilePicture || 'avatar.png'} className='sidebar-profile-img circle'/>
-          <h1 className='font-bold text-xl mt-2'>{user.fullName}</h1>
+          <Link to={'/profile/' + user.username} className='sidebar-profile-img circle'>
+            <img src={user.profilePicture || 'avatar.png'} className='sidebar-profile-img circle img-fit'/>
+          </Link>
+          <Link to={'/profile/' + user.username} className='font-bold text-xl mt-2'>{user.fullName}</Link>
           <p className='text-gray-600'>{user.headline}</p>
           <p className='text-xs text-gray-600'>{user.connections.length} connections</p>
         </div>

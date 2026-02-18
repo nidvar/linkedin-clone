@@ -231,6 +231,7 @@
 
 .sidebar-profile-img {
   height: 80px;
+  width: 80px;
   background-color: rgb(209, 216, 222);;
   border-radius: 50%;
   z-index: 10;
@@ -392,22 +393,27 @@ button{
 
 .profile-img {
   height: 50px;
+  width: 50px;
 }
 
 .profile-img-small {
   height: 24px;
+  width: 24px;
 }
 
 .profile-img-medium {
   height: 34px;
+  width: 34px;
 }
 
 .profile-img-large {
   height: 100px;
+  width: 100px;
 }
 
 .profile-img-xlarge {
   height: 150px;
+  width: 150px;
 }
 
 .image-preview {
@@ -447,4 +453,9 @@ button{
   border: none;
   color: #0d6efd;
   background-color: white;
+}
+
+.img-fit {
+  object-fit: cover;
+  object-position: center;
 }

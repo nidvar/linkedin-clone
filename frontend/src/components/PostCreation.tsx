@@ -73,13 +73,13 @@ function PostCreation({profile} : {profile: string}) {
       {
         imagePreview !==null?
         <div className='image-preview text-center m-auto'>
-          <img src={imagePreview} alt="Preview" className='m-auto'/>
+          <img src={imagePreview} alt="Preview" className='m-auto img-fit'/>
           <button onClick={deleteImageUpload} type='button' className='m-5 bg-red-600'>DELETE</button>
         </div>:''
       }
       <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
         <div className='flex gap-3'>
-          <img src={profile} alt="Preview" className='profile-img circle'/>
+          <img src={profile} alt="Preview" className='profile-img circle img-fit'/>
           <textarea 
             className='p-2'
             placeholder={'What\'s on your mind?'}

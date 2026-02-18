@@ -133,7 +133,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
           <form className='profile-picture-update-form' onSubmit={function(e){updateImage(e,'profilePic')}}>
             <img 
               src={imagePreview || "blank_profile.jpg"}
-              className='profile-image-preview'
+              className='profile-image-preview img-fit'
             />
             <input
               className='profile-upload-input'
@@ -150,7 +150,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
             </div>
           </form>:
           <>
-            <img src={data.profilePicture || 'avatar.png'} className='profile-img-xlarge circle'/>
+            <img src={data.profilePicture || 'avatar.png'} className='profile-img-xlarge circle img-fit'/>
             {
               ownProfile?
               <div className='profile-update-button hand-hover'>
@@ -164,7 +164,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
         editProfilePic === false?
         <>
           <h1 className='bold text-xl mt-2'>{data.fullName}</h1>
-          <p className='text-gray-500 text-sm'>profile/{data.username}</p>
+          <p className='text-gray-500 text-sm'>profile: /{data.username}</p>
           <p className='text-gray-500 text-sm'>Occupation: {data.headline}</p>
           <p className='text-gray-500 text-sm'>{data.connections.length} {data.connections.length != 1 ? 'connections' : 'connection'}</p>
           <p className='text-gray-500 text-sm flex items-center gap-1'><MapPin size={14} />Location: {data.location}</p>

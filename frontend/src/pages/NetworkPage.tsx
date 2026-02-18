@@ -87,7 +87,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                 <div key={item._id} className='flex justify-between p-3 items-center request-box'>
                   <div className='flex gap-3'>
                     <div>
-                      <img src={item.sender.profilePicture} className='profile-img circle' />
+                      <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
                     </div>
                     <div>
                       <h1 className='font-bold'>{item.sender.fullName}</h1>
@@ -117,7 +117,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                     <div className='shaded-border connection-card' key={item._id}>
                       <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2'>
                         <div>
-                          <img src={item.recipient.profilePicture} className='profile-img-large circle' />
+                          <img src={item.recipient.profilePicture} className='profile-img-large circle img-fit' />
                         </div>
                         <div>
                           <h1 className='font-bold'>{item.recipient.fullName}</h1>
@@ -146,7 +146,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                     <div className='shaded-border connection-card' key={item._id}>
                       <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2'>
                         <div>
-                          <img src={item.profilePicture} className='profile-img-large circle' />
+                          <img src={item.profilePicture} className='profile-img-large circle img-fit' />
                         </div>
                         <div>
                           <h1 className='font-bold'>{item.fullName}</h1>

@@ -35,7 +35,7 @@ function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recomme
               return (
                 <div className='flex justify-between items-center' key={user._id}>
                   <Link to={'/profile/' + user.username} className='flex gap-2 items-center'>
-                    <img src={user.profilePicture} alt="" className='profile-img circle'/>
+                    <img src={user.profilePicture} alt="" className='profile-img circle img-fit'/>
                     <div className='flex flex-col '>
                       <p className="font-semibold text-sm">{user.fullName}</p>
                       <p className="text-xs text-gray-600">{user.headline}</p>
@@ -59,7 +59,7 @@ function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recomme
               return (
                 <div className='flex justify-between items-center' key={user._id}>
                   <Link to={'/profile/' + user.recipient.username} className='flex gap-2 items-center'>
-                    <img src={user.recipient.profilePicture} alt="" className='profile-img circle'/>
+                    <img src={user.recipient.profilePicture} alt="" className='profile-img circle img-fit'/>
                     <div className='flex flex-col '>
                       <p className="font-semibold text-sm">{user.recipient.fullName}</p>
                       <p className="text-xs text-gray-600">{user.recipient.headline}</p>
