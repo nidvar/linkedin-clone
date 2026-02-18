@@ -28,6 +28,7 @@ function App() {
         <Route path='/login' element={ userData.data? <HomePage /> : <LoginPage />}/>
         <Route path='/network' element={ userData.data? <NetworkPage userData={userData.data}/> : <LoginPage />}/>
         <Route path='/notifications' element={ userData.data? <NotificationPage userData={userData.data} /> : <LoginPage />}/>
+        <Route path='/*' element={ userData.data? <HomePage /> : <LoginPage />}/>
       </Routes>
     </Layout>
   )

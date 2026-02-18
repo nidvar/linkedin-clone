@@ -9,60 +9,47 @@ import User from '../models/userModel.js';
 import ConnectionRequest from '../models/connectionModel.js';
 import mongoose from 'mongoose';
 
-export const updateUserDetails = async (req: Request, res: Response)=>{
+export const updateHeaderDetails = async (req: Request, res: Response)=>{
   try {
-
-    console.log(req.body);
-
-    const user = await User.findOne({ email: req.body.email.toLowerCase() });
-
-    if(!user){
+    const user = await User.findOne({ _id: res.locals.id });
+    if(!user) {
       return res.status(400).json({ message: 'User does not exist' });
-    };
-
-    return res.status(200).json({ message: 'User updated' });
-
-
+    }
     if(req.body.updateType === 'header'){
-      const updateHeader = {
-        headline: req.body.headline,
-        location: req.body.location,
-        profilePic: req.body.profilePic,
-        bannerImg: req.body.bannerImg,
-        username: req.body.username
+      let updateHeader:any = {};
+      updateHeader.headline = req.body.headline;
+      updateHeader.location = req.body.location;
+      if(req.body.username !== ''){
+        const usernameExists = await User.findOne({ username: req.body.username });
+        if(usernameExists){
+          return res.status(400).json({ message: 'Username already exists' });
+        }else{
+          updateHeader.username = req.body.username;
+        }
       };
-
-      if(req.body.profilePic !== ''){
-        const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-profile' });
-        updateHeader.profilePic = cloudinaryURL.secure_url;
-      }
-
-      if(req.body.bannerImg !== ''){
-        const cloudinaryURL = await cloudinary.uploader.upload(req.body.profilePic, { folder: 'linkedin-banner' });
-        updateHeader.bannerImg = cloudinaryURL.secure_url;
-      };
-
-      // await User.findByIdAndUpdate(user._id, { $set: updateHeader }, { new: true }).select(
-      //   "-password"
-      // );
+      const updatedUser = await User.findByIdAndUpdate(res.locals.id, { $set: updateHeader }, { new: true }).select(
+        "-password"
+      );
+      return res.status(200).json({ message: 'User details updated' });
     };
-
-    const updateDetails = {
-      about: req.body.about,
-      skills: req.body.skills,
-      experience: req.body.experience,
-      education: req.body.education,
-    };
-
-    // await User.findByIdAndUpdate(user._id, { $set: updateDetails }, { new: true }).select(
-    //   "-password"
-    // );
-
     return res.status(200).json({ message: 'User details updated' });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error for update user details' });
+  }
+}
+
+export const updateProfilePic = async (req: Request, res: Response)=>{
+  try {
+    const user = await User.findOne({ _id: res.locals.id });
+    if(!user) {
+      return res.status(400).json({ message: 'User does not exist' });
+    }
+
+    return res.status(200).json({ message: 'Profile picture updated' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error for update profile picture' });
   }
 };
 

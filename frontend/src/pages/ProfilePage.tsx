@@ -1,16 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
-import { fetchUser, getRequest } from '../utils/utilFunctions';
 import ProfileHeader from '../components/ProfileHeader';
 import AboutSection from '../components/AboutSection';
 import ExperienceSection from '../components/ExperienceSection';
 import EducationSection from '../components/EducationSection';
 import SkillSection from '../components/SkillSection';
 
+import { fetchUser, getRequest } from '../utils/utilFunctions';
+
 function ProfilePage() {
 
   const { username } = useParams();
+  const navigate = useNavigate();
 
   const userData = useQuery({ 
     queryKey: ['authUser'], 
@@ -24,8 +26,12 @@ function ProfilePage() {
       const user = profileData.user;
       console.log(user);
       return user;
-    }
+    },
   });
+
+  if(profileData.error) {
+    navigate('/')
+  }
 
   // const updateProfileMutation = useMutation({
   //   mutationFn: async () => {
@@ -46,7 +52,12 @@ function ProfilePage() {
             backgroundImage: `url(${profileData.data.bannerImg || '/banner.png'})`,
           }}
         ></div>
-        <ProfileHeader profileData={profileData.data} userData={userData.data} ownProfile={userData.data._id === profileData.data._id}/>
+        {
+          userData.data._id === profileData.data._id?
+            <ProfileHeader data={userData.data} ownProfile={userData.data._id === profileData.data._id}/>
+            :
+            <ProfileHeader data={profileData.data} ownProfile={userData.data._id === profileData.data._id}/>
+        }
       </div>
 
       <AboutSection profileData={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
