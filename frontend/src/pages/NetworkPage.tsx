@@ -145,12 +145,10 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                   return (
                     <div className='shaded-border connection-card' key={item._id}>
                       <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2 items-center'>
-                        <div>
-                          <img src={item.profilePicture} className='profile-img-large circle img-fit' />
-                        </div>
+                        <img src={item.profilePicture} className='profile-img-large circle img-fit' />
                         <div>
                           <h1 className='font-bold'>{item.fullName}</h1>
-                          <p className='text-sm text-gray-600'>{item.headline}</p>
+                          <p className='text-sm text-gray-600'>{item.headline.length > 20 ? item.headline.slice(0, 20) + '...' : item.headline}</p>
                         </div>
                       </Link>
                       <button onClick={function () { deleteConnectionMutation.mutate(item._id) }}>DELETE</button>

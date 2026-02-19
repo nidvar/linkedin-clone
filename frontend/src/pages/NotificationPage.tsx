@@ -117,21 +117,23 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                         }
                         <Trash2 color={'red'} className='hand-hover notification-icons' onClick={function(){deleteMutation.mutate(notification._id)}}/>
                       </div>
-                      {
-                        showId === notification._id?
-                        <>
-                          <EllipsisVertical className='hand-hover' onClick={function(){showMenuFn('')}}/>
-                          <div className='notification-options'>
-                            {
-                              notification.read === true?
-                              <p className='text-gray-400'>Read</p>:
-                              <p className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}>Mark as read</p>
-                            }
-                            <p color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}>delete notification</p>
-                            <p className='hand-hover'onClick={function(){showMenuFn('')}}>cancel</p>
-                          </div>
-                        </>:<EllipsisVertical className='hand-hover' onClick={function(){showMenuFn(notification._id)}}/>
-                      }
+                      <div className='mobile'>
+                        {
+                          showId === notification._id?
+                          <>
+                            <EllipsisVertical className='hand-hover' onClick={function(){showMenuFn('')}}/>
+                            <div className='notification-options'>
+                              {
+                                notification.read === true?
+                                <p className='text-gray-400'>Read</p>:
+                                <p className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}>Mark as read</p>
+                              }
+                              <p color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}>delete notification</p>
+                              <p className='hand-hover'onClick={function(){showMenuFn('')}}>cancel</p>
+                            </div>
+                          </>:<EllipsisVertical className='hand-hover' onClick={function(){showMenuFn(notification._id)}}/>
+                        }
+                      </div>
                     </div>
                   </div>
                 )
