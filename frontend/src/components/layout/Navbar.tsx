@@ -67,8 +67,11 @@ const Navbar = () => {
   return (
     <div className="my-nav-container relative">
       <div className='my-nav flex justify-between py-2'>
-        <div className="nav-left-side">
+        <div className="nav-left-side desktop">
           <Link to='/'><img src="/long-logo.png" alt="logo" className="logo-img"/></Link>
+        </div>
+        <div className="nav-left-side mobile">
+          <Link to='/'><img src="/small-logo.png" alt="logo" className="logo-img"/></Link>
         </div>
         <div className="nav-right-side">
           {

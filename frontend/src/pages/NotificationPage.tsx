@@ -1,12 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AuthUserType, NotificationType } from '../utils/types';
 import { daysAgo, getRequest, postRequest } from '../utils/utilFunctions';
-import { Eye, ThumbsUp, Trash2, UserPlus } from 'lucide-react';
+import { EllipsisVertical, Eye, ThumbsUp, Trash2, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 function NotificationPage({userData}: {userData: AuthUserType}) {
 
   const queryClient = useQueryClient();
+
+  const [showId, setShowId] = useState('');
 
   const notifications = useQuery({
     queryKey: userData ? ['notifications', userData._id] : ['notifications', 'guest'],
@@ -60,9 +63,16 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
     }
   });
 
+  const showMenuFn = function(id: string){
+    if(showId != id){
+      setShowId('');
+    }
+    setShowId(id);
+  }
+
   return (
-    <div className='main'>
-      <div className='main-container shaded-border'>
+    <div className='main notification-page'>
+      <div className='main-container shaded-border relative'>
         <h1 className='font-bold text-2xl mb-10'>Notifications</h1>
         {
           notifications.data && notifications.data.length > 0?
@@ -99,14 +109,29 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                           </div>
                         </div>
                       </div>
-                      <div className='flex gap-4'>
+                      <div className='flex gap-4 desktop'>
                         {
                           notification.read === true?
-                          <Eye color={'skyblue'} />:
-                          <Eye color={'black'} className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}/>
+                          <Eye color={'skyblue'} className='notification-icons'/>:
+                          <Eye color={'black'} className='hand-hover notification-icons' onClick={function(){readMutation.mutate(notification._id)}}/>
                         }
-                        <Trash2 color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}/>
+                        <Trash2 color={'red'} className='hand-hover notification-icons' onClick={function(){deleteMutation.mutate(notification._id)}}/>
                       </div>
+                      {
+                        showId === notification._id?
+                        <>
+                          <EllipsisVertical className='hand-hover' onClick={function(){showMenuFn('')}}/>
+                          <div className='notification-options'>
+                            {
+                              notification.read === true?
+                              <p className='text-gray-400'>Read</p>:
+                              <p className='hand-hover' onClick={function(){readMutation.mutate(notification._id)}}>Mark as read</p>
+                            }
+                            <p color={'red'} className='hand-hover' onClick={function(){deleteMutation.mutate(notification._id)}}>delete notification</p>
+                            <p className='hand-hover'onClick={function(){showMenuFn('')}}>cancel</p>
+                          </div>
+                        </>:<EllipsisVertical className='hand-hover' onClick={function(){showMenuFn(notification._id)}}/>
+                      }
                     </div>
                   </div>
                 )

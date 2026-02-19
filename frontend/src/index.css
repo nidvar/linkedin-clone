@@ -35,6 +35,7 @@
 
 .nav-left-side {
   display: flex;
+  align-content: center;
   align-items: center;
 }
 
@@ -466,4 +467,71 @@ button{
 .img-fit {
   object-fit: cover;
   object-position: center;
+}
+
+
+
+.mobile {
+  display: none;
+}
+
+.desktop {
+  display: flex;
+}
+
+@media (max-width: 530px) {
+
+  main {
+    padding: 0 15px;
+  }
+
+  .mobile {
+    display: block;
+    border-radius: 6px;
+  }
+
+  .mobile img{
+    border-radius: 6px;
+  }
+
+  .desktop {
+    display: none;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .sidebar-profile-container {
+    display: none;
+  }
+
+  .recommended-container {
+    display: none;
+  }
+
+  .nav-right-side {
+    display: flex;
+    align-items: center;
+    font-weight: 300;
+    margin: auto;
+  }
+
+  .notification-page {
+    font-weight: 300;
+    font-size: 14px;
+  }
+
+  .notification-options {
+    position: absolute;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 30px;
+    background-color: white;
+    border: 1px solid rgb(124, 123, 123);
+    padding: 3px;
+    border-radius: 1px;
+  }
 }
