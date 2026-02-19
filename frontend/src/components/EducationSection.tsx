@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CircleX, SquarePlus } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 
 import type { AuthUserType, EducationType } from '../utils/types'
 import { postRequest } from '../utils/utilFunctions';
@@ -13,50 +13,66 @@ function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: b
   const queryClient = useQueryClient();
 
   const [edit, setEdit] = useState(false);
+  const [add, setAdd] = useState(false);
 
   const [school, setSchool] = useState('');
   const [field, setField] = useState('');
   const [startYear, setStartYear] = useState(0);
   const [endYear, setEndYear] = useState(0);
 
+  const [changes, setChanges] = useState(false);
+
   const [educationArray, setEducationArray] = useState<EducationType[]>([]);
 
   const updateSectionMutation = useMutation({
-    mutationFn: async () => {
-      const result = await postRequest('/user/update', {});
-      if (!result.success) throw new Error(result.message);
-      return result;
+    mutationFn: async (body: {education: EducationType[]}) => {
+      const result = await postRequest('/user/updatedetails', body);
+      if(result.message === 'User details updated') return result;
     },
     onSuccess: () => {
+      clearStudyFields();
+      setEdit(false);
+      setAdd(false);
+      setChanges(false);
       queryClient.invalidateQueries({ queryKey: ['profile', username] });
     },
   });
 
-  const handleSubmit = async ()=>{
-    console.log('submit')
-  };
-
-  const addStudy = ()=>{
-    const newStudy = {school: school, field: field, startYear: startYear, endYear: endYear};
-    let array = [...educationArray]
-    array.push(newStudy);
-    setEducationArray(array);
-    clearStudy();
-  };
-
-  const clearStudy = ()=>{
+  const clearStudyFields = ()=>{
     setSchool('');
     setField('');
     setEndYear(0);
     setStartYear(0);
   }
 
+  const cancelAllChanges = function(){
+    clearStudyFields();
+    setChanges(false);
+    setEdit(false);
+    setAdd(false);
+
+    let array = [...data.education];
+    setEducationArray(array);
+  }
+
   const deleteStudy = (index: number)=>{
     let array = [...educationArray];
     array.splice(index, 1);
     setEducationArray(array);
+    setChanges(true);
+  };
+
+  const saveDeletionToDB = ()=>{
+    updateSectionMutation.mutate({education: educationArray});
   }
-  
+
+  const addStudy = ()=>{
+    const newStudy = {school: school, field: field, startYear: startYear, endYear: endYear};
+    let array = [...educationArray];
+    array.push(newStudy);
+    updateSectionMutation.mutate({education: array});
+  };
+
   useEffect(()=>{
     if(data.username != undefined || data.username != null || data.username != ''){
       setEducationArray(data.education);
@@ -84,7 +100,7 @@ function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: b
         }
       </div>
       {
-        edit?
+        add?
           <div className='profile-details-update-form'>
             <label className='label'>School</label>
             <input
@@ -114,10 +130,6 @@ function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: b
               value={endYear == 0?'':endYear}
               onChange={function (e) { setEndYear(Number(e.target.value)) }}
             />
-            <div className='flex justify-between'>
-              <button className='edit-button' onClick={function(){setEdit(prev => !prev);clearStudy();}}>Cancel</button>
-              <div className='flex my-3 gap-1 font-semibold items-center'>ADD<SquarePlus size={30} className='hand-hover' onClick={function(){addStudy()}}/></div>
-            </div>
           </div>:''
       }
 
@@ -125,9 +137,30 @@ function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: b
         ownProfile === true?
         <>
           {
-            edit?
-            <button onClick={function(e){setEdit(prev => !prev);clearStudy(); handleSubmit();}}>UPDATE</button>:
-            <button className='edit-button' onClick={function(){setEdit(prev => !prev); clearStudy();}}>Edit</button>
+            add?
+            <div className='flex my-3 gap-3'>
+              <button onClick={function(){addStudy()}}>SAVE</button>
+              <button className='edit-button' onClick={function(){cancelAllChanges()}}>Cancel</button>
+            </div>:''
+          }
+          {
+            changes?
+            <div className='flex my-3 gap-3'>
+              <button onClick={function(){saveDeletionToDB()}}>SAVE</button>
+              <button className='edit-button' onClick={function(){cancelAllChanges()}}>Cancel</button>
+            </div>:''
+          }
+          {
+            edit && !changes?
+            <button className='edit-button' onClick={function(){cancelAllChanges()}}>Cancel</button>:''
+          }
+          {
+            add || edit?
+              '':
+              <div className='flex gap-3 items-center'>
+                <button className='edit-button' onClick={function(){setEdit(prev => !prev); clearStudyFields();}}>Edit</button>
+                <button className='edit-button' onClick={function(){setAdd(true)}}>Add</button>
+              </div>
           }
         </>:''
       }

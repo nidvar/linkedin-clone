@@ -80,10 +80,8 @@ export const updateDetails = async (req: Request, res: Response)=>{
       "-password"
     );
     if(updatedUser){
-      console.log('win')
       return res.status(200).json({ message: 'User details updated' });
     }else{
-      console.log('fail')
       return res.status(400).json({ message: 'User details not updated' });
     }
 
