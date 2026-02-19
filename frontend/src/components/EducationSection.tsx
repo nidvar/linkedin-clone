@@ -67,6 +67,7 @@ function EducationSection({data, ownProfile}: {data: AuthUserType, ownProfile: b
   }
 
   const addStudy = ()=>{
+    if(school === '' || field === '' || startYear === 0 || endYear === 0) return;
     const newStudy = {school: school, field: field, startYear: startYear, endYear: endYear};
     let array = [...educationArray];
     array.push(newStudy);
