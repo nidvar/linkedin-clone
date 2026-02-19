@@ -67,21 +67,21 @@ const Navbar = () => {
   return (
     <div className="my-nav-container relative">
       <div className='my-nav flex justify-between py-2'>
-        <div className="nav-left-side desktop">
+        <div className="nav-left-side the-desktop">
           <Link to='/'><img src="/long-logo.png" alt="logo" className="logo-img"/></Link>
         </div>
-        <div className="nav-left-side mobile">
+        <div className="nav-left-side the-mobile">
           <Link to='/'><img src="/small-logo.png" alt="logo" className="logo-img"/></Link>
         </div>
         <div className="nav-right-side">
           {
             userData.data?
             <>
-              <Link to={'/profile/' + userData.data.username} className="flex flex-col items-center hand-hover">
-                <img src={userData.data.profilePicture} alt="" className="profile-img-small circle img-fit desktop"/>
-                <img src={userData.data.profilePicture} alt="" className="profile-img-xsmall circle img-fit mobile"/>
-                <span title="Profile" className="text-xs mt-1 mobile">Me</span>
-                <span title="Profile" className="text-xs mt-1 desktop">{userData.data.fullName}</span>
+              <Link to={'/profile/' + userData.data.username} className="flex flex-col gap-1 items-center hand-hover">
+                <img src={userData.data.profilePicture} alt="" className="circle img-fit profile-img-small the-desktop"/>
+                <img src={userData.data.profilePicture} alt="" className="circle img-fit nav-icons the-mobile"/>
+                <span title="Profile" className="text-xs the-mobile">Me</span>
+                <span title="Profile" className="text-xs the-desktop">{userData.data.fullName}</span>
               </Link>
 
               <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">

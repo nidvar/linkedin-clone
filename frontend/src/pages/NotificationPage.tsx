@@ -109,7 +109,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                           </div>
                         </div>
                       </div>
-                      <div className='flex gap-4 desktop'>
+                      <div className='flex gap-4 the-desktop'>
                         {
                           notification.read === true?
                           <Eye color={'skyblue'} className='notification-icons'/>:
@@ -117,7 +117,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                         }
                         <Trash2 color={'red'} className='hand-hover notification-icons' onClick={function(){deleteMutation.mutate(notification._id)}}/>
                       </div>
-                      <div className='mobile'>
+                      <div className='the-mobile'>
                         {
                           showId === notification._id?
                           <>

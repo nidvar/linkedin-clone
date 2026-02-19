@@ -507,11 +507,11 @@ button{
 }
 
 
-.mobile {
+.the-mobile {
   display: none;
 }
 
-.desktop {
+.the-desktop {
   display: flex;
 }
 
@@ -521,16 +521,16 @@ button{
     padding: 0 15px;
   }
 
-  .mobile {
+  .the-mobile {
     display: block;
     border-radius: 6px;
   }
 
-  .mobile img{
+  .the-mobile img{
     border-radius: 6px;
   }
 
-  .desktop {
+  .the-desktop {
     display: none;
   }
 
@@ -578,6 +578,7 @@ button{
 
   .nav-icons {
     height: 18px;
+    width: 18px;
   }
 
   .profile-img-xsmall {
