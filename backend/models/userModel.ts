@@ -61,16 +61,15 @@ const userSchema = new mongoose.Schema(
         company: String,
         startYear: Number,
         endYear: Number,
-        numberOfMonths: Number,
         description: String,
       },
     ],
     education: [
       {
         school: String,
-        fieldOfStudy: String,
-        startYear: String,
-        endYear: String,
+        field: String,
+        startYear: Number,
+        endYear: Number,
       },
     ],
     connections: [

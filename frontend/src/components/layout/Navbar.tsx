@@ -78,12 +78,14 @@ const Navbar = () => {
             userData.data?
             <>
               <Link to={'/profile/' + userData.data.username} className="flex flex-col items-center hand-hover">
-                <img src={userData.data.profilePicture} alt="" className="profile-img-small circle img-fit"/>
-                <span title="Profile" className="text-xs mt-1">{userData.data.fullName}</span>
+                <img src={userData.data.profilePicture} alt="" className="profile-img-small circle img-fit desktop"/>
+                <img src={userData.data.profilePicture} alt="" className="profile-img-xsmall circle img-fit mobile"/>
+                <span title="Profile" className="text-xs mt-1 mobile">Me</span>
+                <span title="Profile" className="text-xs mt-1 desktop">{userData.data.fullName}</span>
               </Link>
 
               <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">
-                <Users height={24}/>
+                <Users className="nav-icons"/>
                 <span title="Connections" className="text-xs">My Network</span>
                 {
                   connectionRequests.data && connectionRequests.data.length > 0?
@@ -94,7 +96,7 @@ const Navbar = () => {
               </Link>
 
               <Link to='/notifications' className="flex flex-col items-center gap-1 hand-hover relative">
-                <Bell height={24}/>
+                <Bell className="nav-icons"/>
                 <span title="Notifications" className="text-xs">Notifications</span>
                 {
                   notifications.data && unread > 0?
@@ -105,7 +107,7 @@ const Navbar = () => {
               </Link>
 
               <div className="flex flex-col items-center gap-1 hand-hover" onClick={function(){mutateObj.mutate()}}>
-                <LogOut height={24}/>
+                <LogOut className="nav-icons"/>
                 <span title="Logout" className="text-xs">Logout</span>
               </div>
             </>:''

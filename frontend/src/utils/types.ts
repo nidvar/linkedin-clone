@@ -12,26 +12,26 @@ export type AuthUserType = {
   skills: string[],
   connections: string[],
   username: string,
-  experience: Experience[],
-  education: Education[],
+  experience: ExperienceType[],
+  education: EducationType[],
   createdAt?: string,
   updatedAt?: string,
 };
 
-type Experience = {
+export type ExperienceType = {
   title: String,
   company: String,
-  startYear: String,
-  endYear: String,
+  startYear: Number,
+  endYear: Number,
   numberOfMonths?: String
   description: String,
 }
 
-type Education = {
+export type EducationType = {
   school: String,
-  fieldOfStudy: String,
-  startYear: String,
-  endYear: String,
+  field: String,
+  startYear: Number,
+  endYear: Number,
 }
 
 export type CommentType = {
