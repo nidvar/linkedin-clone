@@ -373,6 +373,17 @@
 
 /* UTILITIES ===============================================*/
 
+.page-title {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0;
+}
+
 textarea {
   border: 1px solid rgb(230, 230, 230);
   background-color: rgb(243, 242, 240);
@@ -520,7 +531,6 @@ button{
   height: 24px;
 }
 
-
 .the-mobile {
   display: none;
 }
@@ -629,6 +639,14 @@ button{
   .profile-img-xsmall {
     height: 20px;
     width: 20px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .section-title {
+    font-size: 14px;
   }
 
 }

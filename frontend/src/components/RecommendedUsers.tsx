@@ -26,7 +26,7 @@ function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recomme
 
   return (
     <div className='recommended-container shaded-border'>
-      <h1 className='font-semibold text-lg'>People you may know</h1>
+      <h3 className='section-title'>People you may know</h3>
       {
         recommendedUsers && recommendedUsers.length > 0?
         <>

@@ -24,7 +24,7 @@ function ExperienceSection({data, ownProfile}: {data: AuthUserType, ownProfile: 
   
   return (
     <div className='profile-section shaded-border'>
-      <h1 className='font-semibold'>Experience</h1>
+      <h3 className='section-title'>Experience</h3>
       <div className='profile-section-content'>
         {
           data.experience.map((item)=>{

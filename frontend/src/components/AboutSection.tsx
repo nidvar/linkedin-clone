@@ -38,7 +38,7 @@ function AboutSection({data, ownProfile}: {data: AuthUserType, ownProfile: boole
 
   return (
     <div className='profile-section shaded-border'>
-      <h1 className='font-semibold'>About</h1>
+      <h3 className='section-title'>About</h3>
       {
         edit?
         <form onSubmit={handleSubmit}>

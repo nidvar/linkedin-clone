@@ -73,7 +73,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
   return (
     <div className='main notification-page'>
       <div className='main-container shaded-border relative'>
-        <h1 className='font-bold text-2xl mb-10'>Notifications</h1>
+        <h1 className='page-title'>Notifications</h1>
         {
           notifications.data && notifications.data.length > 0?
           <>
@@ -85,7 +85,7 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                       index > 0?
                       <div className='horizontal-line'></div>:''
                     }
-                    <div className='flex justify-between my-4'>
+                    <div className='flex justify-between my-8'>
                       <div className='w-full'>
                         <div className='flex gap-3 related-post-container'>
                           <Link to={`/profile/${notification.relatedUser.username}`} >
@@ -94,9 +94,9 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                           <div className='w-full'>
                             <div className='flex gap-2'>
                               {notificationIcon(notification.type)}
-                              <h1>
+                              <p>
                                 <span className='font-bold'>{notification.relatedUser.fullName}</span> {notificationType(notification.type)}
-                              </h1>
+                              </p>
                             </div>
                             <p className='text-gray-600 text-sm'>{daysAgo(notification.createdAt)}</p>
                             {

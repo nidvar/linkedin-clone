@@ -161,7 +161,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
       {
         editProfilePic === false?
         <>
-          <h1 className='bold text-xl mt-2'>{data.fullName}</h1>
+          <h1 className='page-title'>{data.fullName}</h1>
           <p className='text-gray-500 text-sm'>profile: /{data.username}</p>
           <p className='text-gray-500 text-sm'>Occupation: {data.headline}</p>
           <p className='text-gray-500 text-sm'>{data.connections.length} {data.connections.length != 1 ? 'connections' : 'connection'}</p>

@@ -78,14 +78,14 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
   return (
     <div className='main'>
       <div className='main-container shaded-border'>
-        <h1 className='font-bold text-2xl my-3'>My Network</h1>
-        <p className='font-semibold text-l mb-3'>Connection Requests</p>
+        <h1 className='page-title'>My Network</h1>
+        <h3 className='section-title'>Connection Requests</h3>
         {
           requests.data && requests.data.length > 0 ?
             requests.data.map((item: ConnectionRequestType) => {
               return (
                 <div key={item._id} className='flex justify-between p-3 items-center request-box'>
-                  <div className='flex gap-3'>
+                  <div className='flex gap-3 my-4'>
                     <Link to={'/profile/' + item.sender.username}>
                       <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
                     </Link>
@@ -107,10 +107,10 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
             </div>
         }
 
-        <p className='font-semibold text-l my-6'>Sent Requests</p>
+        <h3 className='section-title'>Sent Requests</h3>
         {
           sentRequests.data && sentRequests.data.length > 0 ?
-            <div className='flex gap-3'>
+            <div className='flex gap-3 my-4'>
               {
                 sentRequests.data.map((item: sentRequestType) => {
                   return (
@@ -136,10 +136,10 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
             </div>
         }
 
-        <p className='font-semibold text-l my-6'>My Connections</p>
+        <h3 className='section-title'>My Connections</h3>
         {
           allConnections.data && allConnections.data.length > 0 ?
-            <div className='flex gap-3'>
+            <div className='flex gap-3 my-4'>
               {
                 allConnections.data.map((item: ConnectionType) => {
                   return (
