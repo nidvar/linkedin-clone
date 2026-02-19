@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, LogOut, Users } from 'lucide-react';
+import { Bell, LogOut, Search, Users } from 'lucide-react';
 import { useEffect, useState } from "react";
 
 // local imports
@@ -65,56 +65,67 @@ const Navbar = () => {
   if (connectionRequests.isLoading) return null;
 
   return (
-    <div className="my-nav-container relative">
-      <div className='my-nav flex justify-between py-2'>
-        <div className="nav-left-side the-desktop">
-          <Link to='/'><img src="/long-logo.png" alt="logo" className="logo-img"/></Link>
-        </div>
-        <div className="nav-left-side the-mobile">
+    <>
+      <div className="the-mobile-nav the-mobile">
+        <div className="flex justify-between items-center">
           <Link to='/'><img src="/small-logo.png" alt="logo" className="logo-img"/></Link>
-        </div>
-        <div className="nav-right-side">
-          {
-            userData.data?
-            <>
-              <Link to={'/profile/' + userData.data.username} className="flex flex-col gap-1 items-center hand-hover">
-                <img src={userData.data.profilePicture} alt="" className="circle img-fit profile-img-small the-desktop"/>
-                <img src={userData.data.profilePicture} alt="" className="circle img-fit nav-icons the-mobile"/>
-                <span title="Profile" className="text-xs the-mobile">Me</span>
-                <span title="Profile" className="text-xs the-desktop">{userData.data.fullName}</span>
-              </Link>
-
-              <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">
-                <Users className="nav-icons"/>
-                <span title="Connections" className="text-xs">My Network</span>
-                {
-                  connectionRequests.data && connectionRequests.data.length > 0?
-                  <span className='notification-dot'>
-                    {connectionRequests.data.length}
-                  </span>:''
-                }
-              </Link>
-
-              <Link to='/notifications' className="flex flex-col items-center gap-1 hand-hover relative">
-                <Bell className="nav-icons"/>
-                <span title="Notifications" className="text-xs">Notifications</span>
-                {
-                  notifications.data && unread > 0?
-                  <span className='notification-dot'>
-                    {unread}
-                  </span>:''
-                }
-              </Link>
-
-              <div className="flex flex-col items-center gap-1 hand-hover" onClick={function(){mutateObj.mutate()}}>
-                <LogOut className="nav-icons"/>
-                <span title="Logout" className="text-xs">Logout</span>
-              </div>
-            </>:''
-          }
+          <Link to='/'>
+            <input className="search-input"/>
+          </Link>
+          <Link to='/' className="hand-hover">
+            <Search />
+          </Link>
         </div>
       </div>
-    </div>
+
+      <div className="my-nav-container relative">
+        <div className='my-nav flex justify-between py-2'>
+          <div className="nav-left-side the-desktop">
+            <Link to='/'><img src="/long-logo.png" alt="logo" className="logo-img"/></Link>
+          </div>
+          <div className="nav-right-side">
+            {
+              userData.data?
+              <>
+                <Link to={'/profile/' + userData.data.username} className="flex flex-col gap-1 items-center hand-hover">
+                  <img src={userData.data.profilePicture} alt="" className="circle img-fit profile-img-small the-desktop"/>
+                  <img src={userData.data.profilePicture} alt="" className="circle img-fit nav-icons the-mobile"/>
+                  <span title="Profile" className="text-xs the-mobile">Me</span>
+                  <span title="Profile" className="text-xs the-desktop">{userData.data.fullName}</span>
+                </Link>
+
+                <Link to='/network' className="flex flex-col items-center gap-1 hand-hover relative">
+                  <Users className="nav-icons"/>
+                  <span title="Connections" className="text-xs">My Network</span>
+                  {
+                    connectionRequests.data && connectionRequests.data.length > 0?
+                    <span className='notification-dot'>
+                      {connectionRequests.data.length}
+                    </span>:''
+                  }
+                </Link>
+
+                <Link to='/notifications' className="flex flex-col items-center gap-1 hand-hover relative">
+                  <Bell className="nav-icons"/>
+                  <span title="Notifications" className="text-xs">Notifications</span>
+                  {
+                    notifications.data && unread > 0?
+                    <span className='notification-dot'>
+                      {unread}
+                    </span>:''
+                  }
+                </Link>
+
+                <div className="flex flex-col items-center gap-1 hand-hover" onClick={function(){mutateObj.mutate()}}>
+                  <LogOut className="nav-icons"/>
+                  <span title="Logout" className="text-xs">Logout</span>
+                </div>
+              </>:''
+            }
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 
