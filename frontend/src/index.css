@@ -37,6 +37,20 @@
   display: flex;
   align-content: center;
   align-items: center;
+  max-width: 200px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+}
+
+.search-input-desktop {
+  max-width: 400px;
+  width: 100%;
 }
 
 /* HOME PAGE ===============================================*/

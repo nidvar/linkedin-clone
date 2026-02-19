@@ -83,10 +83,20 @@ const Navbar = () => {
           <div className="nav-left-side the-desktop">
             <Link to='/'><img src="/long-logo.png" alt="logo" className="logo-img"/></Link>
           </div>
+
           <div className="nav-right-side">
             {
               userData.data?
               <>
+                <div className="search-bar the-desktop">
+                  <Link to='/'>
+                    <input className="search-input-desktop"/>
+                  </Link>
+                  <Link to='/' className="hand-hover">
+                    <Search />
+                  </Link>
+                </div>
+
                 <Link to={'/profile/' + userData.data.username} className="flex flex-col gap-1 items-center hand-hover">
                   <img src={userData.data.profilePicture} alt="" className="circle img-fit profile-img-small the-desktop"/>
                   <img src={userData.data.profilePicture} alt="" className="circle img-fit nav-icons the-mobile"/>
