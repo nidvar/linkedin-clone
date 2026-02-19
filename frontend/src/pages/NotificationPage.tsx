@@ -87,16 +87,21 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                     }
                     <div className='flex justify-between my-8'>
                       <div className='w-full'>
-                        <div className='flex gap-3 related-post-container'>
+                        <div className='flex gap-3 related-post-container items-center'>
                           <Link to={`/profile/${notification.relatedUser.username}`} >
                             <img src={notification.relatedUser.profilePicture} className='profile-img circle img-fit min-w-[50px]'/>
                           </Link>
-                          <div className='w-full'>
+                          <div className='w-full flex flex-col gap-1'>
                             <div className='flex gap-2'>
-                              {notificationIcon(notification.type)}
+                              <div className='the-desktop'>
+                                {notificationIcon(notification.type)}
+                              </div>
                               <p>
                                 <span className='font-bold'>{notification.relatedUser.fullName}</span> {notificationType(notification.type)}
                               </p>
+                              <div className='the-mobile mr-3'>
+                                {notificationIcon(notification.type)}
+                              </div>
                             </div>
                             <p className='text-gray-600 text-sm'>{daysAgo(notification.createdAt)}</p>
                             {
