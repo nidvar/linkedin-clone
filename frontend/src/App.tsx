@@ -10,6 +10,7 @@ import NetworkPage from './pages/NetworkPage'
 import { fetchUser } from './utils/utilFunctions'
 import NotificationPage from './pages/NotificationPage'
 import ProfilePage from './pages/ProfilePage'
+import SearchPage from './pages/SearchPage'
 
 function App() {
   const userData = useQuery({ 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/signup' element={ userData.data? <HomePage /> : <SignUpPage />}/>
         <Route path='/login' element={ userData.data? <HomePage /> : <LoginPage />}/>
         <Route path='/network' element={ userData.data? <NetworkPage userData={userData.data}/> : <LoginPage />}/>
+        <Route path='/search' element={ userData.data? <SearchPage userData={userData.data}/> : <LoginPage />}/>
         <Route path='/notifications' element={ userData.data? <NotificationPage userData={userData.data} /> : <LoginPage />}/>
         <Route path='/*' element={ userData.data? <HomePage /> : <LoginPage />}/>
       </Routes>

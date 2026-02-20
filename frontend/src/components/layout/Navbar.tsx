@@ -69,10 +69,10 @@ const Navbar = () => {
       <div className="the-mobile-nav the-mobile">
         <div className="flex justify-between items-center">
           <Link to='/'><img src="/small-logo.png" alt="logo" className="logo-img"/></Link>
-          <Link to='/'>
+          <Link to='/search'>
             <input className="search-input"/>
           </Link>
-          <Link to='/' className="hand-hover">
+          <Link to='/search' className="hand-hover">
             <Search />
           </Link>
         </div>
@@ -89,10 +89,10 @@ const Navbar = () => {
               userData.data?
               <>
                 <div className="search-bar the-desktop">
-                  <Link to='/'>
-                    <input className="search-input-desktop"/>
+                  <Link to='/search'>
+                    <input className="search-input-desktop font-light"/>
                   </Link>
-                  <Link to='/' className="hand-hover">
+                  <Link to='/search' className="hand-hover">
                     <Search />
                   </Link>
                 </div>

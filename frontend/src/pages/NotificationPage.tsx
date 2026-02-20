@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AuthUserType, NotificationType } from '../utils/types';
 import { daysAgo, getRequest, postRequest } from '../utils/utilFunctions';
-import { EllipsisVertical, Eye, ThumbsUp, Trash2, UserPlus } from 'lucide-react';
+import { EllipsisVertical, Eye, MessageCircleMore, ThumbsUp, Trash2, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -39,6 +39,9 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
     }
     if(arg === 'like'){
       return <ThumbsUp />
+    }
+    if(arg === 'comment'){
+      return <MessageCircleMore />
     }
   }
 
