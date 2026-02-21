@@ -8,7 +8,6 @@ import { postRequest } from '../utils/utilFunctions';
 function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recommendedUsers: SuggestedUsersType[], userData: AuthUserType, sentRequests: sentRequestType[]}) {
 
   const queryClient = useQueryClient();
-  
   const mutateObj = useMutation({
     mutationFn: async (arg: string) => {
       await postRequest('/connections/sendRequest/' + arg, {});
@@ -35,7 +34,7 @@ function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recomme
               return (
                 <div className='flex justify-between items-center' key={user._id}>
                   <Link to={'/profile/' + user.username} className='flex gap-2 items-center'>
-                    <img src={user.profilePicture} alt="" className='profile-img circle img-fit'/>
+                    <img src={user.profilePicture || 'avatar.png'} alt={user.fullName} className='profile-img circle img-fit'/>
                     <div className='flex flex-col '>
                       <p className="font-semibold text-sm">{user.fullName}</p>
                       <p className="text-xs text-gray-600">{user.headline}</p>

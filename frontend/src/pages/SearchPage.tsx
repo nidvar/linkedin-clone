@@ -9,14 +9,17 @@ function SearchPage({ userData }: { userData: AuthUserType }) {
 
   const queryClient = useQueryClient();
 
-  const allConnections = useQuery({
-    queryKey: ['connections', userData._id],
+  const recommendedUsers = useQuery({
+    queryKey: ['recommendedUsers', userData?._id],
     enabled: !!userData,
     queryFn: async () => {
-      const data = await getRequest('/connections/getallconnections');
-      return data.connections
+      const data = await getRequest('/user/suggestedusers');
+      console.log(data);
+      return data
     },
   });
+
+  console.log(recommendedUsers.data);
 
   return (
     <div className='main'>
