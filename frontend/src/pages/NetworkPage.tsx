@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { ChevronDown, ChevronRight, ChevronUp, MoveRight, StepForward, UserPlus } from 'lucide-react';
+import { ChevronDown, ChevronRight, UserPlus } from 'lucide-react';
 
 import type { AuthUserType, ConnectionRequestType, ConnectionType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
@@ -10,10 +10,9 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
 
   const queryClient = useQueryClient();
 
-  const [showSentRequests, setShowSentRequests] = useState(false);
-  const [showConnections, setShowConnections] = useState(false);
-  const [showRequests, setShowRequests] = useState(false);
-
+  const [showSentRequests, setShowSentRequests] = useState(true);
+  const [showConnections, setShowConnections] = useState(true);
+  const [showRequests, setShowRequests] = useState(true);
 
   const requests = useQuery({
     queryKey: ['requests', userData._id],
@@ -147,7 +146,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                     sentRequests.data.map((item: sentRequestType) => {
                       return (
                         <div className='shaded-border connection-card' key={item._id}>
-                          <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2'>
+                          <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2 items-center'>
                             <div>
                               <img src={item.recipient.profilePicture} className='profile-img-large circle img-fit' />
                             </div>
