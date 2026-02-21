@@ -138,6 +138,25 @@ export const suggestedUsers = async (req: Request, res: Response)=>{
   }
 };
 
+export const findUser = async (req: Request, res: Response)=>{
+  try {
+    const searchQuery = req.params.searchquery?.toString().toLowerCase();
+    if(!searchQuery){
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+    const allUsers = await User.find({}).select('-password -refreshToken');
+    const users = allUsers.filter((user)=>{
+      if(user.fullName){
+        if(user.fullName.toLowerCase().includes(searchQuery)) return user
+      }
+    });
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error for findUser' });
+  }
+}
+
 export const getPublicProfile = async (req: Request, res: Response)=>{
   try {
     const username = req.params.username?.toString();

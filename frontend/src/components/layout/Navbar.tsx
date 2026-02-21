@@ -69,9 +69,6 @@ const Navbar = () => {
       <div className="the-mobile-nav the-mobile">
         <div className="flex justify-between items-center">
           <Link to='/'><img src="/small-logo.png" alt="logo" className="logo-img"/></Link>
-          <Link to='/search'>
-            <input className="search-input"/>
-          </Link>
           <Link to='/search' className="hand-hover">
             <Search />
           </Link>
@@ -88,14 +85,10 @@ const Navbar = () => {
             {
               userData.data?
               <>
-                <div className="search-bar the-desktop">
-                  <Link to='/search'>
-                    <input className="search-input-desktop font-light"/>
-                  </Link>
-                  <Link to='/search' className="hand-hover">
-                    <Search />
-                  </Link>
-                </div>
+                <Link to='/search' className="flex flex-col items-center gap-1 hand-hover relative the-desktop">
+                  <Search />
+                  <span title="Connections" className="text-xs">Search</span>
+                </Link>
 
                 <Link to={'/profile/' + userData.data.username} className="flex flex-col gap-1 items-center hand-hover">
                   <img src={userData.data.profilePicture} alt="" className="circle img-fit profile-img-small the-desktop"/>

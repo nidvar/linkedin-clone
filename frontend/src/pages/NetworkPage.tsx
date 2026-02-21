@@ -142,7 +142,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
           <>
             {
               sentRequests.data && sentRequests.data.length > 0 ?
-                <div className='flex gap-3 my-4'>
+                <div className='flex gap-3 my-4 flex-wrap'>
                   {
                     sentRequests.data.map((item: sentRequestType) => {
                       return (

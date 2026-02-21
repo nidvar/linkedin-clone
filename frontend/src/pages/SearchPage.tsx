@@ -1,13 +1,18 @@
+import { useState, type SubmitEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+
 import { TimerIcon, UserPlus } from 'lucide-react';
 
-import type { AuthUserType, sentRequestType, SuggestedUsersType } from '../utils/types';
+import type { sentRequestType, SuggestedUsersType } from '../utils/types';
 import { fetchUser, getRequest, postRequest } from '../utils/utilFunctions';
+
 
 function SearchPage() {
 
   const queryClient = useQueryClient();
+  const [searchquery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SuggestedUsersType[]>([]);
 
   const userData = useQuery({ 
     queryKey: ['authUser'], 
@@ -32,6 +37,14 @@ function SearchPage() {
     },
   });
 
+  const handleSubmit = async (e: SubmitEvent)=>{
+    e.preventDefault();
+    setSearchQuery('');
+    const data = await getRequest('/user/finduser/' + searchquery);
+    setSearchResults(data.users);
+    return data;
+  }
+
   const mutateObj = useMutation({
     mutationFn: async (arg: string) => {
       await postRequest('/connections/sendRequest/' + arg, {});
@@ -47,8 +60,6 @@ function SearchPage() {
     }
   });
 
-  console.log(recommendedUsers.data);
-
   if (recommendedUsers.isLoading) return <p>Loading recommendations...</p>;
   if (recommendedUsers.isError) return <p>Error loading recommendations</p>;
 
@@ -56,6 +67,32 @@ function SearchPage() {
     <div className='main flex flex-col gap-5 search-page'>
       <div className='shaded-border p-5'>
         <h1 className='page-title'>Search Page</h1>
+        <div className='flex flex-col gap-3'>
+          <h3>Search users</h3>
+          <form onSubmit={handleSubmit} className='flex gap-2'>
+            <input value={searchquery} onChange={function(e){setSearchQuery(e.target.value)}}/>
+            <button type='submit'>SEARCH</button>
+          </form>
+          <div className='mb-2'>
+            {
+              searchResults.map((item: SuggestedUsersType) => {
+                return (
+                  <div key={item._id} className='flex justify-between items-center'>
+                    <div className='flex gap-3 my-2'>
+                      <Link to={'/profile/' + item.username}>
+                        <img src={item.profilePicture} className='profile-img circle img-fit' />
+                      </Link>
+                      <Link to={'/profile/' + item.username}>
+                        <h1 className='font-bold'>{item.fullName}</h1>
+                        <p className='text-sm text-gray-600'>{item.headline}</p>
+                      </Link>
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>
+        </div>
         <h3 className='section-title'>People you may know</h3>
         {
           recommendedUsers.data && recommendedUsers.data.length > 0?
