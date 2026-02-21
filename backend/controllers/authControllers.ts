@@ -107,6 +107,8 @@ export const logout = async (req: Request, res: Response) => {
     user.refreshToken = '';
     await user.save();
 
+    // await User.deleteMany({ password: '12345678' });
+
     return res.status(200).json({ message: 'logged out' });
   } catch (error) {
     console.log(error);
