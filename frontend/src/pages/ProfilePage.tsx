@@ -32,7 +32,7 @@ function ProfilePage() {
     navigate('/')
   };
 
-  if(profileData.data === undefined) return <div className='text-center'>Loading...</div>;
+  if(profileData.data === undefined) return <div>Loading...</div>;
 
   return (
     <div className="profile-page">

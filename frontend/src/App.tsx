@@ -18,7 +18,7 @@ function App() {
     queryFn: fetchUser
   });
 
-  if (userData.isLoading) return <div className='text-center'>Loading...</div>;
+  if (userData.isLoading) return <div>Loading...</div>;
 
   return (
     <Layout>
@@ -28,7 +28,7 @@ function App() {
         <Route path='/signup' element={ userData.data? <HomePage /> : <SignUpPage />}/>
         <Route path='/login' element={ userData.data? <HomePage /> : <LoginPage />}/>
         <Route path='/network' element={ userData.data? <NetworkPage userData={userData.data}/> : <LoginPage />}/>
-        <Route path='/search' element={ userData.data? <SearchPage/> : <LoginPage />}/>
+        <Route path='/search' element={ userData.data? <SearchPage userData={userData.data}/> : <LoginPage />}/>
         <Route path='/notifications' element={ userData.data? <NotificationPage userData={userData.data} /> : <LoginPage />}/>
         <Route path='/*' element={ userData.data? <HomePage /> : <LoginPage />}/>
       </Routes>

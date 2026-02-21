@@ -60,8 +60,8 @@ function SearchPage() {
     }
   });
 
-  if (recommendedUsers.isLoading) return <p className='text-center'>Loading recommendations...</p>;
-  if (recommendedUsers.isError) return <p className='text-center'>Error loading recommendations</p>;
+  if (recommendedUsers.isLoading) return <p>Loading recommendations...</p>;
+  if (recommendedUsers.isError) return <p>Error loading recommendations</p>;
 
   return (
     <div className='main flex flex-col gap-5 search-page'>

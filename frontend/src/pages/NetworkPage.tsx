@@ -10,9 +10,9 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
 
   const queryClient = useQueryClient();
 
-  const [showSentRequests, setShowSentRequests] = useState(true);
-  const [showConnections, setShowConnections] = useState(true);
-  const [showRequests, setShowRequests] = useState(true);
+  const [showSentRequests, setShowSentRequests] = useState(false);
+  const [showConnections, setShowConnections] = useState(false);
+  const [showRequests, setShowRequests] = useState(false);
 
 
   const requests = useQuery({
@@ -101,7 +101,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
 
   return (
     <div className='main'>
-      <div className='main-container shaded-border flex flex-col gap-3'>
+      <div className='main-container shaded-border flex flex-col'>
         <h1 className='page-title'>My Network</h1>
         <h3 className='section-title flex gap-3 items-center'>Connection Requests {returnChevron('requests')}</h3>
         {
@@ -111,8 +111,8 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
               requests.data && requests.data.length > 0 ?
                 requests.data.map((item: ConnectionRequestType) => {
                   return (
-                    <div key={item._id} className='flex justify-between items-center request-box'>
-                      <div className='flex gap-3'>
+                    <div key={item._id} className='flex justify-between p-3 items-center request-box'>
+                      <div className='flex gap-3 my-4'>
                         <Link to={'/profile/' + item.sender.username}>
                           <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
                         </Link>
@@ -142,18 +142,18 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
           <>
             {
               sentRequests.data && sentRequests.data.length > 0 ?
-                <div className='connection-card-container'>
+                <div className='flex gap-3 my-4 flex-wrap'>
                   {
                     sentRequests.data.map((item: sentRequestType) => {
                       return (
                         <div className='shaded-border connection-card' key={item._id}>
-                          <Link to={'/profile/' + item.recipient.username} className='hand-hover connection-card-profile'>
+                          <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2'>
                             <div>
                               <img src={item.recipient.profilePicture} className='profile-img-large circle img-fit' />
                             </div>
                             <div>
-                              <h1 className='font-bold'>{item.recipient.fullName.length > 15? item.recipient.fullName.substring(0, 10) + '...': item.recipient.fullName}</h1>
-                              <p className='text-sm text-gray-600'>{item.recipient.headline.length > 15? item.recipient.headline.substring(0, 10) + '...': item.recipient.headline}</p>
+                              <h1 className='font-bold'>{item.recipient.fullName}</h1>
+                              <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
                             </div>
                           </Link>
                           <button onClick={function () { cancelRequestMutation.mutate(item.recipient._id) }}>CANCEL</button>
