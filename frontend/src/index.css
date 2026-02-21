@@ -203,8 +203,16 @@
 }
 
 .request-box {
-  padding-bottom: 20px;
+  padding: 10px 0;
   border-bottom: 1px solid rgb(207, 207, 207);
+}
+
+.connection-card-container {
+  background-color: orange;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
 }
 
 .connection-card {
@@ -555,6 +563,25 @@ button{
 
   main {
     padding: 0 15px;
+  }
+
+  .connection-card-container {
+    background-color: wheat;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .connection-card {
+    background-color: yellow;
+    display: flex;
+    width: 100%;
+    gap:0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .connection-card-profile {
+    display: flex;
   }
 
   .the-mobile-nav {
