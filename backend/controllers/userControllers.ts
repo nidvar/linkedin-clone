@@ -91,6 +91,17 @@ export const updateDetails = async (req: Request, res: Response)=>{
   }
 }
 
+export const getSelectedUsers = async (req: Request, res: Response)=>{
+  try {
+    console.log(req.body);
+    const users = await User.find({ _id: { $in: req.body } });
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error for selected Users' });
+  }
+}
+
 export const suggestedUsers = async (req: Request, res: Response)=>{
   try {
     const currentUserId = new mongoose.Types.ObjectId(res.locals.id.toString());

@@ -1,13 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { UserPlus } from 'lucide-react';
+import { ChevronDown, ChevronRight, ChevronUp, MoveRight, StepForward, UserPlus } from 'lucide-react';
 
 import type { AuthUserType, ConnectionRequestType, ConnectionType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
+import { useState } from 'react';
 
 function NetworkPage({ userData }: { userData: AuthUserType }) {
 
   const queryClient = useQueryClient();
+
+  const [showSentRequests, setShowSentRequests] = useState(false);
+  const [showConnections, setShowConnections] = useState(false);
+  const [showRequests, setShowRequests] = useState(false);
+
 
   const requests = useQuery({
     queryKey: ['requests', userData._id],
@@ -75,92 +81,125 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
     }
   });
 
+  const returnChevron = function(section: string){
+    if(section === 'sentRequests'){
+      return showSentRequests?
+       <ChevronDown size={20} className='hand-hover' onClick={() => { setShowSentRequests(false) }} />: 
+       <ChevronRight size={20} className='hand-hover' onClick={() => { setShowSentRequests(true) }} />
+    };
+    if(section === 'connections'){
+      return showConnections?
+       <ChevronDown size={20} className='hand-hover' onClick={() => { setShowConnections(false) }} />: 
+       <ChevronRight size={20} className='hand-hover' onClick={() => { setShowConnections(true) }} />
+    };
+    if(section === 'requests'){
+      return showRequests?
+       <ChevronDown size={20} className='hand-hover' onClick={() => { setShowRequests(false) }} />: 
+       <ChevronRight size={20} className='hand-hover' onClick={() => { setShowRequests(true) }} />
+    };
+  }
+
   return (
     <div className='main'>
-      <div className='main-container shaded-border'>
+      <div className='main-container shaded-border flex flex-col'>
         <h1 className='page-title'>My Network</h1>
-        <h3 className='section-title'>Connection Requests</h3>
+        <h3 className='section-title flex gap-3 items-center'>Connection Requests {returnChevron('requests')}</h3>
         {
-          requests.data && requests.data.length > 0 ?
-            requests.data.map((item: ConnectionRequestType) => {
-              return (
-                <div key={item._id} className='flex justify-between p-3 items-center request-box'>
-                  <div className='flex gap-3 my-4'>
-                    <Link to={'/profile/' + item.sender.username}>
-                      <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
-                    </Link>
-                    <div>
-                      <h1 className='font-bold'>{item.sender.fullName}</h1>
-                      <p className='text-sm text-gray-600'>{item.sender.headline}</p>
+          showRequests?
+          <>
+            {
+              requests.data && requests.data.length > 0 ?
+                requests.data.map((item: ConnectionRequestType) => {
+                  return (
+                    <div key={item._id} className='flex justify-between p-3 items-center request-box'>
+                      <div className='flex gap-3 my-4'>
+                        <Link to={'/profile/' + item.sender.username}>
+                          <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
+                        </Link>
+                        <div>
+                          <h1 className='font-bold'>{item.sender.fullName}</h1>
+                          <p className='text-sm text-gray-600'>{item.sender.headline}</p>
+                        </div>
+                      </div>
+                      <div>
+                        <button className='mr-2' onClick={function () { acceptMutation.mutate(item.sender._id) }}>Accept</button>
+                        <button className='bg-slate-400' onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <button className='mr-2' onClick={function () { acceptMutation.mutate(item.sender._id) }}>Accept</button>
-                    <button className='bg-slate-400' onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
-                  </div>
+                  )
+                }) :
+                <div className='flex flex-col gap-1 items-center my-10'>
+                  <UserPlus size={54} color={'gray'} />
+                  <p className='text-xl my-3'>No connection requests</p>
                 </div>
-              )
-            }) :
-            <div className='flex flex-col gap-1 items-center my-10'>
-              <UserPlus size={54} color={'gray'} />
-              <p className='text-xl my-3'>No connection requests</p>
-            </div>
+            }
+          </>:''
         }
 
-        <h3 className='section-title'>Sent Requests</h3>
+        <h3 className='section-title flex gap-3 items-center'>Sent Requests {returnChevron('sentRequests')}</h3>
         {
-          sentRequests.data && sentRequests.data.length > 0 ?
-            <div className='flex gap-3 my-4'>
-              {
-                sentRequests.data.map((item: sentRequestType) => {
-                  return (
-                    <div className='shaded-border connection-card' key={item._id}>
-                      <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2'>
-                        <div>
-                          <img src={item.recipient.profilePicture} className='profile-img-large circle img-fit' />
+          showSentRequests? 
+          <>
+            {
+              sentRequests.data && sentRequests.data.length > 0 ?
+                <div className='flex gap-3 my-4'>
+                  {
+                    sentRequests.data.map((item: sentRequestType) => {
+                      return (
+                        <div className='shaded-border connection-card' key={item._id}>
+                          <Link to={'/profile/' + item.recipient.username} className='hand-hover flex flex-col gap-2'>
+                            <div>
+                              <img src={item.recipient.profilePicture} className='profile-img-large circle img-fit' />
+                            </div>
+                            <div>
+                              <h1 className='font-bold'>{item.recipient.fullName}</h1>
+                              <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
+                            </div>
+                          </Link>
+                          <button onClick={function () { cancelRequestMutation.mutate(item.recipient._id) }}>CANCEL</button>
                         </div>
-                        <div>
-                          <h1 className='font-bold'>{item.recipient.fullName}</h1>
-                          <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
-                        </div>
-                      </Link>
-                      <button onClick={function () { cancelRequestMutation.mutate(item.recipient._id) }}>CANCEL</button>
-                    </div>
-                  )
-                })
-              }
-            </div> :
-            <div className='flex flex-col gap-1 items-center my-10'>
-              <UserPlus size={54} color={'gray'} />
-              <p className='text-xl my-3'>No sent requests</p>
-            </div>
+                      )
+                    })
+                  }
+                </div> :
+                <div className='flex flex-col gap-1 items-center my-10'>
+                  <UserPlus size={54} color={'gray'} />
+                  <p className='text-xl my-3'>No sent requests</p>
+                </div>
+            }
+          </>:''
         }
 
-        <h3 className='section-title'>My Connections</h3>
+        <h3 className='section-title flex gap-3 items-center'>My Connections {returnChevron('connections')}</h3>
         {
-          allConnections.data && allConnections.data.length > 0 ?
-            <div className='flex gap-3 my-4'>
-              {
-                allConnections.data.map((item: ConnectionType) => {
-                  return (
-                    <div className='shaded-border connection-card' key={item._id}>
-                      <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2 items-center'>
-                        <img src={item.profilePicture} className='profile-img-large circle img-fit' />
-                        <div>
-                          <h1 className='font-bold'>{item.fullName}</h1>
-                          <p className='text-sm text-gray-600'>{item.headline.length > 20 ? item.headline.slice(0, 20) + '...' : item.headline}</p>
+          showConnections?
+          <>
+            {
+              allConnections.data && allConnections.data.length > 0 ?
+                <div className='flex gap-3 my-4'>
+                  {
+                    allConnections.data.map((item: ConnectionType) => {
+                      return (
+                        <div className='shaded-border connection-card' key={item._id}>
+                          <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2 items-center'>
+                            <img src={item.profilePicture} className='profile-img-large circle img-fit' />
+                            <div>
+                              <h1 className='font-bold'>{item.fullName}</h1>
+                              <p className='text-sm text-gray-600'>{item.headline.length > 20 ? item.headline.slice(0, 20) + '...' : item.headline}</p>
+                            </div>
+                          </Link>
+                          <button onClick={function () { deleteConnectionMutation.mutate(item._id) }}>DELETE</button>
                         </div>
-                      </Link>
-                      <button onClick={function () { deleteConnectionMutation.mutate(item._id) }}>DELETE</button>
-                    </div>
-                  )
-                })
-              }
-            </div> :
-            <div className='flex flex-col gap-1 items-center my-10'>
-              <UserPlus size={54} color={'gray'} />
-              <p className='text-xl my-3'>No connections</p>
-            </div>
+                      )
+                    })
+                  }
+                </div> :
+                <div className='flex flex-col gap-1 items-center my-10'>
+                  <UserPlus size={54} color={'gray'} />
+                  <p className='text-xl my-3'>No connections</p>
+                </div>
+            }
+          </>:''
         }
       </div>
     </div>
