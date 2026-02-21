@@ -126,9 +126,10 @@ export const suggestedUsers = async (req: Request, res: Response)=>{
 
     excludedUserIds.push(currentUserId);
 
-    const usersNotConnected = await User.find({
-      _id: { $nin: excludedUserIds }
-    });
+    const usersNotConnected = await User.aggregate([
+      { $match: { _id: { $nin: excludedUserIds } } }, 
+      { $sample: { size: 10 } }
+    ]);
 
     return res.status(200).json({ usersNotConnected });
   } catch (error) {

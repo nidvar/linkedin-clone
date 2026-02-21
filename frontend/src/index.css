@@ -343,6 +343,16 @@
   flex-direction: column;
 }
 
+/* SEARCH PAGE ===============================================*/
+
+.search-page {
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 /* RECOMMENDED USERS ===============================================*/
 
 .recommended-container {

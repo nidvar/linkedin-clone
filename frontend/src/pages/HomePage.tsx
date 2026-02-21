@@ -24,7 +24,7 @@ const HomePage = () => {
   });
 
   const recommendedUsers = useQuery({
-    queryKey: ['recommendedUsers', userData.data?._id],
+    queryKey: ['recommendedUsers', 'home', userData.data?._id],
     enabled: !!userData.data,
     queryFn: async () => {
       const data = await getRequest('/user/suggestedusers');
