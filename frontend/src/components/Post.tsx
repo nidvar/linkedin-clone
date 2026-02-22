@@ -64,6 +64,8 @@ function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
     };
   }
 
+  if(post.author === null) return;
+
   return (
     <div className="post-container shaded-border">
       <div className='flex justify-between items-center'>

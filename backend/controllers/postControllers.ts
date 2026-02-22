@@ -16,9 +16,7 @@ export const getFeedPosts = async (req: Request, res: Response)=>{
     if(!user){
       return res.status(400).json({ message: 'User does not exist' });
     };
-    const posts = await Post.find({
-      author: { $in: [...user.connections, res.locals.id] }
-    })
+    const posts = await Post.find({})
     .populate('author', 'fullName username profilePicture headline username')
     .populate('comments.user', 'fullName profilePicture username')
     .sort({ createdAt: -1 }).limit(10);
