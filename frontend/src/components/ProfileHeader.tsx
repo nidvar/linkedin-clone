@@ -8,7 +8,7 @@ import { Camera, MapPin } from 'lucide-react';
 import type { AuthUserType, ConnectionRequestType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
 
-function ProfileHeader({data, ownProfile, currentUser} : {data: AuthUserType, ownProfile: boolean, currentUser: AuthUserType}) {
+function ProfileHeader({data, ownProfile, currentUser, opacity} : {data: AuthUserType, ownProfile: boolean, currentUser: AuthUserType, opacity: boolean}) {
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -229,7 +229,10 @@ function ProfileHeader({data, ownProfile, currentUser} : {data: AuthUserType, ow
   }, [data]);
 
   return (
-    <div className='profile-picture-container relative'>
+    <div className={
+      'profile-picture-container relative ' +
+      (opacity ? 'uploading-banner' : '')
+    }>
       {
         editProfilePic === true?
           <form className='profile-picture-update-form' onSubmit={function(e){updateImage(e,'profilePic')}}>
