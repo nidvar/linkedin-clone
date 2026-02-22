@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-import type { AuthUserType, sentRequestType, SuggestedUsersType } from '../utils/types';
+import type { AuthUserType, sentRequestType, userDetailsType } from '../utils/types';
 import { TimerIcon, UserPlus } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '../utils/utilFunctions';
 
-function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recommendedUsers: SuggestedUsersType[], userData: AuthUserType, sentRequests: sentRequestType[]}) {
+function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recommendedUsers: userDetailsType[], userData: AuthUserType, sentRequests: sentRequestType[]}) {
 
   const queryClient = useQueryClient();
   const mutateObj = useMutation({

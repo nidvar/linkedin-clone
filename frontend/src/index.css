@@ -551,6 +551,11 @@ button{
   display: flex;
 }
 
+.medium-width-button-container {
+  padding: 0 50px;
+  margin: 5px 0;
+}
+
 @media (max-width: 530px) {
 
   main {

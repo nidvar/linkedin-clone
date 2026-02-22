@@ -42,7 +42,7 @@ function ProfilePage() {
             backgroundImage: `url(${profileData.data.bannerImg || '/banner.png'})`,
           }}
         ></div>
-        <ProfileHeader data={profileData.data} ownProfile={userData.data._id === profileData.data._id}/>
+        <ProfileHeader data={profileData.data} ownProfile={userData.data._id === profileData.data._id} currentUser={userData.data}/>
       </div>
 
       <AboutSection data={profileData.data} ownProfile={userData.data._id === profileData.data._id} />

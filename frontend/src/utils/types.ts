@@ -35,12 +35,7 @@ export type EducationType = {
 }
 
 export type CommentType = {
-  user: {
-    _id: string
-    fullName: string
-    profilePicture: string
-    username?: string
-  },
+  user: userDetailsType,
   _id: string
   createdAt: string
   content?: string
@@ -48,27 +43,13 @@ export type CommentType = {
 
 export type PostType = {
   _id: string,
-  author: {
-      _id: string,
-      profilePicture: string
-      headline: string
-      username: string
-      fullName: string
-  },
+  author: userDetailsType,
   content: string
   image: string,
   likes: string[],
   comments: CommentType[],
   createdAt: string
   updatedAt: string
-}
-
-export type SuggestedUsersType = {
-  _id: string
-  fullName: string
-  profilePicture: string
-  headline: string
-  username?: string
 }
 
 export type NotificationType = {
@@ -92,14 +73,7 @@ export type NotificationType = {
 
 export type ConnectionRequestType = {
   _id: string
-  sender: {
-    connections: string[]
-    fullName: string
-    profilePicture: string
-    headline: string
-    _id: string
-    username?: string
-  }
+  sender: userDetailsType
   recipient: string
   status: string
   createdAt: string
@@ -108,25 +82,18 @@ export type ConnectionRequestType = {
 
 export type sentRequestType = {
   _id: string
-  recipient: {
-    connections: string[]
-    fullName: string
-    profilePicture: string
-    headline: string
-    _id: string
-    username?: string
-  }
+  recipient: userDetailsType
   sender: string
   status: string
   createdAt: string
   updatedAt: string
 }
 
-export type ConnectionType = {
+export type userDetailsType = {
   _id: string
   fullName: string
-  profilePicture: string
-  headline: string
-  connections: string[]
   username?: string
+  headline?: string
+  profilePicture: string
+  connections?: string[]
 }

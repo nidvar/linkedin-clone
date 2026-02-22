@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect, type SubmitEvent } from 'react';
 import { Camera, MapPin } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import type { AuthUserType } from '../utils/types';
-import { postRequest } from '../utils/utilFunctions';
+import type { AuthUserType, ConnectionRequestType, sentRequestType } from '../utils/types';
+import { getRequest, postRequest } from '../utils/utilFunctions';
 
-function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boolean}) {
+function ProfileHeader({data, ownProfile, currentUser} : {data: AuthUserType, ownProfile: boolean, currentUser: AuthUserType}) {
 
   const queryClient = useQueryClient();
   const navigate = useNavigate()
@@ -21,6 +21,26 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
   const [occupation, setOccupation] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
+
+  const [connectionStatus, setConnectionStatus] = useState('');
+
+  const recievedRequests = useQuery({
+    queryKey: ['requests', currentUser._id],
+    queryFn: async () => {
+      const data = await getRequest('/connections/requests');
+      return data.connectionRequests;
+    },
+    enabled: currentUser !== null,
+  });
+
+  const sentRequests = useQuery({
+    queryKey: ['sentRequests', currentUser._id],
+    enabled: !!currentUser,
+    queryFn: async () => {
+      const data = await getRequest('/connections/sentrequests');
+      return data.sentRequests;
+    },
+  });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMessage('');
@@ -91,6 +111,21 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
     }
   });
 
+  const sendRequestMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      await postRequest('/connections/sendRequest/' + arg, {});
+    },
+    onSuccess: ()=>{
+      console.log('success');
+      queryClient.invalidateQueries({ queryKey: ['recommendedUsers', 'home', data._id] });
+      queryClient.invalidateQueries({ queryKey: ['sentRequests', data._id] });
+      queryClient.refetchQueries({ queryKey: ['sentRequests', data._id] });
+    },
+    onError: (error)=>{
+      console.log(error);
+    }
+  });
+
   const updateImage = async (e: SubmitEvent, type: string)=>{
     e.preventDefault();
     if(imagePreview === null){
@@ -121,8 +156,47 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
       setUsername(data.username);
       setLocation(data.location);
       setOccupation(data.headline);
+      
+      if(data.connections.includes(currentUser._id)){
+        setConnectionStatus('connected');
+      }
     }
-  }, [data])
+  }, [data]);
+
+  const displayButtons = function(){
+    if(connectionStatus === 'connected'){
+      return <button className='px-4' onClick={function(){}}>Remove Connection</button>
+    }
+    if(connectionStatus === 'sent'){
+      return <button className='px-4' onClick={function(){}}>Cancel Request</button>
+    }
+    if(connectionStatus === 'recieved'){
+      return <button className='px-4' onClick={function(){}}>Reject Request</button>
+    }
+    if(connectionStatus === ''){
+      return <button className='px-4' onClick={function(){}}>Connect</button>
+    }
+  }
+
+  useEffect(()=>{
+    if(recievedRequests.data && recievedRequests.data.length > 0){
+      recievedRequests.data.forEach((item: ConnectionRequestType) => {
+        if(item.sender._id === data._id){
+          setConnectionStatus('recieved');
+        }
+      });
+    };
+  }, [recievedRequests.data]);
+
+  useEffect(()=>{
+    if(sentRequests.data && sentRequests.data.length > 0){
+      sentRequests.data.forEach((item: sentRequestType) => {
+        if(item.recipient._id === data._id){
+          setConnectionStatus('sent');
+        }
+      });
+    };
+  }, [sentRequests.data]);
 
   return (
     <div className='profile-picture-container relative'>
@@ -173,7 +247,7 @@ function ProfileHeader({data, ownProfile} : {data: AuthUserType, ownProfile: boo
                 editProfile === false?
                 <button className='edit-button' onClick={function(){setEditProfile(true)}}>Edit</button>:null
               }
-            </>:null
+            </>:<div className='medium-width-button-container'>{displayButtons()}</div>
           }
         </>:null
       }

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronRight, UserPlus } from 'lucide-react';
 
-import type { AuthUserType, ConnectionRequestType, ConnectionType, sentRequestType } from '../utils/types';
+import type { AuthUserType, ConnectionRequestType, userDetailsType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
 import { useState } from 'react';
 
@@ -177,7 +177,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
               allConnections.data && allConnections.data.length > 0 ?
                 <div className='flex gap-3 my-4'>
                   {
-                    allConnections.data.map((item: ConnectionType) => {
+                    allConnections.data.map((item: userDetailsType) => {
                       return (
                         <div className='shaded-border connection-card' key={item._id}>
                           <Link to={'/profile/' + item.username} className='hand-hover flex flex-col gap-2 items-center'>

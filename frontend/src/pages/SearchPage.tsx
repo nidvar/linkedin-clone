@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { TimerIcon, UserPlus } from 'lucide-react';
 
-import type { sentRequestType, SuggestedUsersType } from '../utils/types';
+import type { sentRequestType, userDetailsType } from '../utils/types';
 import { fetchUser, getRequest, postRequest } from '../utils/utilFunctions';
 
 
@@ -12,7 +12,7 @@ function SearchPage() {
 
   const queryClient = useQueryClient();
   const [searchquery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<SuggestedUsersType[]>([]);
+  const [searchResults, setSearchResults] = useState<userDetailsType[]>([]);
 
   const userData = useQuery({ 
     queryKey: ['authUser'], 
@@ -75,7 +75,7 @@ function SearchPage() {
           </form>
           <div className='mb-2'>
             {
-              searchResults.map((item: SuggestedUsersType) => {
+              searchResults.map((item: userDetailsType) => {
                 return (
                   <div key={item._id} className='flex justify-between items-center'>
                     <div className='flex gap-3 my-2'>
@@ -98,7 +98,7 @@ function SearchPage() {
           recommendedUsers.data && recommendedUsers.data.length > 0?
           <>
             {
-              recommendedUsers.data.map((user: SuggestedUsersType) => {
+              recommendedUsers.data.map((user: userDetailsType) => {
                 return (
                   <div className='flex justify-between items-center my-4' key={user._id}>
                     <Link to={'/profile/' + user.username} className='flex gap-2 items-center'>
