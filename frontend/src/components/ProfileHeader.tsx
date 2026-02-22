@@ -9,7 +9,7 @@ import { getRequest, postRequest } from '../utils/utilFunctions';
 function ProfileHeader({data, ownProfile, currentUser} : {data: AuthUserType, ownProfile: boolean, currentUser: AuthUserType}) {
 
   const queryClient = useQueryClient();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -116,13 +116,41 @@ function ProfileHeader({data, ownProfile, currentUser} : {data: AuthUserType, ow
       await postRequest('/connections/sendRequest/' + arg, {});
     },
     onSuccess: ()=>{
-      console.log('success');
-      queryClient.invalidateQueries({ queryKey: ['recommendedUsers', 'home', data._id] });
-      queryClient.invalidateQueries({ queryKey: ['sentRequests', data._id] });
-      queryClient.refetchQueries({ queryKey: ['sentRequests', data._id] });
+      console.log('sent request');
+      queryClient.invalidateQueries({ queryKey: ['sentRequests', currentUser._id] });
+      queryClient.refetchQueries({ queryKey: ['sentRequests', currentUser._id] });
     },
     onError: (error)=>{
       console.log(error);
+    }
+  });
+
+  const deleteConnectionMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      await postRequest('/connections/removeconnection/' + arg, {}, 'DELETE');
+    },
+    onSuccess: () => {
+      setConnectionStatus('');
+    }
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      await postRequest('/connections/reject/' + arg, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requests', currentUser._id] });
+      queryClient.invalidateQueries({ queryKey: ['connections', currentUser._id] });
+    }
+  });
+
+  const cancelRequestMutation = useMutation({
+    mutationFn: async (arg: string) => {
+      await postRequest('/connections/cancel/' + arg, {}, 'DELETE');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['sentRequests', currentUser._id] });
+      queryClient.refetchQueries({ queryKey: ['sentRequests', currentUser._id] });
     }
   });
 
@@ -151,52 +179,52 @@ function ProfileHeader({data, ownProfile, currentUser} : {data: AuthUserType, ow
     headerUpdateMutation.mutate(body);
   }
 
+  const recievedCheck = function(){
+    if(recievedRequests.data && recievedRequests.data.length > 0){
+      return recievedRequests.data.some((item: ConnectionRequestType) => {
+        return (item.sender._id === data._id)
+      });
+    };
+  }
+
+  const sentCheck = function(){
+    if(sentRequests.data && sentRequests.data.length > 0){
+      return sentRequests.data.some((item: sentRequestType) => {
+        return (item.recipient._id === data._id)
+      })
+    };
+  }
+
+  const connectedCheck = function(){
+    if(data.connections.includes(currentUser._id)){
+      return true
+    }else{
+      return false
+    }
+  }
+
+  const displayButtons = function(){
+    if(connectedCheck() === true){
+      return <button className='px-4' disabled={deleteConnectionMutation.isPending} onClick={function(){deleteConnectionMutation.mutate(data._id);}}>Remove Connection</button>
+    }
+    if(sentCheck() === true){
+      return <button className='px-4' disabled={cancelRequestMutation.isPending} onClick={function(){cancelRequestMutation.mutate(data._id);}}>Cancel Request</button>
+    }
+    if(recievedCheck() === true){
+      return <button className='px-4' disabled={rejectMutation.isPending} onClick={function(){rejectMutation.mutate(data._id);}}>Reject Request</button>
+    }
+    if(connectedCheck() === false){
+      return <button className='px-4' disabled={sendRequestMutation.isPending} onClick={function(){sendRequestMutation.mutate(data._id);}}>Connect</button>
+    }
+  }
+
   useEffect(()=>{
     if(data.username != undefined || data.username != null || data.username != ''){
       setUsername(data.username);
       setLocation(data.location);
       setOccupation(data.headline);
-      
-      if(data.connections.includes(currentUser._id)){
-        setConnectionStatus('connected');
-      }
     }
   }, [data]);
-
-  const displayButtons = function(){
-    if(connectionStatus === 'connected'){
-      return <button className='px-4' onClick={function(){}}>Remove Connection</button>
-    }
-    if(connectionStatus === 'sent'){
-      return <button className='px-4' onClick={function(){}}>Cancel Request</button>
-    }
-    if(connectionStatus === 'recieved'){
-      return <button className='px-4' onClick={function(){}}>Reject Request</button>
-    }
-    if(connectionStatus === ''){
-      return <button className='px-4' onClick={function(){}}>Connect</button>
-    }
-  }
-
-  useEffect(()=>{
-    if(recievedRequests.data && recievedRequests.data.length > 0){
-      recievedRequests.data.forEach((item: ConnectionRequestType) => {
-        if(item.sender._id === data._id){
-          setConnectionStatus('recieved');
-        }
-      });
-    };
-  }, [recievedRequests.data]);
-
-  useEffect(()=>{
-    if(sentRequests.data && sentRequests.data.length > 0){
-      sentRequests.data.forEach((item: sentRequestType) => {
-        if(item.recipient._id === data._id){
-          setConnectionStatus('sent');
-        }
-      });
-    };
-  }, [sentRequests.data]);
 
   return (
     <div className='profile-picture-container relative'>
