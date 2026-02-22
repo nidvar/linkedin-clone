@@ -1,10 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { ChevronDown, ChevronRight, UserPlus } from 'lucide-react';
 
 import type { AuthUserType, ConnectionRequestType, userDetailsType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
-import { useState } from 'react';
+
 
 function NetworkPage({ userData }: { userData: AuthUserType }) {
 

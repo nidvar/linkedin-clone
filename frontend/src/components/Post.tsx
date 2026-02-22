@@ -1,11 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageCircle, Share2, ThumbsUp, Trash2 } from "lucide-react";
 import { useState, type SubmitEvent } from 'react';
+import { Link } from "react-router-dom";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { MessageCircle, Share2, ThumbsUp, Trash2 } from "lucide-react";
 
 import type { AuthUserType, PostType } from '../utils/types';
 import { daysAgo, postRequest } from "../utils/utilFunctions";
-import { Link } from "react-router-dom";
-
 
 function Post({post ,userData} : {post: PostType, userData: AuthUserType}) {
 

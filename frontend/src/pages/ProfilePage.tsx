@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 import ProfileHeader from '../components/ProfileHeader';
 import AboutSection from '../components/AboutSection';

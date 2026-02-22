@@ -24,7 +24,7 @@ export type ExperienceType = {
   startYear: Number,
   endYear: Number,
   numberOfMonths?: String
-  description: String,
+  description?: String,
 }
 
 export type EducationType = {

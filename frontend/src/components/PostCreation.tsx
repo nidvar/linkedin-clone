@@ -1,7 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { postRequest } from '../utils/utilFunctions';
 import { useRef, useState, type SubmitEvent } from 'react';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { Image } from 'lucide-react';
+
+import { postRequest } from '../utils/utilFunctions';
 
 function PostCreation({profile} : {profile: string}) {
 

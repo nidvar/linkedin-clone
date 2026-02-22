@@ -1,9 +1,13 @@
 import { useState, useEffect, type SubmitEvent } from 'react';
-import type { AuthUserType } from '../utils/types';
 import { useParams } from 'react-router-dom';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postRequest } from '../utils/utilFunctions';
+
 import { Plus, Trash2 } from 'lucide-react';
+
+import type { AuthUserType } from '../utils/types';
+import { postRequest } from '../utils/utilFunctions';
+
 
 function SkillSection({data, ownProfile}: {data: AuthUserType, ownProfile: boolean}) {
   const { username } = useParams();

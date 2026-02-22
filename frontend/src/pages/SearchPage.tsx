@@ -1,12 +1,12 @@
 import { useState, type SubmitEvent } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { TimerIcon, UserPlus } from 'lucide-react';
 
 import type { sentRequestType, userDetailsType } from '../utils/types';
 import { fetchUser, getRequest, postRequest } from '../utils/utilFunctions';
-
 
 function SearchPage() {
 

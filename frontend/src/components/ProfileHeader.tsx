@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect, type SubmitEvent } from 'react';
-import { Camera, MapPin } from 'lucide-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { Camera, MapPin } from 'lucide-react';
 
 import type { AuthUserType, ConnectionRequestType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';

@@ -1,5 +1,7 @@
-import { Bell, Home, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
+
+import { Bell, Home, User } from 'lucide-react'
+
 import type { AuthUserType } from '../utils/types';
 
 function Sidebar({user} : {user: AuthUserType | null}) {

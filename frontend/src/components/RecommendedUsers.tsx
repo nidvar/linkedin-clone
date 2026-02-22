@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-
-import type { AuthUserType, sentRequestType, userDetailsType } from '../utils/types';
-import { TimerIcon, UserPlus } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { TimerIcon, UserPlus } from 'lucide-react';
+
 import { postRequest } from '../utils/utilFunctions';
+import type { AuthUserType, sentRequestType, userDetailsType } from '../utils/types';
 
 function RecommendedUsers({ recommendedUsers, userData, sentRequests }: {recommendedUsers: userDetailsType[], userData: AuthUserType, sentRequests: sentRequestType[]}) {
 

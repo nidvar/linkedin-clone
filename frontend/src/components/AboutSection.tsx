@@ -1,6 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState, type SubmitEvent } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { postRequest } from '../utils/utilFunctions';
 import type { AuthUserType } from '../utils/types';
 
