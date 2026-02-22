@@ -203,7 +203,6 @@
 }
 
 .request-box {
-  padding-bottom: 20px;
   border-bottom: 1px solid rgb(207, 207, 207);
 }
 
@@ -223,7 +222,6 @@
 .related-post {
   background-color: rgb(230, 228, 225);
   padding: 10px 0 10px 15px;
-  margin-top: 10px;
   border-radius: 4px;
   width: 80%;
 }

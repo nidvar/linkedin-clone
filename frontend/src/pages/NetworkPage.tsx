@@ -110,15 +110,15 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
               requests.data && requests.data.length > 0 ?
                 requests.data.map((item: ConnectionRequestType) => {
                   return (
-                    <div key={item._id} className='flex justify-between p-3 items-center request-box'>
+                    <div key={item._id} className='flex justify-between items-center request-box'>
                       <div className='flex gap-3 my-4'>
                         <Link to={'/profile/' + item.sender.username}>
                           <img src={item.sender.profilePicture} className='profile-img circle img-fit' />
                         </Link>
-                        <div>
+                        <Link to={'/profile/' + item.sender.username}>
                           <h1 className='font-bold'>{item.sender.fullName}</h1>
                           <p className='text-sm text-gray-600'>{item.sender.headline}</p>
-                        </div>
+                        </Link>
                       </div>
                       <div>
                         <button className='mr-2' onClick={function () { acceptMutation.mutate(item.sender._id) }}>Accept</button>

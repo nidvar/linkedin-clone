@@ -90,8 +90,8 @@ function NotificationPage({userData}: {userData: AuthUserType}) {
                     }
                     <div className='flex justify-between my-8'>
                       <div className='w-full'>
-                        <div className='flex gap-3 related-post-container items-center'>
-                          <Link to={`/profile/${notification.relatedUser.username}`} >
+                        <div className='flex gap-4'>
+                          <Link to={`/profile/${notification.relatedUser.username}`}>
                             <img src={notification.relatedUser.profilePicture} className='profile-img circle img-fit min-w-[50px]'/>
                           </Link>
                           <div className='w-full flex flex-col gap-1'>
