@@ -8,7 +8,7 @@ import User from '../models/userModel.js';
 
 // Functions
 import { generateAccessToken, generateRefreshToken } from '../utils/generateToken.js';
-import { sendWelcomeEmail } from '../utils/handleEmails.js';
+// import { sendWelcomeEmail } from '../utils/handleEmails.js';
 
 const validation = function(value:string) {
   if(value === undefined || value === null || value === ''){
