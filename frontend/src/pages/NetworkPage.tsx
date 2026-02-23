@@ -131,7 +131,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
 
                       <div className='the-desktop'>
                         <button className='mr-2' onClick={function () { acceptMutation.mutate(item.sender._id) }}>Accept</button>
-                        <button onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
+                        <button className='bg-red-600' onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
                       </div>
                     </div>
                   )
@@ -196,7 +196,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                               <p className='text-sm text-gray-600'>{item.headline && item.headline.length > 20 ? item.headline.slice(0, 20) + '...' : item.headline}</p>
                             </div>
                           </Link>
-                          <button onClick={function () { deleteConnectionMutation.mutate(item._id) }}>DELETE</button>
+                          <button className='bg-red-600' onClick={function () { deleteConnectionMutation.mutate(item._id) }}>DELETE</button>
                         </div>
                       )
                     })
