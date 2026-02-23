@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { ChevronDown, ChevronRight, UserPlus } from 'lucide-react';
+import { ChevronDown, ChevronRight, CircleCheck, CircleX, UserPlus } from 'lucide-react';
 
 import type { AuthUserType, ConnectionRequestType, userDetailsType, sentRequestType } from '../utils/types';
 import { getRequest, postRequest } from '../utils/utilFunctions';
@@ -123,9 +123,15 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                           <p className='text-sm text-gray-600'>{item.sender.headline}</p>
                         </Link>
                       </div>
-                      <div>
+
+                      <div className='flex'>
+                        <CircleCheck color={'green'} className='mr-2 the-mobile' onClick={function () { acceptMutation.mutate(item.sender._id) }} />
+                        <CircleX color={'red'} className='the-mobile' onClick={function () { rejectMutation.mutate(item.sender._id) }} />
+                      </div>
+
+                      <div className='the-desktop'>
                         <button className='mr-2' onClick={function () { acceptMutation.mutate(item.sender._id) }}>Accept</button>
-                        <button className='bg-slate-400' onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
+                        <button onClick={function () { rejectMutation.mutate(item.sender._id) }}>Decline</button>
                       </div>
                     </div>
                   )
@@ -144,7 +150,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
           <>
             {
               sentRequests.data && sentRequests.data.length > 0 ?
-                <div className='flex gap-3 my-4 flex-wrap'>
+                <div className='flex gap-3 my-4 flex-wrap connection-container'>
                   {
                     sentRequests.data.map((item: sentRequestType) => {
                       return (
@@ -155,7 +161,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
                             </div>
                             <div>
                               <h1 className='font-bold'>{item.recipient.fullName}</h1>
-                              <p className='text-sm text-gray-600'>{item.recipient.headline}</p>
+                              <p className='text-sm text-gray-600'>{item.recipient.headline && item.recipient.headline.length > 20 ? item.recipient.headline.slice(0, 20) + '...' : item.recipient.headline}</p>
                             </div>
                           </Link>
                           <button onClick={function () { cancelRequestMutation.mutate(item.recipient._id) }}>CANCEL</button>
@@ -178,7 +184,7 @@ function NetworkPage({ userData }: { userData: AuthUserType }) {
           <>
             {
               allConnections.data && allConnections.data.length > 0 ?
-                <div className='flex gap-3 my-4'>
+                <div className='flex gap-3 my-4 connection-container'>
                   {
                     allConnections.data.map((item: userDetailsType) => {
                       return (
