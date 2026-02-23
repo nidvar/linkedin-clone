@@ -5,13 +5,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // --------------------
-// Third-party packages
+// Third-party imports
 // --------------------
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
-import { fileURLToPath } from "url";
 
 // --------------------
 // Local imports
@@ -25,17 +24,14 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import connectionRoutes from "./routes/connectionRoutes.js";
 
 // --------------------
-// App & config
+// App setup
 // --------------------
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// Correct __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirnameResolved = path.dirname(__filename);
+const __dirnameResolved = path.resolve();
 
 // --------------------
-// Connect to DB
+// Database
 // --------------------
 connectDB();
 
@@ -46,15 +42,14 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === "production"
-        ? "https://jarro-linkedin.onrender.com" // your frontend URL
-        : "http://localhost:5173",
+        ? "https://jarro-linkedin.onrender.com" // your deployed frontend
+        : "http://localhost:5173",             // local dev
     credentials: true,
   })
 );
-
 app.use(cookieParser());
-app.use(express.json({ limit: "5mb" }));
-app.use(express.urlencoded({ extended: true, limit: "5mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "10mb" }));
 
 // --------------------
 // API Routes
@@ -66,15 +61,15 @@ app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/connections", connectionRoutes);
 
 // --------------------
-// Serve frontend (production only)
+// Serve frontend (ONLY in production)
 // --------------------
 if (process.env.NODE_ENV === "production") {
-  const frontendDist = path.join(__dirnameResolved, "../frontend/dist");
-  app.use(express.static(frontendDist));
+  const clientPath = path.join(__dirnameResolved, "frontend", "dist");
+  app.use(express.static(clientPath));
 
-  // Express 5-safe catch-all
+  // Safe catch-all for React routing
   app.use((req, res) => {
-    res.sendFile(path.join(frontendDist, "index.html"));
+    res.sendFile(path.join(clientPath, "index.html"));
   });
 }
 
