@@ -24,8 +24,6 @@ function ProfileHeader({data, ownProfile, currentUser, opacity} : {data: AuthUse
   const [errorMessage, setErrorMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
 
-  const [connectionStatus, setConnectionStatus] = useState('');
-
   const recievedRequests = useQuery({
     queryKey: ['requests', currentUser._id],
     queryFn: async () => {

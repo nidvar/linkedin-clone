@@ -135,6 +135,7 @@ function ProfilePage() {
           </div>:null
         }
         <ProfileHeader data={profileData.data} ownProfile={userData.data._id === profileData.data._id} currentUser={userData.data} opacity={editBannerPic} />
+        <p className='text-red-500 text-center'>{errorMessage}</p>
       </div>
 
       <AboutSection data={profileData.data} ownProfile={userData.data._id === profileData.data._id} />
