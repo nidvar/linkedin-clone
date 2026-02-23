@@ -132,7 +132,9 @@ function ProfileHeader({data, ownProfile, currentUser, opacity} : {data: AuthUse
       await postRequest('/connections/removeconnection/' + arg, {}, 'DELETE');
     },
     onSuccess: () => {
-      setConnectionStatus('');
+      queryClient.invalidateQueries({ queryKey: ['profile', data.username] });
+      queryClient.invalidateQueries({ queryKey: ['connections', currentUser._id] });
+      queryClient.refetchQueries({ queryKey: ['connections', currentUser._id] });
     }
   });
 
@@ -221,7 +223,7 @@ function ProfileHeader({data, ownProfile, currentUser, opacity} : {data: AuthUse
   }
 
   useEffect(()=>{
-    if(data.username != undefined || data.username != null || data.username != ''){
+    if(data.username){
       setUsername(data.username);
       setLocation(data.location);
       setOccupation(data.headline);

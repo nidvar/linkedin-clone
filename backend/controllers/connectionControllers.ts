@@ -135,6 +135,16 @@ export const sendConnectionRequest = async (req: Request, res: Response) => {
     });
     connectionRequest.save();
 
+    const currentUser = await User.findById(sender);
+
+    if(!currentUser) return res.status(400).json({ message: 'current user error' });
+
+    currentUser.connections.some(()=>{
+      if(currentUser.connections.includes(recipient)){
+        return res.status(400).json({ message: 'You are already connected with this user' });
+      }
+    });
+
     return res.status(200).json({ message: 'Connection request sent' });
   } catch (error) {
     console.log(error);
@@ -156,6 +166,11 @@ export const removeConnection = async (req: Request, res: Response) => {
 
     user.connections = user.connections.filter((id) => id.toString() !== otherUserId.toString());
     otherUser.connections = otherUser.connections.filter((id) => id.toString() !== userId.toString());
+
+    const removeConnectionRequest = await ConnectionRequest.findOneAndDelete({recipient: userId, sender: otherUserId});
+    if(!removeConnectionRequest) {
+      await ConnectionRequest.findOneAndDelete({recipient: otherUserId, sender: userId});
+    }
 
     await user.save();
     await otherUser.save();
