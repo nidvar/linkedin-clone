@@ -71,6 +71,10 @@ function PostCreation({profile} : {profile: string}) {
     mutateObj.mutate();
   }
 
+  if (image) {
+    console.log(image);
+  }
+
   return (
     <div className='new-post-container shaded-border'>
       {
