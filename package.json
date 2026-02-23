@@ -1,16 +1,12 @@
 {
   "name": "linkedin-clone",
   "version": "1.0.0",
-  "description": "",
+  "type": "module",
   "main": "backend/server.ts",
   "scripts": {
-    "dev": "tsx watch backend/server.ts",
-    "start": "tsx backend/server.ts"
+    "start": "NODE_ENV=production tsx backend/server.ts",
+    "build-frontend": "npm install --prefix frontend && npm run build --prefix frontend"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@faker-js/faker": "^10.3.0",
     "bcryptjs": "^3.0.3",
@@ -19,9 +15,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "faker": "^6.6.6",
     "jsonwebtoken": "^9.0.3",
-    "mailtrap": "^4.4.0",
     "mongoose": "^9.1.5",
     "pg": "^8.17.2"
   },
@@ -35,7 +29,6 @@
     "@types/mongoose": "^5.11.96",
     "@types/node": "^25.3.0",
     "@types/pg": "^8.16.0",
-    "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
