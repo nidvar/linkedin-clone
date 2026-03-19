@@ -29,6 +29,12 @@ function LoginPage() {
     mutateObj.mutate();
   };
 
+  const guestLogin = async () => {
+    setEmail('johnsmith@mail.com');
+    setPassword('john123');
+    mutateObj.mutate();
+  };
+
   return (
     <div className='signup-page login-page'>
       <form className='signup-form login-form shaded-border' onSubmit={handleSubmit}>
@@ -49,7 +55,11 @@ function LoginPage() {
           onChange={function (e) { setPassword(e.target.value) }}
         />
         {
-          mutateObj.isPending ? <p className='text-center'>Logging in...</p> : <button type="submit" className='blue-button'>Sign In</button>
+          mutateObj.isPending ? <p className='text-center'>Logging in...</p> :
+          <>
+            <button type="submit" className='blue-button'>Sign In</button>
+            <button type="button" className='blue-button' onClick={function(){guestLogin()}}>Guest / Test Login</button>
+          </>
         }
         {
           error !== '' ? <p className='error'>{error}</p> : null
